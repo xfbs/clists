@@ -15,6 +15,7 @@ HEADERS=l_list.h
 TARGETS=l_list
 
 CTEST=$(CXX) -c $(CFLAGS) -o $(OBJDIR)/$@_test.o test/$@.c
+LTEST=$(CXX) $(LFLAGS) -o $(BINDIR)/$@ $($(filter *.c,$^):%.c=$(OBJDIR)/%.o) $($(filter *.cpp,$^):%.cpp=$(OBJDIR)/%.o)
 
 $(filter %.c,$(SOURCES)): %.c: $(SRCDIR)/%.c
 	echo $@ $* $<
@@ -25,3 +26,7 @@ $(filter %.cpp,$(SROUCES)): $(@:%=$(SRCDIR)/%)
 
 $(HEADERS): %.h: $(SRCDIR)/%.h
 	cp $< $(INCDIR)/$@
+
+l_list: l_list.h l_list.c
+	$(CTEST)
+	$(LTEST)
