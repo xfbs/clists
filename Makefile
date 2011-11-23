@@ -10,15 +10,15 @@ LFLAGS+=-L$(LIBDIR) -O0 -ggdb3
 CXX    =g++
 CC     =gcc -std=c99
 
-SOURCES=l_list.c llist.cpp
-HEADERS=l_list.h
-TARGETS=l_list
+SOURCES=sl_list.c
+HEADERS=sl_list.h
+TARGETS=sl_list
+.SUFFIXES: 
 
-CTEST=$(CXX) -c $(CFLAGS) -o $(OBJDIR)/$@_test.o test/$@.c
-LTEST=$(CXX) $(LFLAGS) -o $(BINDIR)/$@ $($(filter *.c,$^):%.c=$(OBJDIR)/%.o) $($(filter *.cpp,$^):%.cpp=$(OBJDIR)/%.o)
+CTEST=$(CC) -c $(CFLAGS) -o $(OBJDIR)/$@_test.o test/$@.c
+LTEST=$(CC) $(LFLAGS) -o $(BINDIR)/$@ $(OBJDIR)/$@_test.o $(patsubst %.c,$(OBJDIR)/%.o,$(filter %.c,$^)) $(patsubst %.cpp,$(OBJDIR)/%.o,$(filter %.cpp,$^))
 
 $(filter %.c,$(SOURCES)): %.c: $(SRCDIR)/%.c
-	echo $@ $* $<
 	$(CC)  -c $(CFLAGS) -o $(OBJDIR)/$*.o $<
 
 $(filter %.cpp,$(SROUCES)): $(@:%=$(SRCDIR)/%)
@@ -27,6 +27,6 @@ $(filter %.cpp,$(SROUCES)): $(@:%=$(SRCDIR)/%)
 $(HEADERS): %.h: $(SRCDIR)/%.h
 	cp $< $(INCDIR)/$@
 
-l_list: l_list.h l_list.c
+sl_list: sl_list.h sl_list.c
 	$(CTEST)
 	$(LTEST)
