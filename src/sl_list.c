@@ -42,6 +42,12 @@ void list_reset(sl_list *list, bool free_data)
     list->head = 0;
 }
 
+void list_delete(sl_list *list, bool free_data)
+{
+    list_reset(list, free_data);
+    free(list);
+}
+
 sl_list *sl_list_new()
 {
     // allocate space for a sl_list
