@@ -26,4 +26,25 @@ int main()
     assert(list_last(list) == 0);
     assert(list_pop(list) == 0);
 
+    for(int i = 0; i < 5; i++)
+    {
+        list_append(list, 0);
+        assert(list_get(list, i) == 0);
+    }
+
+    for(int i = 0; i < 5; i++)
+    {
+        list_set(list, i, malloc(sizeof(int)));
+        assert(list_get(list, i));
+    }
+
+    list_reset(list, true);
+    list_append(list, list);
+    assert(list_first(list) == list);
+    assert(list_pop(list) == list);
+    assert(list_size(list) == 0);
+
+    list_debug(list);
+
+    list_delete(list, true);
 }
