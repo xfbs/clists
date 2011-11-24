@@ -30,12 +30,9 @@
 #define true 1
 #define false 0
 
-#ifdef _cplusplus
-extern "C" {
-#endif
-
 #include <string.h>
 #include <stdlib.h>
+
 
 /* SL_LIST DATA STRUCTURES
  * Data structures used by the single linked list
@@ -63,29 +60,29 @@ typedef struct sl_list_node sl_list_node;
 
 
 /* SL_LIST FUNCTIONS
- * These are functions used exclusively by SL_LIST
+ * These are functions used to manipulate sl_lists
  */
 
 // create a sl_list 'object'
 sl_list *sl_list_new();
 
-
-/* COMMON LIST API
- * These are function overloads to use SL_LIST
- * with the common list api used by other lists
- */
+// get the node of the list at pos
+sl_list_node *list_get_node(sl_list *list, size_t pos);
 
 // free list and all nodes (but no data pointers)
 void list_delete(sl_list *list, bool free_data);
 
-// get the node of the list at pos
-sl_list_node *list_get_node(sl_list *list, size_t pos);
+// append data to the end of the list
+void list_append(sl_list *list, void *data);
 
-// get the list's size
-size_t list_size(sl_list *list);
+// print diagnostics
+void list_debug(sl_list *list);
 
 // set an element to data
 void list_set(sl_list *list, size_t pos, void *data);
+
+// get the list's size
+size_t list_size(sl_list *list);
 
 // get the data stored at pos (or NULL)
 void *list_get(sl_list *list, size_t pos);
@@ -96,18 +93,7 @@ void *list_last(sl_list *list);
 // get the first element (or NULL)
 void *list_first(sl_list *list);
 
-// append data to the end of the list
-void list_append(sl_list *list, void *data);
-
 // delete last list node and return data
 void *list_pop(sl_list *list);
-
-// print diagnostics
-void list_debug(sl_list *list);
-
-
-#ifdef _cplusplus
-} // extern C
-#endif
 
 #endif
