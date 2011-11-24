@@ -1,5 +1,5 @@
-/*  File: llist.h
- *  Header for llist, a C implementation of a single linked list
+/*  File: sl_list.c
+ *  Source for llist, a C implementation of a single linked list
  *  
  *  Copyright (C) 2011, Patrick M. Elsen
  *
