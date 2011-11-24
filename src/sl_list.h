@@ -26,6 +26,10 @@
 #ifndef SL_LIST_H
 #define SL_LIST_H
 
+#define bool short
+#define true 1
+#define false 0
+
 #ifdef _cplusplus
 extern "C" {
 #endif
@@ -72,7 +76,7 @@ sl_list *sl_list_new();
  */
 
 // free list and all nodes (but no data pointers)
-void sl_list_delete(sl_list *list);
+void list_delete(sl_list *list, bool free_data);
 
 // get the node of the list at pos
 sl_list_node *list_get_node(sl_list *list, size_t pos);

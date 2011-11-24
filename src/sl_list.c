@@ -25,6 +25,23 @@
 
 #include "sl_list.h"
 
+void list_reset(sl_list *list, bool free_data)
+{
+    sl_list_node *node = list->head;
+    sl_list_node *old = 0;
+
+    while(node)
+    {
+        if(free_data)
+            free(node->data);
+        old = node;
+        node = node->next;
+        free(old);
+    }
+
+    list->head = 0;
+}
+
 sl_list *sl_list_new()
 {
     // allocate space for a sl_list
