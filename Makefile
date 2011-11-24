@@ -30,3 +30,7 @@ $(HEADERS): %.h: $(SRCDIR)/%.h
 sl_list: sl_list.h sl_list.c
 	$(CTEST)
 	$(LTEST)
+
+sl_list_interactive: sl_list.h sl_list.c
+	$(CTEST)
+	$(LTEST)
