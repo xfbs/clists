@@ -32,6 +32,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 
 /* SL_LIST DATA STRUCTURES
@@ -68,6 +69,9 @@ sl_list *sl_list_new();
 
 // get the node of the list at pos
 sl_list_node *list_get_node(sl_list *list, size_t pos);
+
+// reset list nodes
+void list_reset(sl_list *list, bool free_data);
 
 // free list and all nodes (but no data pointers)
 void list_delete(sl_list *list, bool free_data);
