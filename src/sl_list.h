@@ -26,19 +26,22 @@
 #ifndef SL_LIST_H
 #define SL_LIST_H
 
+#ifndef bool
 #define bool short
+#endif
+#ifndef true
 #define true 1
+#endif
+#ifndef false
 #define false 0
+#endif
+#define SL_LIST sizeof(sl_list)
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "list.h"
 
-
-/* SL_LIST DATA STRUCTURES
- * Data structures used by the single linked list
- * implementation. 
- */
 
 // single lined list node
 struct sl_list_node
@@ -59,13 +62,6 @@ struct sl_list
 typedef struct sl_list sl_list;
 typedef struct sl_list_node sl_list_node;
 
-
-/* SL_LIST FUNCTIONS
- * These are functions used to manipulate sl_lists
- */
-
-// create a sl_list 'object'
-sl_list *sl_list_new();
 
 // get the node of the list at pos
 sl_list_node *list_get_node(sl_list *list, size_t pos);

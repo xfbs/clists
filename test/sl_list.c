@@ -3,7 +3,7 @@
 
 int main()
 {
-    sl_list *list = sl_list_new();
+    sl_list *list = list_new(SL_LIST);
     assert(list != 0);
 
     for(int i = 0; i < 5; i++)
@@ -46,5 +46,5 @@ int main()
 
     list_debug(list);
 
-    list_delete(list, true);
+    list_delete(list, false);
 }

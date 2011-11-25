@@ -48,16 +48,6 @@ void list_delete(sl_list *list, bool free_data)
     free(list);
 }
 
-sl_list *sl_list_new()
-{
-    // allocate space for a sl_list
-    sl_list *list = (sl_list*)malloc(sizeof(sl_list));
-    // use memset to zero it out
-    memset(list, 0, sizeof(sl_list));
-
-    return list;
-}
-
 sl_list_node *list_get_node(sl_list *list, size_t pos)
 {
     sl_list_node *node = list->head;

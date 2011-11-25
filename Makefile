@@ -10,8 +10,8 @@ LFLAGS+=-L$(LIBDIR) -O0 -ggdb3
 CXX    =g++
 CC     =gcc -std=c99
 
-SOURCES=sl_list.c
-HEADERS=sl_list.h
+SOURCES=list.c sl_list.c dl_list.h
+HEADERS=list.h sl_list.h dl_list.h
 TARGETS=sl_list
 .SUFFIXES: 
 
@@ -27,10 +27,10 @@ $(filter %.cpp,$(SROUCES)): $(@:%=$(SRCDIR)/%)
 $(HEADERS): %.h: $(SRCDIR)/%.h
 	cp $< $(INCDIR)/$@
 
-sl_list: sl_list.h sl_list.c
+sl_list: list.h sl_list.h list.c sl_list.c
 	$(CTEST)
 	$(LTEST)
 
-sl_list_interactive: sl_list.h sl_list.c
+sl_list_interactive: list.h sl_list.h list.c sl_list.c
 	$(CTEST)
 	$(LTEST)
