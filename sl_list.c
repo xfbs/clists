@@ -1,5 +1,5 @@
 /*  File: sl_list.c
- *  Source for llist, a C implementation of a single linked list
+ *  Source for sl_list, a C implementation of a single linked list.
  *  
  *  Copyright (C) 2011, Patrick M. Elsen
  *
