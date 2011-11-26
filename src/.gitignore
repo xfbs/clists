@@ -1,7 +1,0 @@
-# ignore everything but code
-*
-!*.hpp
-!*.cpp
-!*.h
-!*.c
-!.gitignore
