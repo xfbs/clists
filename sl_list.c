@@ -25,29 +25,6 @@
 
 #include "sl_list.h"
 
-void list_reset(sl_list *list, bool free_data)
-{
-    sl_list_node *node = list->head;
-    sl_list_node *old = 0;
-
-    while(node)
-    {
-        if(free_data)
-            free(node->data);
-        old = node;
-        node = node->next;
-        free(old);
-    }
-
-    list->head = 0;
-}
-
-void list_delete(sl_list *list, bool free_data)
-{
-    list_reset(list, free_data);
-    free(list);
-}
-
 sl_list_node *list_get_node(sl_list *list, size_t pos)
 {
     sl_list_node *node = list->head;
@@ -62,42 +39,10 @@ sl_list_node *list_get_node(sl_list *list, size_t pos)
     return node;
 }
 
-void list_debug(sl_list *list)
+sl_list *sl_list_new()
 {
-    printf("list %p head %p\n", list, list->head);
-    sl_list_node *node = list->head;
-
-    while(node)
-    {
-        printf("node %p data %p next %p\n", node, node->data, node->next);
-        node = node->next;
-    }
-}
-
-size_t list_size(sl_list *list)
-{
-    // get the list's first node
-    sl_list_node *node = list->head;
-    // counter variable
-    size_t size = 0;
-
-    // loop thru all nodes
-    while(node)
-    {
-        size++;
-        node = node->next;
-    }
-
-    return size;
-}
-
-void list_set(sl_list *list, size_t pos, void *data)
-{
-    // get the node that we want to update
-    sl_list_node *node = list_get_node(list, pos);
-
-    if(node)
-        node->data = data;
+    sl_list *list = (sl_list*)malloc(sizeof(sl_list));
+    memset(list, 0, sizeof(list));
 }
 
 void *list_get(sl_list *list, size_t pos)
@@ -136,36 +81,6 @@ void *list_first(sl_list *list)
         return list->head->data;
     else
         return 0;
-}
-
-void list_append(sl_list *list, void *data)
-{
-    // allocate new node
-    sl_list_node *new = (sl_list_node*)malloc(sizeof(sl_list_node));
-    // zeroize it
-    memset(new, 0, sizeof(sl_list_node));
-    // fill data
-    new->data = data;
-
-    // check if list is empty
-    if(!list->head)
-    {
-        // if it is, make this the first element
-        list->head = new;
-        return;
-    }
-
-    // get the first node
-    sl_list_node *node = list->head;
-
-    // loop until the last node
-    while(node->next)
-    {
-        node = node->next;
-    }
-
-    // once we got the last node, append the new node
-    node->next = new;
 }
 
 void *list_pop(sl_list *list)
@@ -208,6 +123,96 @@ void *list_pop(sl_list *list)
     return data;
 }
 
+void list_set(sl_list *list, size_t pos, void *data)
+{
+    // get the node that we want to update
+    sl_list_node *node = list_get_node(list, pos);
+
+    if(node)
+        node->data = data;
+}
+
+void list_append(sl_list *list, void *data)
+{
+    // allocate new node
+    sl_list_node *new = (sl_list_node*)malloc(sizeof(sl_list_node));
+    // zeroize it
+    memset(new, 0, sizeof(sl_list_node));
+    // fill data
+    new->data = data;
+
+    // check if list is empty
+    if(!list->head)
+    {
+        // if it is, make this the first element
+        list->head = new;
+        return;
+    }
+
+    // get the first node
+    sl_list_node *node = list->head;
+
+    // loop until the last node
+    while(node->next)
+    {
+        node = node->next;
+    }
+
+    // once we got the last node, append the new node
+    node->next = new;
+}
+
+void list_debug(sl_list *list)
+{
+    printf("list %p head %p\n", list, list->head);
+    sl_list_node *node = list->head;
+
+    while(node)
+    {
+        printf("node %p data %p next %p\n", node, node->data, node->next);
+        node = node->next;
+    }
+}
+
+void list_reset(sl_list *list, bool free_data)
+{
+    sl_list_node *node = list->head;
+    sl_list_node *old = 0;
+
+    while(node)
+    {
+        if(free_data)
+            free(node->data);
+        old = node;
+        node = node->next;
+        free(old);
+    }
+
+    list->head = 0;
+}
+
+void list_delete(sl_list *list, bool free_data)
+{
+    list_reset(list, free_data);
+    free(list);
+}
+
+size_t list_size(sl_list *list)
+{
+    // get the list's first node
+    sl_list_node *node = list->head;
+    // counter variable
+    size_t size = 0;
+
+    // loop thru all nodes
+    while(node)
+    {
+        size++;
+        node = node->next;
+    }
+
+    return size;
+}
 
 
 
