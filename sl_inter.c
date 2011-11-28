@@ -29,5 +29,5 @@ main(void)
 
     printf("Some diagnostics:\n");
     list_debug(list);
-    list_delete(list, true);
+    list_delete(list, 1);
 }

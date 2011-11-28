@@ -29,7 +29,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "list.h"
 
 struct sl_list_node
 {
@@ -46,9 +45,10 @@ typedef struct sl_list sl_list;
 
 sl_list_node *list_get_node(sl_list *list, size_t pos);
 sl_list *sl_list_new();
-void list_reset(sl_list *list, bool free_data);
-void list_delete(sl_list *list, bool free_data);
+void list_reset(sl_list *list, int free_data);
+void list_delete(sl_list *list, size_t pos, int free_data);
 void list_append(sl_list *list, void *data);
+void list_insert(sl_list *list, size_t pos, void *data);
 void list_debug(sl_list *list);
 void list_set(sl_list *list, size_t pos, void *data);
 void *list_get(sl_list *list, size_t pos);

@@ -174,7 +174,7 @@ void list_debug(sl_list *list)
     }
 }
 
-void list_reset(sl_list *list, bool free_data)
+void list_reset(sl_list *list, int free_data)
 {
     sl_list_node *node = list->head;
     sl_list_node *old = 0;
@@ -191,7 +191,7 @@ void list_reset(sl_list *list, bool free_data)
     list->head = 0;
 }
 
-void list_delete(sl_list *list, bool free_data)
+void list_delete(sl_list *list, int free_data)
 {
     list_reset(list, free_data);
     free(list);
