@@ -41,6 +41,8 @@ typedef struct dl_list_node dl_list_node;
 struct dl_list
 {
     dl_list_node *head;
+    dl_list_node *tail;
+    size_t size;
 };
 typedef struct dl_list dl_list;
 

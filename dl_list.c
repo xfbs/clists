@@ -27,13 +27,22 @@
 
 dl_list_node *list_get_node(dl_list *list, size_t pos)
 {
-    dl_list_node *node = list->head;
+    dl_list_node *node = 0;
 
-    // loop until we are at the node at pos
-    while(node && pos)
-    {
-        pos--;
-        node = node->next;
+    if(pos > (list->size/2)) {
+        node = list->tail;
+        while(node && pos)
+        {
+            pos--;
+            node = node->prev;
+        }
+    } else {
+        node = list->head;
+        while(node && pos)
+        {
+            pos--;
+            node = node->next;
+        }
     }
 
     return node;
