@@ -1,5 +1,5 @@
 /*  File: sl_list.c
- *  Source for dl_list, a C implementation of a double linked list.
+ *  Source for sl_list, a C implementation of a single linked list.
  *  
  *  Copyright (C) 2011, Patrick M. Elsen
  *
@@ -23,7 +23,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "dl_list.h"
+#include "sl_list.h"
 
 sl_list_node *list_get_node(sl_list *list, size_t pos)
 {
