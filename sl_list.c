@@ -1,9 +1,9 @@
 /*  File: sl_list.c
- *  Source for sl_list, a C implementation of a single linked list.
+ *  Source for dl_list, a C implementation of a double linked list.
  *  
  *  Copyright (C) 2011, Patrick M. Elsen
  *
- *  This file is part of CMatrixCrypt (http://github.com/xfbs/CMatrixCrypt)
+ *  This file is part of CLists (http://github.com/xfbs/CLists)
  *  Author: Patrick M. Elsen <pelsen.vn (a) gmail.com>
  *
  *  All rights reserved.
@@ -23,7 +23,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "sl_list.h"
+#include "dl_list.h"
 
 sl_list_node *list_get_node(sl_list *list, size_t pos)
 {

@@ -30,4 +30,5 @@ main(void)
     printf("Some diagnostics:\n");
     list_debug(list);
     list_delete(list, 1);
+    printf("genial!\n");
 }
