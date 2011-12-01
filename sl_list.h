@@ -62,5 +62,6 @@ void *list_get(sl_list *list, size_t pos);
 void *list_last(sl_list *list);
 void *list_first(sl_list *list);
 size_t list_size(sl_list *list);
+// TODO: iterators
 
 #endif
