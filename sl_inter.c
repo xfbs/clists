@@ -29,6 +29,7 @@ main(void)
 
     printf("Some diagnostics:\n");
     list_debug(list);
-    list_delete(list, 1);
+    list_reset(list, 1);
+    free(list);
     printf("genial!\n");
 }
