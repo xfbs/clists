@@ -27,9 +27,11 @@
 
 sl_node *list_get_node(sl_list *list, size_t pos)
 {
+    if((pos-1) == list->size)
+        return list->tail;
+
     sl_node *node = list->head;
 
-    // loop until we are at the node at pos
     while(node && pos)
     {
         pos--;
@@ -47,9 +49,8 @@ sl_list *sl_list_new()
 
 void *list_get(sl_list *list, size_t pos)
 {
-    // get the node at pos
     sl_node *node = list_get_node(list, pos);
-    // return data or zero
+
     if(node)
         return node->data;
     else
@@ -58,25 +59,14 @@ void *list_get(sl_list *list, size_t pos)
 
 void *list_last(sl_list *list)
 {
-    // get list's first ndoe
-    sl_node *node = list->head;
-    // make sure this node exists (not NULL)
-    if(!node)
+    if(list->tail)
+        return list->tail->data;
+    else
         return 0;
-    
-    // loop thru to the last node
-    while(node->next)
-    {
-        node = node->next;
-    }
-
-    // return last node's data
-    return node->data;
 }
 
 void *list_first(sl_list *list)
 {
-    // if the first node exists, return it's data, else NULL
     if(list->head)
         return list->head->data;
     else
@@ -85,47 +75,30 @@ void *list_first(sl_list *list)
 
 void *list_pop(sl_list *list)
 {
-    // get the first ndoe of the list
     sl_node *node = list->head;
-    // space to store the node's data
-    void *data;
 
-    // make sure the list isn't empty
     if(!node)
         return 0;
 
-    // if the list only had one node, that needs to be handles differently
-    if(!node->next)
+    if(node->next)
     {
-        // save the node's data
-        data = node->data;
-        // make the list forget about the node
+        list->head = node->next;
+    } else {
         list->head = 0;
-        // free the node
-        free(node);
-        // return the data
-        return data;
-    }
-    
-    // go to the node before the last node
-    while(node->next->next)
-    {
-        node = node->next;
+        list->tail = 0;
     }
 
-    // save the data
-    data = node->next->data;
-    // free the node
-    free(node->next);
-    // unregiester it
-    node->next = 0;
-    // return the data
+    list->size--;
+
+    void *data = node->data;
+
+    free(node);
+
     return data;
 }
 
 void list_set(sl_list *list, size_t pos, void *data)
 {
-    // get the node that we want to update
     sl_node *node = list_get_node(list, pos);
 
     if(node)
@@ -207,6 +180,3 @@ size_t list_size(sl_list *list)
 
     return size;
 }
-
-
-
