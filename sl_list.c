@@ -107,37 +107,27 @@ void list_set(sl_list *list, size_t pos, void *data)
 
 void list_append(sl_list *list, void *data)
 {
-    // allocate new node
-    sl_node *new = (sl_node*)malloc(sizeof(sl_node));
-    // zeroize it
-    memset(new, 0, sizeof(sl_node));
-    // fill data
-    new->data = data;
+    sl_node *node = (sl_node*)malloc(sizeof(sl_node));
 
-    // check if list is empty
-    if(!list->head)
+    memset(node, 0, sizeof(node));
+
+    node->data = data;
+
+    if(list->tail)
     {
-        // if it is, make this the first element
-        list->head = new;
-        return;
+        list->tail->next = node;
+        list->tail = node;
+        list->size++;
+    } else {
+        list->head = node;
+        list->tail = node;
+        list->size++;
     }
-
-    // get the first node
-    sl_node *node = list->head;
-
-    // loop until the last node
-    while(node->next)
-    {
-        node = node->next;
-    }
-
-    // once we got the last node, append the new node
-    node->next = new;
 }
 
 void list_debug(sl_list *list)
 {
-    printf("list %p head %p\n", list, list->head);
+    printf("list %p head %p tail %p\n", list, list->head, list->tail);
     sl_node *node = list->head;
 
     while(node)
