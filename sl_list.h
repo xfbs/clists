@@ -40,21 +40,27 @@ typedef struct sl_node sl_node;
 struct sl_list
 {
     sl_node *head;
+    sl_node *tail; // for efficient appending
+    size_t size;   // to avoid havint to recalculate the list's size
 };
 typedef struct sl_list sl_list;
 
+
 sl_node *list_get_node(sl_list *list, size_t pos);
 sl_list *sl_list_new();
+void list_recalc(sl_list *list);
 void list_reset(sl_list *list, int free_data);
-void list_delete(sl_list *list, size_t pos, int free_data);
+void list_free(sl_list *list);
 void list_append(sl_list *list, void *data);
+void list_push(sl_list *list, void *data);
 void list_insert(sl_list *list, size_t pos, void *data);
 void list_debug(sl_list *list);
 void list_set(sl_list *list, size_t pos, void *data);
+void *list_delete(sl_list *list, size_t pos, int free_data);
+void *list_pop(sl_list *list);
 void *list_get(sl_list *list, size_t pos);
 void *list_last(sl_list *list);
 void *list_first(sl_list *list);
-void *list_pop(sl_list *list);
 size_t list_size(sl_list *list);
 
 #endif
