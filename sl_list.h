@@ -30,20 +30,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct sl_list_node
+struct sl_node
 {
     void *data;
-    struct sl_list_node *next;
+    struct sl_node *next;
 };
-typedef struct sl_list_node sl_list_node;
+typedef struct sl_node sl_node;
 
 struct sl_list
 {
-    sl_list_node *head;
+    sl_node *head;
 };
 typedef struct sl_list sl_list;
 
-sl_list_node *list_get_node(sl_list *list, size_t pos);
+sl_node *list_get_node(sl_list *list, size_t pos);
 sl_list *sl_list_new();
 void list_reset(sl_list *list, int free_data);
 void list_delete(sl_list *list, size_t pos, int free_data);

@@ -25,9 +25,9 @@
 
 #include "sl_list.h"
 
-sl_list_node *list_get_node(sl_list *list, size_t pos)
+sl_node *list_get_node(sl_list *list, size_t pos)
 {
-    sl_list_node *node = list->head;
+    sl_node *node = list->head;
 
     // loop until we are at the node at pos
     while(node && pos)
@@ -48,7 +48,7 @@ sl_list *sl_list_new()
 void *list_get(sl_list *list, size_t pos)
 {
     // get the node at pos
-    sl_list_node *node = list_get_node(list, pos);
+    sl_node *node = list_get_node(list, pos);
     // return data or zero
     if(node)
         return node->data;
@@ -59,7 +59,7 @@ void *list_get(sl_list *list, size_t pos)
 void *list_last(sl_list *list)
 {
     // get list's first ndoe
-    sl_list_node *node = list->head;
+    sl_node *node = list->head;
     // make sure this node exists (not NULL)
     if(!node)
         return 0;
@@ -86,7 +86,7 @@ void *list_first(sl_list *list)
 void *list_pop(sl_list *list)
 {
     // get the first ndoe of the list
-    sl_list_node *node = list->head;
+    sl_node *node = list->head;
     // space to store the node's data
     void *data;
 
@@ -126,7 +126,7 @@ void *list_pop(sl_list *list)
 void list_set(sl_list *list, size_t pos, void *data)
 {
     // get the node that we want to update
-    sl_list_node *node = list_get_node(list, pos);
+    sl_node *node = list_get_node(list, pos);
 
     if(node)
         node->data = data;
@@ -135,9 +135,9 @@ void list_set(sl_list *list, size_t pos, void *data)
 void list_append(sl_list *list, void *data)
 {
     // allocate new node
-    sl_list_node *new = (sl_list_node*)malloc(sizeof(sl_list_node));
+    sl_node *new = (sl_node*)malloc(sizeof(sl_node));
     // zeroize it
-    memset(new, 0, sizeof(sl_list_node));
+    memset(new, 0, sizeof(sl_node));
     // fill data
     new->data = data;
 
@@ -150,7 +150,7 @@ void list_append(sl_list *list, void *data)
     }
 
     // get the first node
-    sl_list_node *node = list->head;
+    sl_node *node = list->head;
 
     // loop until the last node
     while(node->next)
@@ -165,7 +165,7 @@ void list_append(sl_list *list, void *data)
 void list_debug(sl_list *list)
 {
     printf("list %p head %p\n", list, list->head);
-    sl_list_node *node = list->head;
+    sl_node *node = list->head;
 
     while(node)
     {
@@ -176,8 +176,8 @@ void list_debug(sl_list *list)
 
 void list_reset(sl_list *list, int free_data)
 {
-    sl_list_node *node = list->head;
-    sl_list_node *old = 0;
+    sl_node *node = list->head;
+    sl_node *old = 0;
 
     while(node)
     {
@@ -191,16 +191,10 @@ void list_reset(sl_list *list, int free_data)
     list->head = 0;
 }
 
-void list_delete(sl_list *list, int free_data)
-{
-    list_reset(list, free_data);
-    free(list);
-}
-
 size_t list_size(sl_list *list)
 {
     // get the list's first node
-    sl_list_node *node = list->head;
+    sl_node *node = list->head;
     // counter variable
     size_t size = 0;
 
