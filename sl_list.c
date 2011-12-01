@@ -156,17 +156,5 @@ void list_reset(sl_list *list, int free_data)
 
 size_t list_size(sl_list *list)
 {
-    // get the list's first node
-    sl_node *node = list->head;
-    // counter variable
-    size_t size = 0;
-
-    // loop thru all nodes
-    while(node)
-    {
-        size++;
-        node = node->next;
-    }
-
-    return size;
+    return list->size;
 }
