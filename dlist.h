@@ -101,4 +101,10 @@ void dlist_push(dlist *list, void *data);
  */
 void dlist_insert(dlist *list, void *data, size_t pos);
 
+
+/* dlist_set(list, data, pos)
+ * set the data of the list's node at pos to data
+ */
+void dlist_set(dlist *list, void *data, size_t pos);
+
 #endif
