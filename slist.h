@@ -100,6 +100,14 @@ slist *slist_copy(slist *old);
 void slist_purge(slist *list, int free_data);
 
 
+/* slist_merge(dest, source)
+ * destructively adds all nodes of other to list.
+ * this will make other an empty list. use 
+ * slist_copy to prevent other from being emptied
+ */
+void slist_merge(slist *dest, slist *source);
+
+
 /* slist_append(list, data)
  * add data to the back of the linked list
  */

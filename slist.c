@@ -135,6 +135,30 @@ void slist_purge(slist *list, int free_data)
 }
 
 
+void slist_merge(slist *dest, slist *source)
+{
+    // if source is empty, ne need to do anything
+    if (!source->size)
+        return NULL;
+
+    // handle an empty dest differently
+    if (dest->size) {
+        // make dest's tail point to the beginning source
+        dest->tail->next = source->head;
+
+        // set dest's tail to source's tail
+        dest->tail = source->tail;
+
+        // add the sizes up
+        dest->size += source->size;
+    } else {
+        // merely copy all fields
+        memcpy(dest, source, sizeof(slist));
+    }
+
+    memset(source, 0, sizeof(slist));
+}
+
 
 void slist_append(slist *list, void *data)
 {
