@@ -19,7 +19,7 @@ dlist *dlist_copy(dlist *orig)
     dlist *copy = dlist_alloc();
     
     // get pointer to original node for copying
-    dlist_node *orig_node = orig->next;
+    dlist_node *orig_node = orig->head;
     // copy node over
     dlist_node *copy_node;
     if (orig_node)
