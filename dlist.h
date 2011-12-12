@@ -74,7 +74,14 @@ dlist_node *dlist_node_get(dlist *list, size_t pos);
  * frees list's nodes, the list itself and
  * optionally the data the ndoes point to
  */
-void dlist_free(dlist *list, int free_node);
+void dlist_free(dlist *list, int free_data);
+
+
+/* dlist_purge(list, free_data)
+ * remove all nodes from list and optionally
+ * free their data
+ */
+void dlist_purge(dlist *list, int free_data);
 
 
 /* dlist_append(list, data)
@@ -87,5 +94,11 @@ void dlist_append(dlist *list, void *data);
  * add data as node to the top of the list
  */
 void dlist_push(dlist *list, void *data);
+
+
+/* dlist_insert(list, data, pos)
+ * insert data at position pos of list
+ */
+void dlist_insert(dlist *list, void *data, size_t pos);
 
 #endif

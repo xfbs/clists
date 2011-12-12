@@ -91,6 +91,16 @@ dlist_node *dlist_node_get(dlist *list, size_t pos)
 
 void dlist_free(dlist *list, int free_data)
 {
+    // remove all nodes
+    dlist_purge(list, free_data);
+
+    // free dlist
+    free(list);
+}
+
+
+void dlist_purge(dlist *list, int free_data)
+{
     // get pointer to head of list
     dlist_node *node = list->head;
 
@@ -109,9 +119,6 @@ void dlist_free(dlist *list, int free_data)
         // traverse to next node
         node = node->next;
     }
-
-    // free dlist
-    free(list);
 }
 
 
@@ -176,4 +183,39 @@ void dlist_push(dlist *list, void *data)
 }
 
 
+void dlist_insert(dlist *list, void *data, size_t pos)
+{
+    // if asked to insert at pos 0, use push instead
+    if (pos == 0) {
+        // add to top of list
+        dlist_push(list, data);
+    } else {
+        // new node that needs to be inserted
+        dlist_node *new = dlist_node_alloc();
+
+        // set new node's data
+        new->data = data;
+
+        // get the node before
+        dlist_node *node = dlist_node_get(list, pos-1);
+
+        if (node) {
+            // tell the next node about the new one
+            node->next->prev = new;
+
+            // set the next node
+            new->next = node->next;
+
+            // insert this node
+            node->next = new;
+        } else {
+            // set this node as first node
+            list->head = new;
+            list->tail = new;
+        }
+
+        // increase list size
+        list->size++;
+    }
+}
 
