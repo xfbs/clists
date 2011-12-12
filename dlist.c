@@ -13,9 +13,37 @@ dlist *dlist_alloc()
 }
 
 
-dlist *dlist_copy(dlist *list)
+dlist *dlist_copy(dlist *orig)
 {
-    // TODO!!!
+    // new dlist to copy into
+    dlist *copy = dlist_alloc();
+    
+    // get pointer to original node for copying
+    dlist_node *orig_node = orig->next;
+    // copy node over
+    dlist_node *copy_node;
+    if (orig_node)
+        copy_node = dlist_node_copy(orig_node);
+    
+    // add node as head of list
+    copy->head = copy_node;
+    
+    while (orig_node = orig_node->next) {
+        // copy node
+        copy_node->next = dlist_node_copy(orig_node);
+        
+        // insert node into list
+        copy_node->next->prev = copy_node;
+        
+        // go to next node
+        copy_node = copy_node->next;
+    }
+    
+    // set last copied node to be the tail of the list
+    copy->tail = copy_node;
+    
+    // copy size over
+    copy->size = orig->size;
 }
 
 
@@ -33,6 +61,10 @@ dlist_node *dlist_node_alloc()
 
 dlist_node *dlist_node_copy(dlist_node *node)
 {
+    // don't attempt to copy an empty node
+    if(!node)
+        return NULL;
+
     // allocate memory for the copy
     dlist_node *copy = malloc(sizeof(dlist_node));
 
