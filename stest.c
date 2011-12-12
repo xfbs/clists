@@ -6,7 +6,7 @@ void slist_debug(slist *list)
     assert(list);
 
     // print debug info about list
-    printf("list @%p, head %p, tail %p, size %u\n", list, list->head, list->tail, (unsigned int)list->size);
+    printf("slist %p, head %p, tail %p, size %u\n", list, list->head, list->tail, (unsigned int)list->size);
 
     slist_node *node = list->head;
     size_t pos = -1;
