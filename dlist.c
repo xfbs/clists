@@ -168,6 +168,9 @@ void dlist_merge(dlist *dest, dlist *source)
         dest->tail->next = source->head;
         source->head->prev = dest->tail;
 
+        // set the last node
+        dest->tail = source->tail;
+
         // increment the size
         dest->size += source->size;
     }
@@ -315,5 +318,58 @@ void *dlist_get(dlist *list, size_t pos)
     return((node) ? node->data : NULL);
 }
 
+
+void *dlist_pop(dlist *list)
+{
+    // data to return
+    void *data;
+
+    // check if the list is empty
+    if (!list->size) {
+        // if so, return NULL
+        data = NULL;
+    } else if(list->size == 1) {
+        // get list's head
+        dlist_node *node = list->head;
+        
+        // get the node's data
+        data = node->data;
+
+        // zeroise list (since it's now empty)
+        memset(list, 0, sizeof(dlist));
+
+        // free node
+        free(node);
+    } else {
+        // get first node
+        dlist_node *node = list->head;
+
+        // if there is a next node, remove the back reference
+        if (node->next)
+            node->next->prev = 0;
+
+        // set the next node to be the new head
+        list->head = node->next;
+
+        // decrement list's size
+        list->size--;
+
+        // get the node's data
+        data = node->data;
+
+        // free the node
+        free(node);
+    }
+
+    // return data
+    return data;
+}
+
+
+size_t dlist_size(dlist *size)
+{
+    // return the size
+    return(list->size);
+}
 
 

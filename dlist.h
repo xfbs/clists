@@ -136,4 +136,15 @@ void *dlist_last(dlist *lsit);
 void *dlist_get(dlist *list, size_t pos);
 
 
+/* dlist_pop(list)
+ * remove and return the topmost node's data
+ */
+void *dlist_pop(dlist *list);
+
+
+/* dlist_size(list)
+ * returns the current size of the list
+ */
+size_t dlist_size(dlist *list);
+
 #endif
