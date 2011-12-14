@@ -142,6 +142,14 @@ void *dlist_get(dlist *list, size_t pos);
 void *dlist_pop(dlist *list);
 
 
+/* dlist_remove(list, pos, free_data)
+ * remove the node at pos, freeing it if asked to
+ * and return it's data in case cleanup needs to 
+ * be done
+ */
+void *dlist_remove(dlist *list, size_t pos, int free_data);
+
+
 /* dlist_size(list)
  * returns the current size of the list
  */

@@ -366,7 +366,53 @@ void *dlist_pop(dlist *list)
 }
 
 
-size_t dlist_size(dlist *size)
+void *dlist_remove(dlist *list, size_t pos, int free_data)
+{
+    // can't do this if list is empty
+    if (!list->size)
+        return NULL;
+
+    // make sure that pos is legal
+    if (pos >= list->size)
+        return NULL;
+
+    // just be lazy and use pop for this case
+    if (pos == 0)
+        return(dlist_pop(list));
+
+    // get the node that needs to be removed
+    dlist_node *node;
+
+    if (pos == (list->size-1)) {
+        // special treatment if it's the tail of the list
+        node = list->tail;
+
+        // unlink node
+        node->prev->next = NULL;
+    } else {
+        // get node
+        node = dlist_node_get(list, pos);
+
+        // unlink node
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+    }
+
+    // get the node's data for later use
+    void *data = node->data;
+
+    // free the node
+    free(node);
+    
+    // decrement list size
+    list->size--;
+
+    // return the saved data
+    return(data);
+}
+
+
+size_t dlist_size(dlist *list)
 {
     // return the size
     return(list->size);
