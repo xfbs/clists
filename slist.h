@@ -187,6 +187,7 @@ slist_iter *slist_iter_alloc(slist *list);
  */
 void slist_iter_free(slist_iter *iter);
 
+
 /* slist_iter_goto(iter, pos)
  * go to position pos in the iterator iter
  */
