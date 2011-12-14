@@ -84,6 +84,14 @@ void dlist_free(dlist *list, int free_data);
 void dlist_purge(dlist *list, int free_data);
 
 
+/* dlist_merge(destination, source)
+ * moves all nodes of source into destination, 
+ * leaving source as an empty list and destination
+ * as a list with all of source's nodes
+ */
+void dlist_merge(dlist *dest, dlist *source);
+
+
 /* dlist_append(list, data)
  * append data to the end of the list
  */
@@ -106,5 +114,26 @@ void dlist_insert(dlist *list, void *data, size_t pos);
  * set the data of the list's node at pos to data
  */
 void dlist_set(dlist *list, void *data, size_t pos);
+
+
+/* dlist_first(list)
+ * return the first node's data or NULL if 
+ * list is empty
+ */
+void *dlist_first(dlist *list);
+
+
+/* dlist_last(list)
+ * return the last node's data or NULL if
+ * list is empty
+ */
+void *dlist_last(dlist *lsit);
+
+
+/* dlist_get(list, pos)
+ * return the data of the node at pos
+ */
+void *dlist_get(dlist *list, size_t pos);
+
 
 #endif

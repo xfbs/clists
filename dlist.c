@@ -154,6 +154,29 @@ void dlist_purge(dlist *list, int free_data)
 }
 
 
+void dlist_merge(dlist *dest, dlist *source)
+{
+    // can't copy from source if source is empty
+    if(!source->size)
+        return;
+
+    // if dest is empty, just copy the memory over
+    if(!dest->size) {
+        memcpy(dest, source, sizeof(dlist));
+    } else {
+        // connect dest->tail and source->head
+        dest->tail->next = source->head;
+        source->head->prev = dest->tail;
+
+        // increment the size
+        dest->size += source->size;
+    }
+
+    // zeroise source
+    memset(source, 0, sizeof(dlist));
+}
+
+
 void dlist_append(dlist *list, void *data)
 {
     // the ndoe that needs to be appended
@@ -250,4 +273,47 @@ void dlist_insert(dlist *list, void *data, size_t pos)
         list->size++;
     }
 }
+
+
+void dlist_set(dlist *list, void *data, size_t pos)
+{
+    // get a reference to the node that needs to be altered
+    dlist_node *node = dlist_node_get(list, pos);
+
+    // only change node if it exists
+    if (node)
+        node->data = data;
+}
+
+
+void *dlist_first(dlist *list)
+{
+    // get pointer to first node
+    dlist_node *node = list->head;
+
+    // return it's data or NULL
+    return((node) ? node->data : NULL);
+}
+
+
+void *dlist_last(dlist *list)
+{
+    // get pointer to last node
+    dlist_node *node = list->tail;
+
+    // return it's data or NULL
+    return((node) ? node->data : NULL);
+}
+
+
+void *dlist_get(dlist *list, size_t pos)
+{
+    // get the requested node
+    dlist_node *node = dlist_node_get(list, pos);
+
+    // return data or NULL
+    return((node) ? node->data : NULL);
+}
+
+
 
