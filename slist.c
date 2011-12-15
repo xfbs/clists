@@ -139,7 +139,7 @@ void slist_merge(slist *dest, slist *source)
 {
     // if source is empty, ne need to do anything
     if (!source->size)
-        return NULL;
+        return;
 
     // handle an empty dest differently
     if (dest->size) {
