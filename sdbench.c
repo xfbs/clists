@@ -61,7 +61,6 @@ int main()
     dlist *dlist = dlist_alloc();
     printf("[*]\n");
 
-    size /= 100;
     printf("[%3i%%] filling dlist\r", 0);
     fflush(stdout);
 
