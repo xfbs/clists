@@ -11,7 +11,7 @@ void **pvector_data_resize(void **old_data, size_t old_size, size_t new_size)
     // if that didn't work, try using malloc
     if (!new_data) {
         // allocate new memory
-        new_data = malloc(new_size * sizeof(void**));
+        new_data = calloc(new_size, sizeof(void**));
 
         // copy memory
         memcpy(new_data, old_data, sizeof(void*) * ((old_size > new_size) ? new_size : old_size));
