@@ -6,7 +6,11 @@ int main()
     printf(" -> how many items? ");
     scanf("%u", &size);
 
+    unsigned int memory = sizeof(slist) + sizeof(slist_node)*size;
+    printf(" -> going to use %.2fMiB of memory\n", memory/1024.0/1024.0);
+
     printf("[ ] allocating list\r");
+    fflush(stdout);
     slist *list = slist_alloc();
     printf("[*]\n");
 
@@ -42,6 +46,7 @@ int main()
     printf("\n");
 
     printf("[ ] freeing list\r");
+    fflush(stdout);
     slist_free(list, 0);
     printf("[*]\n");
 
