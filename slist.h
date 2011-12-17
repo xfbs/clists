@@ -2,6 +2,7 @@
 #define _SLIST_H
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "debug.h"
 
 
@@ -63,7 +64,7 @@ slist *slist_alloc();
  * frees a list, it's nodes and optionally the 
  * node's data
  */
-void slist_free(slist* list, int free_data);
+void slist_free(slist* list, bool free_data);
 
 
 /* slist_node_alloc()
@@ -97,7 +98,7 @@ slist *slist_copy(slist *old);
  * removes all nodes from list, making it
  * empty, optionally frees all data
  */
-void slist_purge(slist *list, int free_data);
+void slist_purge(slist *list, bool free_data);
 
 
 /* slist_merge(dest, source)
@@ -167,7 +168,7 @@ void *slist_pop(slist *list);
  * the data if asked so, and returning the
  * pointer
  */
-void *slist_remove(slist *list, size_t pos, int free_data);
+void *slist_remove(slist *list, size_t pos, bool free_data);
 
 
 /* slist_size(list)

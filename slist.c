@@ -12,7 +12,7 @@ slist *slist_alloc()
 }
 
 
-void slist_free(slist *list, int free_data)
+void slist_free(slist *list, bool free_data)
 {
     slist_purge(list, free_data);
 
@@ -112,7 +112,7 @@ slist *slist_copy(slist *list)
 }
 
 
-void slist_purge(slist *list, int free_data)
+void slist_purge(slist *list, bool free_data)
 {
     // if list is NULL, don't do anything
     if (!list)
@@ -317,7 +317,7 @@ void *slist_pop(slist *list)
 }
 
 
-void *slist_remove(slist *list, size_t pos, int free_data)
+void *slist_remove(slist *list, size_t pos, bool free_data)
 {
     void *data;
 
@@ -344,6 +344,7 @@ void *slist_remove(slist *list, size_t pos, int free_data)
         } else {
             prev->next = node->next;
         }
+        
 
         // save the data for later
         data = node->data;
