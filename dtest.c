@@ -33,12 +33,20 @@ int main(void)
     dlist *list = dlist_alloc();
     dlist_debug(list);
 
+    printf("-> copying empty list\n");
+    dlist *copy = dlist_copy(list);
+    assert(dlist_size(copy) == dlist_size(list) == 0);
+    dlist_debug(copy);
+
+    printf("-> freeing empty copy\n");
+    dlist_free(list, 0);
+
     printf("-> appending data to list\n");
     dlist_append(list, data1);
     dlist_debug(list);
 
     printf("-> copying list\n");
-    dlist *copy = dlist_copy(list);
+    copy = dlist_copy(list);
     dlist_debug(copy);
 
     printf("-> joining lists\n");
