@@ -20,23 +20,28 @@ dlist *dlist_copy(dlist *orig)
     
     // get pointer to original node for copying
     dlist_node *orig_node = orig->head;
+
     // copy node over
     dlist_node *copy_node;
-    if (orig_node)
+
+    // if the list isn't empty, copy the stuff
+    if (orig_node) {
         copy_node = dlist_node_copy(orig_node);
-    
-    // add node as head of list
-    copy->head = copy_node;
-    
-    while (orig_node = orig_node->next) {
-        // copy node
-        copy_node->next = dlist_node_copy(orig_node);
         
-        // insert node into list
-        copy_node->next->prev = copy_node;
+        // add node as head of list
+        copy->head = copy_node;
         
-        // go to next node
-        copy_node = copy_node->next;
+        // copy nodes over
+        while (orig_node = orig_node->next) {
+            // copy node
+            copy_node->next = dlist_node_copy(orig_node);
+            
+            // insert node into list
+            copy_node->next->prev = copy_node;
+            
+            // go to next node
+            copy_node = copy_node->next;
+        }
     }
     
     // set last copied node to be the tail of the list
