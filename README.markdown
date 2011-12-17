@@ -17,10 +17,9 @@ compiling
 ---------
 
 All C code in this project is C99, thus when compiling you may need to pass a flag to your compiler to make it aware of this. To compile the slist and dlist tests, you can use these commands:
-```
-gcc -std=c99 -o stest stest.c slist.c debug.c
-gcc -std=c99 -o dtest dtest.c dlist.c debug.c
-```
+
+    gcc -std=c99 -o stest stest.c slist.c debug.c
+    gcc -std=c99 -o dtest dtest.c dlist.c debug.c
 
 contributing
 ------------
