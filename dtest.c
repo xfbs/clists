@@ -35,11 +35,12 @@ int main(void)
 
     printf("-> copying empty list\n");
     dlist *copy = dlist_copy(list);
-    assert(dlist_size(copy) == dlist_size(list) == 0);
+    assert(dlist_size(copy) == 0);
+    assert(dlist_size(copy) == dlist_size(list));
     dlist_debug(copy);
 
     printf("-> freeing empty copy\n");
-    dlist_free(list, 0);
+    dlist_free(copy, 0);
 
     printf("-> appending data to list\n");
     dlist_append(list, data1);
