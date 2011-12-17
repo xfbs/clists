@@ -2,6 +2,7 @@
 #define _DLIST_H
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "debug.h"
 
 
@@ -74,14 +75,14 @@ dlist_node *dlist_node_get(dlist *list, size_t pos);
  * frees list's nodes, the list itself and
  * optionally the data the ndoes point to
  */
-void dlist_free(dlist *list, int free_data);
+void dlist_free(dlist *list, bool free_data);
 
 
 /* dlist_purge(list, free_data)
  * remove all nodes from list and optionally
  * free their data
  */
-void dlist_purge(dlist *list, int free_data);
+void dlist_purge(dlist *list, bool free_data);
 
 
 /* dlist_merge(destination, source)
@@ -147,7 +148,7 @@ void *dlist_pop(dlist *list);
  * and return it's data in case cleanup needs to 
  * be done
  */
-void *dlist_remove(dlist *list, size_t pos, int free_data);
+void *dlist_remove(dlist *list, size_t pos, bool free_data);
 
 
 /* dlist_size(list)

@@ -126,7 +126,7 @@ dlist_node *dlist_node_get(dlist *list, size_t pos)
 }
 
 
-void dlist_free(dlist *list, int free_data)
+void dlist_free(dlist *list, bool free_data)
 {
     // remove all nodes
     dlist_purge(list, free_data);
@@ -136,7 +136,7 @@ void dlist_free(dlist *list, int free_data)
 }
 
 
-void dlist_purge(dlist *list, int free_data)
+void dlist_purge(dlist *list, bool free_data)
 {
     // get pointer to head of list
     dlist_node *node = list->head;
@@ -371,7 +371,7 @@ void *dlist_pop(dlist *list)
 }
 
 
-void *dlist_remove(dlist *list, size_t pos, int free_data)
+void *dlist_remove(dlist *list, size_t pos, bool free_data)
 {
     // can't do this if list is empty
     if (!list->size)
