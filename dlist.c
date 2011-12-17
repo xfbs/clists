@@ -67,7 +67,7 @@ dlist_node *dlist_node_alloc()
 dlist_node *dlist_node_copy(dlist_node *node)
 {
     // don't attempt to copy an empty node
-    if(!node)
+    if (!node)
         return NULL;
 
     // allocate memory for the copy
@@ -141,7 +141,7 @@ void dlist_purge(dlist *list, int free_data)
     // get pointer to head of list
     dlist_node *node = list->head;
 
-    while(node)
+    while (node)
     {
         // save data pointer for freeing later
         void *data = node->data;
@@ -150,7 +150,7 @@ void dlist_purge(dlist *list, int free_data)
         free(node);
 
         // free data if asked to
-        if(free_data)
+        if (free_data)
             free(data);
 
         // traverse to next node
@@ -162,11 +162,11 @@ void dlist_purge(dlist *list, int free_data)
 void dlist_merge(dlist *dest, dlist *source)
 {
     // can't copy from source if source is empty
-    if(!source->size)
+    if (!source->size)
         return;
 
     // if dest is empty, just copy the memory over
-    if(!dest->size) {
+    if (!dest->size) {
         memcpy(dest, source, sizeof(dlist));
     } else {
         // connect dest->tail and source->head
@@ -333,7 +333,7 @@ void *dlist_pop(dlist *list)
     if (!list->size) {
         // if so, return NULL
         data = NULL;
-    } else if(list->size == 1) {
+    } else if (list->size == 1) {
         // get list's head
         dlist_node *node = list->head;
         

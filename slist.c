@@ -42,8 +42,7 @@ slist_node *slist_get_node(slist *list, size_t pos)
 
     // loop until we hit the requested element
     slist_node *node = list->head;
-    while (node && pos)
-    {
+    while (node && pos) {
         pos--;
         node = node->next;
     }
@@ -54,8 +53,13 @@ slist_node *slist_get_node(slist *list, size_t pos)
 
 slist_node *slist_node_alloc()
 {
+    // allocate memory for node
     slist_node *node = malloc(sizeof(slist_node));
+
+    // zeroise memory
     memset(node, 0, sizeof(node));
+
+    // return pointer
     return node;
 }
 
@@ -63,11 +67,12 @@ slist_node *slist_node_alloc()
 slist_node *slist_node_copy(slist_node *old)
 {
     // can't copy nonexistant node
-    if(!old)
+    if (!old)
         return 0;
 
     // allocate new slist_node
     slist_node *new = malloc(sizeof(slist_node));
+
     // copy memory from old node over
     memcpy(new, old, sizeof(slist_node));
 }
@@ -80,6 +85,7 @@ slist *slist_copy(slist *list)
 
     // head node or list
     slist_node *list_node = list->head;
+
     // copy head node of list
     slist_node *copy_node = slist_node_copy(list_node);
 
@@ -87,16 +93,18 @@ slist *slist_copy(slist *list)
     copy->head = copy_node;
 
     // loop through nodes
-    while(list_node && list_node->next) {
+    while (list_node && list_node->next) {
         // copy nodes
         copy_node->next = slist_node_copy(list_node->next);
 
+        // go to next nodes
         copy_node = copy_node->next;
         list_node = list_node->next;
     }
 
     // set copy's tail node
     copy->tail = copy_node;
+
     // set copy's size
     copy->size = list->size;
 
@@ -107,25 +115,27 @@ slist *slist_copy(slist *list)
 void slist_purge(slist *list, int free_data)
 {
     // if list is NULL, don't do anything
-    if(!list)
+    if (!list)
         return;
 
     // current node
     slist_node *cur = list->head;
+
     // pointer to next node
     slist_node *next;
 
     // loop though list's nodes
-    while (cur)
-    {
+    while (cur) {
         // free data if asked to
-        if(free_data)
+        if (free_data)
             free(cur->data);
 
         // store a pointer to the next node
         next = cur->next;
+
         // free current node
         free(cur);
+
         // go to pointer to next node
         cur = next;
     }
@@ -156,6 +166,7 @@ void slist_merge(slist *dest, slist *source)
         memcpy(dest, source, sizeof(slist));
     }
 
+    // zeroise other list
     memset(source, 0, sizeof(slist));
 }
 
@@ -166,11 +177,12 @@ void slist_append(slist *list, void *data)
     slist_node *node = list->tail;
 
     // append node
-    if (node)
-    {
+    if (node) {
+        // to existing node
         node->next = slist_node_alloc();
         node = node->next;
     } else {
+        // by making it first node of the list
         node = slist_node_alloc();
         list->head = node;
     }
@@ -215,7 +227,7 @@ void slist_insert(slist *list, void *data, size_t pos)
     // handle special cases
     if (pos == 0) {
         slist_push(list, data);
-    } else if(pos >= list->size) {
+    } else if (pos >= list->size) {
         slist_append(list, data);
     } else {
         // get previous node
@@ -361,10 +373,13 @@ slist_iter *slist_iter_alloc(slist *list)
 {
     // allocate iterator
     slist_iter *iter = malloc(sizeof(slist_iter));
+    
+    // zeroise iterator
     memset(iter, 0, sizeof(slist_iter));
 
     // set list
     iter->list = list;
+
     // set current position
     iter->cur = 0;
     iter->pos = 0;
@@ -394,6 +409,7 @@ void slist_iter_goto(slist_iter *iter, size_t pos)
     iter->cur = node;
 }
 
+
 void *slist_iter_next(slist_iter *iter)
 {
     if(iter->cur) {
@@ -413,3 +429,5 @@ void *slist_iter_get(slist_iter *iter)
 {
     return((iter->cur) ? iter->cur->data : (void*)0);
 }
+
+
