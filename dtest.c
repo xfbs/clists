@@ -1,3 +1,28 @@
+/*  File: dtest.c
+ *  
+ *  Copyright (C) 2011, Patrick M. Elsen
+ *
+ *  This file is part of CLists (http://github.com/xfbs/CLists)
+ *  Author: Patrick M. Elsen <pelsen.vn (a) gmail.com>
+ *
+ *  All rights reserved.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+
 #include "dlist.h"
 
 void dlist_debug(dlist *list)
@@ -53,6 +78,29 @@ int main(void)
     printf("-> joining lists\n");
     dlist_merge(list, copy);
     dlist_debug(list);
+
+    printf("-> check if data is correct\n");
+    assert(dlist_pop(list) == data1);
+    assert(dlist_size(list) == 1);
+    assert(dlist_pop(list) == data1);
+    assert(dlist_size(list) == 0);
+    assert(dlist_pop(list) == NULL);
+    assert(dlist_size(list) == 0);
+    dlist_debug(list);
+
+    printf("-> push data to list\n");
+    dlist_push(list, data2);
+    dlist_push(list, data1);
+    assert(dlist_get(list, 0) == data1);
+    assert(dlist_get(list, 1) == data2);
+    dlist_debug(list);
+
+    printf("-> testing first and last\n");
+    assert(dlist_first(list) == data1);
+    assert(dlist_last(list) == data2);
+
+    printf("-> checking size of list\n");
+    assert(dlist_size(list) == 2);
 
     printf("-> adding to list\n");
     dlist_append(copy, data2);
