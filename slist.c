@@ -395,6 +395,31 @@ size_t slist_size(slist *list)
 }
 
 
+bool slist_compare(slist *lhs, slist *rhs)
+{
+    // check if they have the same size
+    if (slist_size(lhs) != slist_size(rhs))
+        return false;
+    
+    // the nodes to loop through
+    slist_node *lhs_node = lhs->head;
+    slist_node *rhs_node = rhs->head;
+
+    // loop through them
+    while (lhs_node && rhs_node) {
+        // return false if their data isn't the same
+        if (lhs_node->data != rhs_node->data)
+            return false;
+
+        // iterate to the next nodes
+        lhs_node = lhs_node->next;
+        rhs_node = rhs_node->next;
+    }
+
+    return true;
+}
+
+
 slist_iter *slist_iter_alloc(slist *list)
 {
     // allocate iterator

@@ -202,6 +202,14 @@ void *slist_remove(slist *list, size_t pos, bool free_data);
 size_t slist_size(slist *list);
 
 
+/* slist_compare(lhs, rhs)
+ * returns true if the lists have the same 
+ * size and if their nodes have the same
+ * data
+ */
+bool slist_compare(slist *lhs, slist *rhs);
+
+
 /* slist_iter_alloc(list)
  * returns an iterator for the list
  */

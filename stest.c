@@ -99,6 +99,9 @@ int main(void)
     slist *copy = slist_copy(list);
     slist_debug(copy);
 
+    printf("-> check if copied list equal\n");
+    assert(slist_compare(list, copy));
+
     printf("-> free lists\n");
     slist_free(list, 0);
     slist_free(copy, 0);
