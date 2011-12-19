@@ -407,38 +407,53 @@ void *dlist_remove(dlist *list, size_t pos, bool free_data)
         return NULL;
 
     // just be lazy and use pop for this case
-    if (pos == 0)
+    if (pos == 0) {
+        // save data
+        void *data = dlist_pop(list);
+
+        // free if necessary
+        if (free_data) {
+            free(data);
+        }
+
+        // return data
         return(dlist_pop(list));
-
-    // get the node that needs to be removed
-    dlist_node *node;
-
-    if (pos == (list->size-1)) {
-        // special treatment if it's the tail of the list
-        node = list->tail;
-
-        // unlink node
-        node->prev->next = NULL;
-    } else {
-        // get node
-        node = dlist_node_get(list, pos);
-
-        // unlink node
-        node->prev->next = node->next;
-        node->next->prev = node->prev;
     }
 
-    // get the node's data for later use
+    // get the node that needs to be removed
+    dlist_node *node = dlist_node_get(list, pos);
+
+    // if node doesn't exist, return NULL
+    if (!node)
+        return NULL;
+
+    // save data
     void *data = node->data;
 
-    // free the node
+    // handle the case where node is the last node
+    if (node == list->tail)
+        list->tail = node->prev;
+
+    // if node isn't last one, unlink
+    if (node->next)
+        node->next->prev = node->prev;
+
+    // if ndoe isn't first one, unlink
+    if (node->prev)
+        node->prev->next = node->next;
+
+    // free data if asked to
+    if (free_data)
+        free(data);
+
+    // free node
     free(node);
     
     // decrement list size
     list->size--;
 
-    // return the saved data
-    return(data);
+    // return data
+    return data;
 }
 
 
@@ -449,3 +464,26 @@ size_t dlist_size(dlist *list)
 }
 
 
+bool dlist_compare(dlist *lhs, dlist *rhs)
+{
+    // return false if the size is not equal
+    if (dlist_size(lhs) != dlist_size(rhs))
+        return false;
+
+    // nodes to loop through
+    dlist_node *lhs_node = lhs->head;
+    dlist_node *rhs_node = rhs->head;
+
+    // loop thru nodes
+    while (lhs_node && rhs_node) {
+        // check for equality
+        if (lhs_node->data != rhs_node->data)
+            return false;
+
+        // iterate to next node
+        lhs_node = lhs_node->next;
+        rhs_node = rhs_node->next;
+    }
+
+    return true;
+}

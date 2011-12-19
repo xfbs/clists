@@ -181,4 +181,11 @@ void *dlist_remove(dlist *list, size_t pos, bool free_data);
  */
 size_t dlist_size(dlist *list);
 
+
+/* dlist_compare(lhs, rhs)
+ * returns true if both lists have the same
+ * size and their nodes have the same data
+ */
+bool dlist_compare(dlist *lhs, dlist *rhs);
+
 #endif
