@@ -49,7 +49,6 @@ void slist_free(slist *list, bool free_data)
 slist_node *slist_get_node(slist *list, size_t pos)
 {
     // if the list is empty, return NULL
-    assert(list->size);
     if (!list->size)
         return NULL;
 
@@ -260,8 +259,6 @@ void slist_insert(slist *list, void *data, size_t pos)
         // get next node
         slist_node *next = prev->next;
         
-        assert(prev && next);
-
         slist_node *node = slist_node_alloc();
         prev->next = node; // make prev node point to it
         node->next = next; // make it point to next node
