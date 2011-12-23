@@ -53,61 +53,97 @@ int main(void)
 {
     void *data1 = (void*)0xDEADBEEF1;
     void *data2 = (void*)0xCAFEBABE2;
+    void *data3 = (void*)0x123ABCDE3;
 
-    printf("-> allocating new dlist\n");
+    printf("-> dlist_alloc (allocating new list)\n");
     dlist *list = dlist_alloc();
     dlist_debug(list);
 
-    printf("-> copying empty list\n");
+    printf("-> dlist_copy (copying empty list)\n");
     dlist *copy = dlist_copy(list);
     assert(dlist_size(copy) == 0);
     assert(dlist_size(copy) == dlist_size(list));
     dlist_debug(copy);
 
-    printf("-> freeing empty copy\n");
-    dlist_free(copy, 0);
+    printf("-> dlist_compare (comparing empty lists)\n");
+    assert(dlist_compare(list, copy));
 
-    printf("-> appending data to list\n");
+    printf("-> dlist_first (first data of empty list)\n");
+    assert(dlist_first(list) == NULL);
+
+    printf("-> dlist_append (appending data1 to list)\n");
     dlist_append(list, data1);
     dlist_debug(list);
 
-    printf("-> copying list\n");
+    printf("-> dlist_compare (comparing different lists)\n");
+    assert(dlist_compare(list, copy) == false);
+
+    printf("-> dlist_insert (inserting into copy at pos 1)\n");
+    dlist_insert(copy, data2, 1);
+    dlist_debug(copy);
+    
+    printf("-> dlist_compare (comparing inequal lists)\n");
+    assert(dlist_compare(list, copy) == false);
+
+    printf("-> dlist_free (freeing copied list)\n");
+    dlist_free(copy, 0);
+
+    printf("-> dlist_copy (copying full list)\n");
     copy = dlist_copy(list);
     dlist_debug(copy);
 
-    printf("-> joining lists\n");
+    printf("-> dlist_set (setting nonexistant position)\n");
+    dlist_set(copy, data2, 3);
+    dlist_debug(copy);
+
+    printf("-> dlist_set (setting existing position)\n");
+    dlist_set(copy, data2, 0);
+    dlist_debug(copy);
+
+    printf("-> dlist_merge (joining lists)\n");
     dlist_merge(list, copy);
     dlist_debug(list);
 
-    printf("-> check if data is correct\n");
+    printf("-> dlist_first (checking first element)\n");
+    assert(dlist_first(list) == data1);
+
+    printf("-> dlist_last (checking last element)\n");
+    assert(dlist_last(list) == data2);
+
+    printf("-> dlist_get (check if data is correct)\n");
+    assert(dlist_get(list, 0) == data1);
+    assert(dlist_get(list, 1) == data2);
+
+    printf("-> dlist_pop (check if data is correct)\n");
     assert(dlist_pop(list) == data1);
     assert(dlist_size(list) == 1);
-    assert(dlist_pop(list) == data1);
+    assert(dlist_pop(list) == data2);
     assert(dlist_size(list) == 0);
     assert(dlist_pop(list) == NULL);
     assert(dlist_size(list) == 0);
     dlist_debug(list);
 
-    printf("-> push data to list\n");
+    printf("-> dlist_push (prepend data to list)\n");
     dlist_push(list, data2);
     dlist_push(list, data1);
     assert(dlist_get(list, 0) == data1);
     assert(dlist_get(list, 1) == data2);
     dlist_debug(list);
 
-    printf("-> testing first and last\n");
-    assert(dlist_first(list) == data1);
-    assert(dlist_last(list) == data2);
-
-    printf("-> checking size of list\n");
+    printf("-> dlist_size (checking size of list)\n");
     assert(dlist_size(list) == 2);
 
-    printf("-> adding to list\n");
-    dlist_append(copy, data2);
-    dlist_push(copy, data1);
+    printf("-> dlist_insert (adding to list)\n");
+    dlist_insert(copy, data2, 1);
+    dlist_insert(copy, data1, 0);
+    dlist_insert(copy, data3, 1);
     assert(dlist_get(copy, 0) == data1);
-    assert(dlist_get(copy, 1) == data2);
+    assert(dlist_get(copy, 1) == data3);
+    assert(dlist_get(copy, 2) == data2);
     dlist_debug(copy);
+
+    printf("-> dlist_remove (removing from list)\n");
+    assert(dlist_remove(copy, 1, false) == data3);
 
     printf("-> popping from list\n");
     assert(dlist_pop(copy) == data1);
