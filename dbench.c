@@ -1,4 +1,4 @@
-/*  File: sdbench.c
+/*  File: dbench.c
  *  
  *  Copyright (C) 2011, Patrick M. Elsen
  *
