@@ -31,6 +31,7 @@
 
 void *log_malloc(size_t size, const char *file, unsigned int line, const char *func);
 void log_free(void *data, const char *file, unsigned int line, const char *func);
+int log_alloc_balance(int add);
 
 #ifndef _DEBUG_C
 #define malloc(size) log_malloc(size, __FILE__, __LINE__, __func__)
