@@ -74,6 +74,8 @@ dlist *dlist_copy(dlist *orig)
     
     // copy size over
     copy->size = orig->size;
+
+    return copy;
 }
 
 
@@ -277,6 +279,9 @@ void dlist_insert(dlist *list, void *data, size_t pos)
     if (pos == 0) {
         // add to top of list
         dlist_push(list, data);
+    } else if (pos >= list->size) {
+        // if asked to insert into the back of the list, use append
+        dlist_append(list, data);
     } else {
         // new node that needs to be inserted
         dlist_node *new = dlist_node_alloc();
@@ -293,6 +298,9 @@ void dlist_insert(dlist *list, void *data, size_t pos)
 
             // set the next node
             new->next = node->next;
+
+            // set previous node
+            new->prev = node;
 
             // insert this node
             node->next = new;
@@ -406,51 +414,45 @@ void *dlist_remove(dlist *list, size_t pos, bool free_data)
     if (pos >= list->size)
         return NULL;
 
+    // save data
+    void *data;
+
     // just be lazy and use pop for this case
     if (pos == 0) {
+        data = dlist_pop(list);
+    } else {
+        // get the node that needs to be removed
+        dlist_node *node = dlist_node_get(list, pos);
+
+        // if node doesn't exist, return NULL
+        if (!node)
+            return NULL;
+
         // save data
-        void *data = dlist_pop(list);
+        data = node->data;
 
-        // free if necessary
-        if (free_data) {
-            free(data);
-        }
+        // handle the case where node is the last node
+        if (node == list->tail)
+            list->tail = node->prev;
 
-        // return data
-        return(dlist_pop(list));
+        // if node isn't last one, unlink
+        if (node->next)
+            node->next->prev = node->prev;
+
+        // if ndoe isn't first one, unlink
+        if (node->prev)
+            node->prev->next = node->next;
+
+        // free node
+        free(node);
+        
+        // decrement list size
+        list->size--;
     }
-
-    // get the node that needs to be removed
-    dlist_node *node = dlist_node_get(list, pos);
-
-    // if node doesn't exist, return NULL
-    if (!node)
-        return NULL;
-
-    // save data
-    void *data = node->data;
-
-    // handle the case where node is the last node
-    if (node == list->tail)
-        list->tail = node->prev;
-
-    // if node isn't last one, unlink
-    if (node->next)
-        node->next->prev = node->prev;
-
-    // if ndoe isn't first one, unlink
-    if (node->prev)
-        node->prev->next = node->next;
 
     // free data if asked to
     if (free_data)
         free(data);
-
-    // free node
-    free(node);
-    
-    // decrement list size
-    list->size--;
 
     // return data
     return data;
