@@ -183,6 +183,8 @@ void dlist_purge(dlist *list, bool free_data)
         // traverse to next node
         node = node->next;
     }
+
+    memset(list, 0, sizeof(dlist));
 }
 
 
