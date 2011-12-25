@@ -433,5 +433,25 @@ int main(void)
     dlist_free(copy, false);
 
 
+    printf("-> dlist_purge(empty)\n");
+    list = dlist_alloc();
+    dlist_purge(list, false);
+    dlist_debug(list);
+    assert(list->size == 0);
+    assert(list->head == NULL);
+    assert(list->tail == NULL);
+    dlist_free(list, false);
+
+
+    printf("-> dlist_purge(full)\n");
+    list = dtest_new();
+    dlist_purge(list, false);
+    dlist_debug(list);
+    assert(list->size == 0);
+    assert(list->head == NULL);
+    assert(list->tail == NULL);
+    dlist_free(list, false);
+    
+
     printf("-> ALL TESTS PASSED (B:%d)\n", log_alloc_balance(0));
 }
