@@ -23,6 +23,7 @@
  */
 
 
+#include <stdio.h>
 #include "slist.h"
 #include "dlist.h"
 
