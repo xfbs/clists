@@ -25,6 +25,15 @@
 
 #include "slist.h"
 
+
+void *data1 = (void*)0xDEADBEEF1;
+void *data2 = (void*)0xCAFEBABE2;
+void *data3 = (void*)0xDECAFBAD3;
+void *data4 = (void*)0xBAADF00D4;
+void *data5 = (void*)0xC0DEBABE5;
+void *data6 = (void*)0xBADCAB1E6;
+
+
 void slist_debug(slist *list)
 {
     // make sure list exists
@@ -56,16 +65,23 @@ void slist_debug(slist *list)
     printf("\n");
 }
 
+
+slist *stest_new()
+{
+    slist *list = slist_alloc();
+
+    slist_append(list, data1);
+    slist_append(list, data2);
+    slist_append(list, data3);
+    slist_append(list, data4);
+    slist_append(list, data5);
+
+    return list;
+}
+
+
 int main(void)
 {
-    // couldn't get it to work as an array... this'll do
-    void *data1 = (void*)0xCAFEBABE1;
-    void *data2 = (void*)0xDECAFBAD2;
-    void *data3 = (void*)0xDEADBEEF3;
-    void *data4 = (void*)0xBAADF00D4;
-    void *data5 = (void*)0xC0DEBABE5;
-    void *data6 = (void*)0xBADCAB1E6;
-
     printf("-> allocate list\n");
     slist *list = slist_alloc();
     slist_debug(list);
