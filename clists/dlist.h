@@ -52,23 +52,23 @@ typedef struct dlist
 #define dlist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
 
 dlist_t *dlist_new();
-int dlist_init(dlist_t *);
-int dlist_purge(dlist_t *);
-int dlist_free(dlist_t *);
+int dlist_init(dlist_t *list);
+int dlist_purge(dlist_t *list);
+int dlist_free(dlist_t *list);
 
-int dlist_append(dlist_t *, void *);
-int dlist_prepend(dlist_t *, void *);
-int dlist_insert(dlist_t *, size_t, void *);
-int dlist_set(dlist_t *, size_t, void *);
+int dlist_append(dlist_t *list, void *data);
+int dlist_prepend(dlist_t *list, void *data);
+int dlist_insert(dlist_t *list, size_t pos, void *data);
+int dlist_set(dlist_t *list, size_t pos, void *data);
 
-void *dlist_get(dlist_t *, size_t);
-void *dlist_pop(dlist_t *);
-void *dlist_poll(dlist_t *);
-void *dlist_remove(dlist_t *, size_t);
+void *dlist_get(dlist_t *list, size_t pos);
+void *dlist_remove(dlist_t *list, size_t pos);
+void *dlist_pop(dlist_t *list);
+void *dlist_poll(dlist_t *list);
 
-int dlist_equal(dlist_t *, dlist_t *);
-int dlist_merge(dlist_t *, dlist_t *);
-dlist_t *dlist_copy(dlist_t *);
+int dlist_equal(dlist_t *lista, dlist_t *listb);
+int dlist_merge(dlist_t *dst, dlist_t *src);
+dlist_t *dlist_copy(dlist_t *list);
 //dlist_node *dlist_node_get(dlist *list, size_t pos);
 
 #ifdef __cplusplus

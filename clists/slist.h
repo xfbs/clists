@@ -23,7 +23,6 @@
  */
 
 
-/* include guard */
 #ifndef _SLIST_H
 #define _SLIST_H
 
@@ -34,14 +33,11 @@
 extern "C" {
 #endif
 
-
-/* data structures */
 typedef struct slist_node
 {
     struct slist_node *next;
     void *data;
 } slist_node_t;
-
 
 typedef struct slist
 {
@@ -50,33 +46,28 @@ typedef struct slist
     size_t size;
 } slist_t;
 
-
-/* public functions */
 #define slist_size(list) ((list) ? (list)->size : 0)
 #define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
 
 slist_t *slist_new();
-int slist_init(slist_t *);
-int slist_purge(slist_t *);
-int slist_free(slist_t *);
+int slist_init(slist_t *list);
+int slist_purge(slist_t *list);
+int slist_free(slist_t *list);
 
-int slist_append(slist_t *, void *);
-int slist_prepend(slist_t *, void *);
-int slist_insert(slist_t *, size_t, void *);
-int slist_remove(slist_t *, size_t);
-int slist_set(slist_t *, size_t, void *);
+int slist_append(slist_t *list, void *data);
+int slist_prepend(slist_t list*, void *data);
+int slist_insert(slist_t *list, size_t pos, void *data);
+int slist_remove(slist_t *list, size_t pos);
+int slist_set(slist_t *list, size_t pos, void *data);
 
-void *slist_get(slist_t *, size_t);
-void *slist_pop(slist_t *);
+void *slist_get(slist_t *list, size_t) pos;
+void *slist_pop(slist_t *list);
 
-int slist_equal(slist_t *, slist_t *);
-int slist_merge(slist_t *, slist_t *);
-slist_t *slist_copy(slist_t *);
-
-/* internal functions */
+int slist_equal(slist_t *lista, slist_t *listb);
+int slist_merge(slist_t *dst, slist_t *src);
+slist_t *slist_copy(slist_t *list);
 //slist_node_t *slist_get_node(slist_t *list, size_t pos);
-
 
 #ifdef __cplusplus
 }
