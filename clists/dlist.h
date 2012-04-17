@@ -25,8 +25,8 @@
 #ifndef _DLIST_H
 #define _DLIST_H
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define dlist_size(list) ((list) ? (list)->size : 0)
 #define dlist_first(list) (((list)->head) ? (list)->head->data : NULL)
@@ -63,10 +63,8 @@ int dlist_set(dlist_t *list, size_t pos, void *data);
 
 void *dlist_get(dlist_t *list, size_t pos);
 void *dlist_pop(dlist_t *list);
-void *dlist_poll(dlist_t *list);
 
 int dlist_equal(dlist_t *lista, dlist_t *listb);
-int dlist_merge(dlist_t *dst, dlist_t *src);
 dlist_t *dlist_copy(dlist_t *list);
 
 #ifndef dlist_size
