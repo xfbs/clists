@@ -253,35 +253,8 @@ int dlist_equal(dlist_t *lista, dlist_t *listb)
         rhs_node = rhs_node->next;
     }
 
-    return -1;
+    return 0;
 }
-
-/*
-void dlist_merge(dlist_t *dest, dlist_t *source)
-{
-    // can't copy from source if source is empty
-    if(!source->size)
-        return;
-
-    // if dest is empty, just copy the memory over
-    if(!dest->size) {
-        memcpy(dest, source, sizeof(dlist_t));
-    } else {
-        // connect dest->tail and source->head
-        dest->tail->next = source->head;
-        source->head->prev = dest->tail;
-
-        // set the last node
-        dest->tail = source->tail;
-
-        // increment the size
-        dest->size += source->size;
-    }
-
-    // zeroise source
-    memset(source, 0, sizeof(dlist));
-}
-*/
 
 dlist_t *dlist_copy(dlist_t *list)
 {
