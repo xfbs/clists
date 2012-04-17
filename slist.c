@@ -22,9 +22,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-
 #include "clists/slist.h"
-
 
 slist_t *slist_new()
 {
@@ -36,7 +34,6 @@ slist_t *slist_new()
     return list;
 }
 
-
 int slist_init(slist_t *list)
 {
     if(list == NULL)
@@ -45,7 +42,6 @@ int slist_init(slist_t *list)
     memset(list, 0, sizeof(slist_t));
     return 0;
 }
-
 
 int slist_free(slist_t *list)
 {
@@ -58,7 +54,6 @@ int slist_free(slist_t *list)
 
     return ret;
 }
-
 
 int slist_purge(slist_t *list)
 {
@@ -79,7 +74,6 @@ int slist_purge(slist_t *list)
     memset(list, 0, sizeof(slist_t));
     return 0;
 }
-
 
 slist_node_t *slist_get_node(slist_t *list, size_t pos)
 {
@@ -105,7 +99,6 @@ slist_node_t *slist_get_node(slist_t *list, size_t pos)
     return node;
 }
 
-
 /*
 slist_node *slist_node_copy(slist_node *old)
 {
@@ -120,7 +113,6 @@ slist_node *slist_node_copy(slist_node *old)
     memcpy(new, old, sizeof(slist_node));
 }
 */
-
 
 /*
 slist *slist_copy(slist *list)
@@ -157,7 +149,6 @@ slist *slist_copy(slist *list)
 }
 */
 
-
 /*
 void slist_merge(slist *dest, slist *source)
 {
@@ -185,7 +176,6 @@ void slist_merge(slist *dest, slist *source)
 }
 */
 
-
 int slist_append(slist_t *list, void *data)
 {
     slist_node_t *node = list->tail;
@@ -211,7 +201,6 @@ int slist_append(slist_t *list, void *data)
     return 0;
 }
 
-
 int slist_prepend(slist_t *list, void *data)
 {
     slist_node_t *node = malloc(sizeof(slist_node_t));
@@ -233,7 +222,6 @@ int slist_prepend(slist_t *list, void *data)
 
     return 0;
 }
-
 
 int slist_insert(slist_t *list, size_t pos, void *data)
 {
@@ -264,7 +252,6 @@ int slist_insert(slist_t *list, size_t pos, void *data)
     return 0;
 }
 
-
 int slist_set(slist_t *list, size_t pos, void *data)
 {
     slist_node_t *node = slist_get_node(list, pos);
@@ -277,7 +264,6 @@ int slist_set(slist_t *list, size_t pos, void *data)
     }
 }
 
-
 /*
 void *slist_first(slist_t *list)
 {
@@ -288,7 +274,6 @@ void *slist_first(slist_t *list)
     }
 }
 */
-
 
 /*
 void *slist_last(slist_t *list)
@@ -301,14 +286,12 @@ void *slist_last(slist_t *list)
 }
 */
 
-
 void *slist_get(slist_t *list, size_t pos)
 {
     slist_node_t *node = slist_get_node(list, pos);
 
     return((node != NULL) ? node->data : NULL);
 }
-
 
 void *slist_pop(slist_t *list)
 {
@@ -331,7 +314,6 @@ void *slist_pop(slist_t *list)
 
     return data;
 }
-
 
 int slist_remove(slist_t *list, size_t pos)
 {
@@ -363,14 +345,12 @@ int slist_remove(slist_t *list, size_t pos)
     return 0;
 }
 
-
 /*
 size_t slist_size(slist_t *list)
 {
     return list->size;
 }
 */
-
 
 /*
 bool slist_compare(slist *lhs, slist *rhs)
