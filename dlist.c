@@ -22,181 +22,250 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-
 #include "dlist.h"
 
-
-dlist *dlist_alloc()
+dlist_t *dlist_new()
 {
-    // allocate new list
-    dlist *list = malloc(sizeof(dlist));
-
-    // zeroize list
-    memset(list, 0, sizeof(dlist));
-
+    dlist_t *list = malloc(sizeof(dlist_t));
+    memset(list, 0, sizeof(dlist_t));
     return list;
 }
 
-
-dlist *dlist_copy(dlist *orig)
+int dlist_init(dlist_t *list)
 {
-    // new dlist to copy into
-    dlist *copy = dlist_alloc();
-    
-    // get pointer to original node for copying
-    dlist_node *orig_node = orig->head;
-
-    // copy node over
-    dlist_node *copy_node;
-
-    // if the list isn't empty, copy the stuff
-    if (orig_node) {
-        copy_node = dlist_node_copy(orig_node);
-        
-        // add node as head of list
-        copy->head = copy_node;
-        
-        // copy nodes over
-        while (orig_node = orig_node->next) {
-            // copy node
-            copy_node->next = dlist_node_copy(orig_node);
-            
-            // insert node into list
-            copy_node->next->prev = copy_node;
-            
-            // go to next node
-            copy_node = copy_node->next;
-        }
-    }
-    
-    // set last copied node to be the tail of the list
-    copy->tail = copy_node;
-    
-    // copy size over
-    copy->size = orig->size;
-
-    return copy;
+    memset(list, 0, sizeof(dlist_t));
+    return 0;
 }
 
-
-dlist_node *dlist_node_alloc()
+int dlist_purge(dlist_t *list)
 {
-    // allocate memory for node
-    dlist_node *node = malloc(sizeof(dlist_node));
+    dlist_node_t *node = list->head;
 
-    // zeroize node
-    memset(node, 0, sizeof(dlist_node));
-
-    return node;
-}
-
-
-dlist_node *dlist_node_copy(dlist_node *node)
-{
-    // don't attempt to copy an empty node
-    if (!node)
-        return NULL;
-
-    // allocate memory for the copy
-    dlist_node *copy = malloc(sizeof(dlist_node));
-
-    // copy contents over
-    memcpy(copy, node, sizeof(dlist_node));
-
-    return copy;
-}
-
-
-dlist_node *dlist_node_get(dlist *list, size_t pos)
-{
-    // return NULL if the list is empty
-    if (!list->size)
-        return NULL;
-
-    // return null if pos doesn't exist in list
-    if (pos >= list->size)
-        return NULL;
-
-    // deliberately uninitialized
-    dlist_node *node;
-
-    // check where the node is
-    if (pos < (list->size/2)) {
-        // pos is before the middle if the list,
-        // thus we loop from the beginning
-        node = list->head;
-
-        while (node && pos) {
-            // decrement pos
-            pos--;
-
-            // go to next node
-            node = node->next;
-        }
-    } else {
-        // pos is after the middle of the list,
-        // thus we loop from the end of the list
-
-        node = list->tail;
-        pos = (list->size-pos)-1;
-
-        while (node && pos) {
-            // decrement pos
-            pos--;
-
-            // go to previous node
-            node = node->prev;
-        }
-    }
-
-    return node;
-}
-
-
-void dlist_free(dlist *list, bool free_data)
-{
-    // remove all nodes
-    dlist_purge(list, free_data);
-
-    // free dlist
-    free(list);
-}
-
-
-void dlist_purge(dlist *list, bool free_data)
-{
-    // get pointer to head of list
-    dlist_node *node = list->head;
-
-    while (node)
-    {
-        // save data pointer for freeing later
-        void *data = node->data;
-
-        // free node
+    while (node) {
         free(node);
-
-        // free data if asked to
-        if (free_data)
-            free(data);
-
-        // traverse to next node
         node = node->next;
     }
 
-    memset(list, 0, sizeof(dlist));
+    memset(list, 0, sizeof(dlist_t));
+    return 0;
+}
+
+int dlist_free(dlist_t *list)
+{
+    int ret = dlist_purge(list);
+    free(list);
+    return ret;
+}
+
+int dlist_append(dlist_t *list, void *data)
+{
+    dlist_node_t *node = malloc(sizeof(dlist_node_t));
+    if(node == NULL) {
+        return -1;
+    }
+    memset(node, 0, sizeof(dlist_node_t));
+    node->data = data;
+
+    if(list->tail != NULL) {
+        node->prev = list->tail;
+        list->tail->next = node;
+        list->tail = node;
+    } else {
+        list->head = node;
+        list->tail = node;
+    }
+
+    list->size++;
+    return 0;
 }
 
 
-void dlist_merge(dlist *dest, dlist *source)
+void dlist_prepend(dlist_t *list, void *data)
+{
+    dlist_node_t *node = malloc(sizeof(dlist_node_t));
+    if(node == NULL) {
+        return -1;
+    }
+    memset(node, 0, sizeof(dlist_node_t));
+    node->data = data;
+
+    if(list->head != NULL) {
+        node->next = list->head;
+        list->head->prev = node;
+        list->head = node;
+    } else {
+        list->head = node;
+        list->tail = node;
+    }
+
+    list->size++;
+    return 0;
+}
+
+int dlist_insert(dlist_t *list, size_t pos, void *data)
+{
+    if(pos == 0) {
+        dlist_prepend(list, data);
+    } else if(pos == list->size) {
+        dlist_append(list, data);
+    } else if(pos > list->size) {
+        return -1;
+    } else {
+        dlist_node_t *new = malloc(sizeof(dlist_node_t));
+        if(new == NULL) {
+            return -1;
+        }
+        memset(new, 0, sizeof(dlist_node_t));
+        new->data = data;
+
+        dlist_node_t *node = dlist_node_get(list, pos-1);
+
+        if(node) {
+            node->next->prev = new;
+            new->next = node->next;
+            new->prev = node;
+            node->next = new;
+        } else {
+            return -1;
+        }
+    }
+
+    list->size++;
+    return 0;
+}
+
+int dlist_set(dlist_t *list, size_t pos, void *data)
+{
+    dlist_node_t *node = dlist_node_get(list, pos);
+
+    if(node) {
+        node->data = data;
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
+void *dlist_get(dlist_t *list, size_t pos)
+{
+    dlist_node_t *node = dlist_node_get(list, pos);
+    return((node) ? node->data : NULL);
+}
+
+void *dlist_pop(dlist_t *list)
+{
+    void *data;
+    dlist_node_t *node;
+
+    switch(list->size) {
+        case 0:
+            return NULL;
+            break;
+        case 1:
+            node = list->head;
+            data = node->data;
+            memset(list, 0, sizeof(dlist_t));
+            break;
+        default:
+            node = list->head;
+
+            if(node->next)
+                node->next->prev = NULL;
+
+            list->head = node->next;
+            list->size--;
+            data = node->data;
+            break;
+    }
+
+    free(node);
+    return data;
+}
+
+int dlist_remove(dlist_t *list, size_t pos)
+{
+    if(list->size == 0)
+        return -1;
+
+    if(pos >= list->size)
+        return -1;
+
+    if(pos == 0) {
+        data = dlist_pop(list);
+    } else {
+        dlist_node_t *node = dlist_node_get(list, pos);
+
+        if(node == NULL)
+            return -1;
+
+        if(node == list->tail)
+            list->tail = node->prev;
+
+        if(node->next != NULL)
+            node->next->prev = node->prev;
+
+        if(node->prev != NULL)
+            node->prev->next = node->next;
+
+        free(node);
+        list->size--;
+    }
+
+    return 0;
+}
+
+#ifndef dlist_size
+size_t dlist_size(dlist_t *list)
+{
+    return((list) ? list->size : 0);
+}
+#endif
+
+#ifndef dlist_first
+void *dlist_first(dlist_t *list)
+{
+    dlist_node_t *node = list->head;
+    return((node) ? node->data : NULL);
+}
+#endif
+
+#ifndef dlist_last
+void *dlist_last(dlist_t *list)
+{
+    dlist_node_t *node = list->tail;
+    return((node) ? node->data : NULL);
+}
+#endif
+
+int dlist_equal(dlist_t *lista, dlist_t *listb)
+{
+    if(dlist_size(lista) != dlist_size(listb))
+        return -1;
+
+    dlist_node_t *lista_node = lista->head;
+    dlist_node_t *listb_node = listb->head;
+
+    while (lista_node && listb_node) {
+        if(lhs_node->data != rhs_node->data)
+            return -1;
+
+        lhs_node = lhs_node->next;
+        rhs_node = rhs_node->next;
+    }
+
+    return -1;
+}
+
+/*
+void dlist_merge(dlist_t *dest, dlist_t *source)
 {
     // can't copy from source if source is empty
-    if (!source->size)
+    if(!source->size)
         return;
 
     // if dest is empty, just copy the memory over
-    if (!dest->size) {
-        memcpy(dest, source, sizeof(dlist));
+    if(!dest->size) {
+        memcpy(dest, source, sizeof(dlist_t));
     } else {
         // connect dest->tail and source->head
         dest->tail->next = source->head;
@@ -212,282 +281,78 @@ void dlist_merge(dlist *dest, dlist *source)
     // zeroise source
     memset(source, 0, sizeof(dlist));
 }
+*/
 
-
-void dlist_append(dlist *list, void *data)
+dlist_t *dlist_copy(dlist_t *list)
 {
-    // the ndoe that needs to be appended
-    dlist_node *node = dlist_node_alloc();
+    dlist_t *copy = dlist_new();
 
-    // set data
-    node->data = data;
+    dlist_node_t *o_node = orig->head;
+    dlist_node_t *c_node;
 
-    // check if list is empty
-    if (list->size) {
-        // append after current tail of list
-        // set the previous node (current tail)
-        node->prev = list->tail;
-
-        // set current tail's next ndoe (this one)
-        list->tail->next = node;
-
-        // set node as new tail
-        list->tail = node;
-    } else {
-        // set node as first item of list
-        list->head = node;
-
-        // set node as last item of list
-        list->tail = node;
-    }
-
-    // increae size by one
-    list->size++;
-}
-
-
-void dlist_push(dlist *list, void *data)
-{
-    // node that needs to be pushed
-    dlist_node *node = dlist_node_alloc();
-
-    // set data
-    node->data = data;
-
-    // check if list is empty
-    if (list->size) {
-        // set node's next to the current head of the list
-        node->next = list->head;
-
-        // set current head's prev to this node
-        list->head->prev = node;
-
-        // set this node as head
-        list->head = node;
-    } else {
-        // set this node as the only list member
-        list->head = node;
-        list->tail = node;
-    }
-
-    // increase list size by one
-    list->size++;
-}
-
-
-void dlist_insert(dlist *list, void *data, size_t pos)
-{
-    // if asked to insert at pos 0, use push instead
-    if (pos == 0) {
-        // add to top of list
-        dlist_push(list, data);
-    } else if (pos >= list->size) {
-        // if asked to insert into the back of the list, use append
-        dlist_append(list, data);
-    } else {
-        // new node that needs to be inserted
-        dlist_node *new = dlist_node_alloc();
-
-        // set new node's data
-        new->data = data;
-
-        // get the node before
-        dlist_node *node = dlist_node_get(list, pos-1);
-
-        if (node) {
-            // tell the next node about the new one
-            node->next->prev = new;
-
-            // set the next node
-            new->next = node->next;
-
-            // set previous node
-            new->prev = node;
-
-            // insert this node
-            node->next = new;
-        } else {
-            // set this node as first node
-            list->head = new;
-            list->tail = new;
+    if(orig_node != NULL) {
+        c_node = malloc(sizeof(dlist_node_t));
+        if(c_node == NULL) {
+            return NULL;
         }
 
-        // increase list size
-        list->size++;
-    }
-}
-
-
-void dlist_set(dlist *list, void *data, size_t pos)
-{
-    // get a reference to the node that needs to be altered
-    dlist_node *node = dlist_node_get(list, pos);
-
-    // only change node if it exists
-    if (node)
-        node->data = data;
-}
-
-
-void *dlist_first(dlist *list)
-{
-    // get pointer to first node
-    dlist_node *node = list->head;
-
-    // return it's data or NULL
-    return((node) ? node->data : NULL);
-}
-
-
-void *dlist_last(dlist *list)
-{
-    // get pointer to last node
-    dlist_node *node = list->tail;
-
-    // return it's data or NULL
-    return((node) ? node->data : NULL);
-}
-
-
-void *dlist_get(dlist *list, size_t pos)
-{
-    // get the requested node
-    dlist_node *node = dlist_node_get(list, pos);
-
-    // return data or NULL
-    return((node) ? node->data : NULL);
-}
-
-
-void *dlist_pop(dlist *list)
-{
-    // data to return
-    void *data;
-
-    // check if the list is empty
-    if (!list->size) {
-        // if so, return NULL
-        data = NULL;
-    } else if (list->size == 1) {
-        // get list's head
-        dlist_node *node = list->head;
+        memset(c_node, 0, sizeof(dlist_node_t));
+        c_node->data = o_node->data;
+        copy->head = c_node;
         
-        // get the node's data
-        data = node->data;
+        while (o_node = o_node->next) {
+            // copy node
+            c_node->next = malloc(sizeof(dlist_node_t));
+            if(c_node->next == NULL) {
+                return NULL;
+            }
 
-        // zeroise list (since it's now empty)
-        memset(list, 0, sizeof(dlist));
-
-        // free node
-        free(node);
-    } else {
-        // get first node
-        dlist_node *node = list->head;
-
-        // if there is a next node, remove the back reference
-        if (node->next)
-            node->next->prev = 0;
-
-        // set the next node to be the new head
-        list->head = node->next;
-
-        // decrement list's size
-        list->size--;
-
-        // get the node's data
-        data = node->data;
-
-        // free the node
-        free(node);
+            memset(c_node->next, 0, sizeof(dlist_node_t));
+            c_node->next->data = orig_node->data;
+            c_node->next->prev = c_node;
+            c_node = c_node->next;
+        }
     }
-
-    // return data
-    return data;
+    
+    copy->tail = c_node;
+    copy->size = orig->size;
+    return copy;
 }
 
-
-void *dlist_remove(dlist *list, size_t pos, bool free_data)
+dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
 {
-    // can't do this if list is empty
-    if (!list->size)
+    if(!list->size)
         return NULL;
 
-    // make sure that pos is legal
-    if (pos >= list->size)
+    if(pos >= list->size)
         return NULL;
 
-    // save data
-    void *data;
+    dlist_node_t *node;
 
-    // just be lazy and use pop for this case
-    if (pos == 0) {
-        data = dlist_pop(list);
+    if(pos < (list->size/2)) {
+        // pos is before the middle if the list,
+        // thus we loop from the beginning
+        node = list->head;
+
+        while (node && pos) {
+            pos--;
+            node = node->next;
+        }
     } else {
-        // get the node that needs to be removed
-        dlist_node *node = dlist_node_get(list, pos);
+        // pos is after the middle of the list,
+        // thus we loop from the end of the list
+        node = list->tail;
+        pos = (list->size - pos) - 1;
 
-        // if node doesn't exist, return NULL
-        if (!node)
-            return NULL;
-
-        // save data
-        data = node->data;
-
-        // handle the case where node is the last node
-        if (node == list->tail)
-            list->tail = node->prev;
-
-        // if node isn't last one, unlink
-        if (node->next)
-            node->next->prev = node->prev;
-
-        // if ndoe isn't first one, unlink
-        if (node->prev)
-            node->prev->next = node->next;
-
-        // free node
-        free(node);
-        
-        // decrement list size
-        list->size--;
+        while (node && pos) {
+            pos--;
+            node = node->prev;
+        }
     }
 
-    // free data if asked to
-    if (free_data)
-        free(data);
-
-    // return data
-    return data;
-}
-
-
-size_t dlist_size(dlist *list)
-{
-    // return the size
-    return(list->size);
-}
-
-
-bool dlist_compare(dlist *lhs, dlist *rhs)
-{
-    // return false if the size is not equal
-    if (dlist_size(lhs) != dlist_size(rhs))
-        return false;
-
-    // nodes to loop through
-    dlist_node *lhs_node = lhs->head;
-    dlist_node *rhs_node = rhs->head;
-
-    // loop thru nodes
-    while (lhs_node && rhs_node) {
-        // check for equality
-        if (lhs_node->data != rhs_node->data)
-            return false;
-
-        // iterate to next node
-        lhs_node = lhs_node->next;
-        rhs_node = rhs_node->next;
+    if(pos == 0) {
+        return NULL;
+    } else {
+        return node;
     }
-
-    return true;
 }
