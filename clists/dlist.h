@@ -68,7 +68,6 @@ void *dlist_poll(dlist_t *list);
 int dlist_equal(dlist_t *lista, dlist_t *listb);
 int dlist_merge(dlist_t *dst, dlist_t *src);
 dlist_t *dlist_copy(dlist_t *list);
-//dlist_node *dlist_node_get(dlist *list, size_t pos);
 
 #ifndef dlist_size
 size_t dlist_size(dlist_t *list);

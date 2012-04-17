@@ -66,7 +66,6 @@ void *slist_pop(slist_t *list);
 int slist_equal(slist_t *lista, slist_t *listb);
 int slist_merge(slist_t *dst, slist_t *src);
 slist_t *slist_copy(slist_t *list);
-//slist_node_t *slist_get_node(slist_t *list, size_t pos);
 
 #ifndef slist_size
 size_t slist_size(slist_t *list);

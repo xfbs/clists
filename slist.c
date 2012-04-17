@@ -75,7 +75,7 @@ int slist_purge(slist_t *list)
     return 0;
 }
 
-slist_node_t *slist_get_node(slist_t *list, size_t pos)
+static slist_node_t *slist_node_get(slist_t *list, size_t pos)
 {
     if (list->size == 0)
         return NULL;
@@ -232,7 +232,7 @@ int slist_insert(slist_t *list, size_t pos, void *data)
     } else if (pos > list->size) {
         return -1;
     } else {
-        slist_node_t *prev = slist_get_node(list, pos-1);
+        slist_node_t *prev = slist_node_get(list, pos-1);
         slist_node_t *next = prev->next;
         
         slist_node_t *node = malloc(sizeof(slist_node_t));
@@ -254,7 +254,7 @@ int slist_insert(slist_t *list, size_t pos, void *data)
 
 int slist_set(slist_t *list, size_t pos, void *data)
 {
-    slist_node_t *node = slist_get_node(list, pos);
+    slist_node_t *node = slist_node_get(list, pos);
 
     if (node != NULL) {
         node->data = data;
@@ -288,7 +288,7 @@ void *slist_last(slist_t *list)
 
 void *slist_get(slist_t *list, size_t pos)
 {
-    slist_node_t *node = slist_get_node(list, pos);
+    slist_node_t *node = slist_node_get(list, pos);
 
     return((node != NULL) ? node->data : NULL);
 }
@@ -322,7 +322,7 @@ int slist_remove(slist_t *list, size_t pos)
     } else if(pos >= list->size) {
         return -1;
     } else {
-        slist_node_t *prev = slist_get_node(list, pos-1);
+        slist_node_t *prev = slist_node_get(list, pos-1);
 
         if ((prev == NULL) || (prev->next == NULL)) {
             return -1;

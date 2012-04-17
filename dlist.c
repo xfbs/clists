@@ -319,7 +319,7 @@ dlist_t *dlist_copy(dlist_t *list)
     return copy;
 }
 
-dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
+static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
 {
     if(!list->size)
         return NULL;
