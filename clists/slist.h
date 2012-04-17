@@ -22,12 +22,15 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-
 #ifndef _SLIST_H
 #define _SLIST_H
 
 #include <stdlib.h>
 #include <string.h>
+
+#define slist_size(list) ((list) ? (list)->size : 0)
+#define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
+#define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,10 +48,6 @@ typedef struct slist
     struct slist_node *tail;
     size_t size;
 } slist_t;
-
-#define slist_size(list) ((list) ? (list)->size : 0)
-#define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
-#define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
 
 slist_t *slist_new();
 int slist_init(slist_t *list);
@@ -68,6 +67,18 @@ int slist_equal(slist_t *lista, slist_t *listb);
 int slist_merge(slist_t *dst, slist_t *src);
 slist_t *slist_copy(slist_t *list);
 //slist_node_t *slist_get_node(slist_t *list, size_t pos);
+
+#ifndef slist_size
+size_t slist_size(slist_t *list);
+#endif
+
+#ifndef dlist_first
+void *slist_first(slist_t *list);
+#endif
+
+#ifndef slist_last
+void *slist_last(slist_t *list);
+#endif
 
 #ifdef __cplusplus
 }
