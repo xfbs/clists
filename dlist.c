@@ -274,7 +274,7 @@ dlist_t *dlist_copy(dlist_t *list)
         c_node->data = o_node->data;
         copy->head = c_node;
         
-        while (o_node = o_node->next) {
+        while((o_node = o_node->next) != NULL) {
             // copy node
             c_node->next = malloc(sizeof(dlist_node_t));
             if(c_node->next == NULL) {
