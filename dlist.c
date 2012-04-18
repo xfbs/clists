@@ -22,7 +22,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "dlist.h"
+#include "clists/dlist.h"
+static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos);
 
 dlist_t *dlist_new()
 {
@@ -80,7 +81,7 @@ int dlist_append(dlist_t *list, void *data)
 }
 
 
-void dlist_prepend(dlist_t *list, void *data)
+int dlist_prepend(dlist_t *list, void *data)
 {
     dlist_node_t *node = malloc(sizeof(dlist_node_t));
     if(node == NULL) {
@@ -191,7 +192,7 @@ int dlist_remove(dlist_t *list, size_t pos)
         return -1;
 
     if(pos == 0) {
-        data = dlist_pop(list);
+        dlist_pop(list);
     } else {
         dlist_node_t *node = dlist_node_get(list, pos);
 
@@ -246,11 +247,11 @@ int dlist_equal(dlist_t *lista, dlist_t *listb)
     dlist_node_t *listb_node = listb->head;
 
     while (lista_node && listb_node) {
-        if(lhs_node->data != rhs_node->data)
+        if(lista_node->data != listb_node->data)
             return -1;
 
-        lhs_node = lhs_node->next;
-        rhs_node = rhs_node->next;
+        lista_node = lista_node->next;
+        listb_node = listb_node->next;
     }
 
     return 0;
@@ -260,10 +261,10 @@ dlist_t *dlist_copy(dlist_t *list)
 {
     dlist_t *copy = dlist_new();
 
-    dlist_node_t *o_node = orig->head;
+    dlist_node_t *o_node = list->head;
     dlist_node_t *c_node;
 
-    if(orig_node != NULL) {
+    if(o_node != NULL) {
         c_node = malloc(sizeof(dlist_node_t));
         if(c_node == NULL) {
             return NULL;
@@ -281,14 +282,14 @@ dlist_t *dlist_copy(dlist_t *list)
             }
 
             memset(c_node->next, 0, sizeof(dlist_node_t));
-            c_node->next->data = orig_node->data;
+            c_node->next->data = o_node->data;
             c_node->next->prev = c_node;
             c_node = c_node->next;
         }
     }
     
     copy->tail = c_node;
-    copy->size = orig->size;
+    copy->size = list->size;
     return copy;
 }
 

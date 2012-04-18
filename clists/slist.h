@@ -55,22 +55,22 @@ int slist_purge(slist_t *list);
 int slist_free(slist_t *list);
 
 int slist_append(slist_t *list, void *data);
-int slist_prepend(slist_t list*, void *data);
+int slist_prepend(slist_t *list, void *data);
 int slist_insert(slist_t *list, size_t pos, void *data);
 int slist_remove(slist_t *list, size_t pos);
 int slist_set(slist_t *list, size_t pos, void *data);
 
-void *slist_get(slist_t *list, size_t) pos;
+void *slist_get(slist_t *list, size_t pos);
 void *slist_pop(slist_t *list);
 
 int slist_equal(slist_t *lista, slist_t *listb);
 slist_t *slist_copy(slist_t *list);
 
-#ifndef slist_size
+#ifndef slist_size(list)
 size_t slist_size(slist_t *list);
 #endif
 
-#ifndef dlist_first
+#ifndef slist_first(list)
 void *slist_first(slist_t *list);
 #endif
 

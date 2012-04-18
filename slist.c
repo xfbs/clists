@@ -23,6 +23,7 @@
  */
 
 #include "clists/slist.h"
+static slist_node_t *slist_node_get(slist_t *list, size_t pos);
 
 slist_t *slist_new()
 {
@@ -244,15 +245,15 @@ void *slist_last(slist_t *list)
 }
 #endif
 
-int slist_equal(slist *lista, slist *listb)
+int slist_equal(slist_t *lista, slist_t *listb)
 {
     // check if they have the same size
     if (slist_size(lista) != slist_size(listb))
         return -1;
     
     // the nodes to loop through
-    slist_node *lista_node = lista->head;
-    slist_node *listb_node = listb->head;
+    slist_node_t *lista_node = lista->head;
+    slist_node_t *listb_node = listb->head;
 
     // loop through them
     while (lista_node && listb_node) {
