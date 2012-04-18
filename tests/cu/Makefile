@@ -21,23 +21,23 @@ test-segfault: test-segfault.c libcu.a
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-check: test test-segfault
-	mkdir -p regressions
-	touch regressions/testSuiteName{,2}.{out,err}
-	touch regressions/testSuiteTest2.{out,err}
-	-./test
-	-cd regressions && ../check-regressions
-	@echo ""
-	@echo "======= SEGFAULT: ========="
-	@echo ""
-	-./test-segfault
+#check: test test-segfault
+#	mkdir -p regressions
+#	touch regressions/testSuiteName{,2}.{out,err}
+#	touch regressions/testSuiteTest2.{out,err}
+#	-./test
+#	-cd regressions && ../check-regressions
+#	@echo ""
+#	@echo "======= SEGFAULT: ========="
+#	@echo ""
+#	-./test-segfault
 
 clean:
 	rm -f *.o
-	rm -f test
-	rm -f test-segfault
+#	rm -f test
+#	rm -f test-segfault
 	rm -f $(TARGETS)
-	rm -f tmp.*
-	rm -rf regressions
+#	rm -f tmp.*
+#	rm -rf regressions
 
 .PHONY: all clean check
