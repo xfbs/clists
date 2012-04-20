@@ -24,9 +24,17 @@ TEST_SUITE(freeing) {
     TEST_SUITE_CLOSURE
 };
 
+TEST(appendEmpty);
+
+TEST_SUITE(appending) {
+    TEST_ADD(appendEmpty),
+    TEST_SUITE_CLOSURE
+};
+
 TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
+    TEST_SUITE_ADD(appending),
     TEST_SUITES_CLOSURE
 };
 
