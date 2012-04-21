@@ -1,14 +1,13 @@
 CC ?= gcc
 CFLAGS = -g -Wall -pedantic --std=gnu99 -I.. -I../..
-LDFLAGS = -L../cu/ -lcu
+LDFLAGS = -L../cu/ -L../.. -lcu -lclists
 
-LIBS = slist.o
 OBJS = alloc.o freeing.o appending.o prepending.o insertion.o tests.o
 
 all: test
 
 test: $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS:%=../../%) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c -o $@ $<

@@ -2,20 +2,20 @@ CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99
 LDFLAGS = 
 OBJS = slist.o dlist.o
-TARGETS = libclist.a
+TARGETS = libclists.a
 TESTS_DIR = tests
 HEADER_DIR = clists
 
 all: $(TARGETS)
 
-libclist.a: $(OBJS)
+libclists.a: $(OBJS)
 	ar cr $@ $^
 	ranlib $@
 
 %.o: %.c $(HEADER_DIR)/%.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-test: $(OBJS)
+test: libclists.a $(OBJS)
 	@cd $(TESTS_DIR) && make run
 
 clean:
