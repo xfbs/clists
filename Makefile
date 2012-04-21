@@ -16,10 +16,10 @@ libclist.a: $(OBJS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 test: $(OBJS)
-	cd $(TESTS_DIR) && make run
+	@cd $(TESTS_DIR) && make run
 
 clean:
 	rm -f *.o *.a
-	cd $(TESTS_DIR) && make clean
+	@cd $(TESTS_DIR) && make clean
 
 .PHONY: all test clean

@@ -11,7 +11,7 @@ run: compile $(TESTS:%=%/run)
 	cd $* && make
 
 %/run:
-	cd $* && make run
+	@cd $* && make run
 
 %/clean:
 	cd $* && make clean
