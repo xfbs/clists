@@ -300,7 +300,7 @@ def main(files):
 
     for filenames in files:
         if len(filenames[1]) == 0:
-            MSGFAIL("", "===", "Can't compare %s %s, bacause %s does not exist!" % \
+            MSGFAIL("", "===", "Can't compare %s %s, because %s does not exist!" % \
                     (filenames[0], filenames[0][4:], filenames[0][4:]))
             continue
 
