@@ -1,4 +1,4 @@
-CC ?= gcc
+CC = gcc
 CFLAGS = -g -Wall -pedantic --std=gnu99 -I.. -I../..
 LDFLAGS = -L../cu/ -L../.. -lcu -lclists
 
