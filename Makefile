@@ -15,11 +15,11 @@ libclists.a: $(OBJS)
 %.o: %.c $(HEADER_DIR)/%.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-test: libclists.a $(OBJS)
+tests: libclists.a $(OBJS)
 	@cd $(TESTS_DIR) && make run
 
 clean:
 	rm -f *.o *.a
 	@cd $(TESTS_DIR) && make clean
 
-.PHONY: all test clean
+.PHONY: all tests clean

@@ -1,5 +1,5 @@
 .DEFAULT: all
-TESTS=slist
+TESTS = slist dlist
 
 all: compile
 clean: $(TESTS:%=%/clean) cu/clean
