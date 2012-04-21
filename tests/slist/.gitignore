@@ -9,3 +9,9 @@
 
 # library files
 *.a
+
+# binary
+test
+
+# testing output folder
+output/
