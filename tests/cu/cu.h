@@ -28,7 +28,7 @@
  * Define test
  */
 #define TEST(name) \
-    void name(void)
+    void test_##name(void)
 
 /**
  * Define testsuite
@@ -52,7 +52,7 @@
  * Add test to testsuite
  */
 #define TEST_ADD(name) \
-    { #name, name }
+    { #name, test_##name }
 
 #define CU_RUN(argc, argv) \
     cu_run(argc, argv)
