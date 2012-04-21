@@ -25,9 +25,20 @@ TEST_SUITE(freeing) {
 };
 
 TEST(appendEmpty);
+TEST(appendFull);
 
 TEST_SUITE(appending) {
     TEST_ADD(appendEmpty),
+    TEST_ADD(appendFull),
+    TEST_SUITE_CLOSURE
+};
+
+TEST(prependEmpty);
+TEST(prependFull);
+
+TEST_SUITE(prepending) {
+    TEST_ADD(prependEmpty),
+    TEST_ADD(prependFull),
     TEST_SUITE_CLOSURE
 };
 
@@ -35,6 +46,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
     TEST_SUITE_ADD(appending),
+    TEST_SUITE_ADD(prepending),
     TEST_SUITES_CLOSURE
 };
 

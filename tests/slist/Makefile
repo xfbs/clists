@@ -3,7 +3,7 @@ CFLAGS = -g -Wall -pedantic --std=gnu99 -I.. -I../..
 LDFLAGS = -L../cu/ -lcu
 
 LIBS = slist.o
-OBJS = alloc.o freeing.o appending.o tests.o
+OBJS = alloc.o freeing.o appending.o prepending.o tests.o
 
 all: test
 
