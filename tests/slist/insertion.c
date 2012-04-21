@@ -3,7 +3,6 @@
 
 static int ret;
 static slist_t *list;
-static slist_node_t *node;
 
 TEST(insertBeginningEmpty)
 {
