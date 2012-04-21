@@ -28,4 +28,5 @@ TEST(manualAllocation)
     assertEquals(list->size, 0);
     assertEquals(list->head, NULL);
     assertEquals(list->tail, NULL);
+    free(list);
 }
