@@ -21,7 +21,8 @@ TEST(prependEmpty)
     assertEquals(node->data, (void*)0x1234);
     assertEquals(node->next, NULL);
 
-    slist_free(list);
+    ret = slist_free(list);
+    assertEquals(ret, 0);
 }
 
 TEST(prependFull)
@@ -41,6 +42,6 @@ TEST(prependFull)
     assertEquals(list->head->data, (void*)0x4321);
     assertEquals(list->tail->data, (void*)0x1234);
 
-    slist_free(list);
+    ret = slist_free(list);
+    assertEquals(ret, 0);
 }
-

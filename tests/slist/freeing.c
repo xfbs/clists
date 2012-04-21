@@ -9,6 +9,7 @@ TEST(freeingEmpty)
 {
     list = slist_new();
     assertNotEquals(list, NULL);
+
     ret = slist_free(list);
     assertEquals(ret, 0);
 }
@@ -17,6 +18,7 @@ TEST(purgingEmpty)
 {
     list = slist_new();
     assertNotEquals(list, NULL);
+
     ret = slist_purge(list);
     assertEquals(ret, 0);
     free(list);
@@ -31,6 +33,7 @@ TEST(purgingFull)
     list->head = node;
     list->tail = node;
     list->size = 1;
+
     ret = slist_purge(list);
     assertEquals(ret, 0);
     free(list);
@@ -45,6 +48,7 @@ TEST(freeingFull)
     list->head = node;
     list->tail = node;
     list->size = 1;
+
     ret = slist_free(list);
     assertEquals(ret, 0);
 }   
