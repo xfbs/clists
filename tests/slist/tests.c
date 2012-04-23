@@ -47,12 +47,26 @@ TEST_SUITE(prepending) {
 };
 
 /* insertion.c */
-TEST(insertBeginningEmpty);
-TEST(insertBeginningFull);
+TEST(insertEmpty);
+TEST(insertBeginning);
+TEST(insertBack);
+TEST(insertMiddle);
 
 TEST_SUITE(insertion) {
-    TEST_ADD(insertBeginningEmpty),
-    TEST_ADD(insertBeginningFull),
+    TEST_ADD(insertEmpty),
+    TEST_ADD(insertBeginning),
+    TEST_ADD(insertBack),
+    TEST_ADD(insertMiddle),
+    TEST_SUITE_CLOSURE
+};
+
+/* removing.c */
+TEST(removeEmpty);
+TEST(removeBeginning);
+
+TEST_SUITE(removing) {
+    TEST_ADD(removeEmpty),
+    TEST_ADD(removeBeginning),
     TEST_SUITE_CLOSURE
 };
 
@@ -62,6 +76,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(appending),
     TEST_SUITE_ADD(prepending),
     TEST_SUITE_ADD(insertion),
+    TEST_SUITE_ADD(removing),
     TEST_SUITES_CLOSURE
 };
 
