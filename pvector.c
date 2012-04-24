@@ -132,7 +132,7 @@ int pvec_insert(pvec_t *vec, size_t pos, void *data)
     } else if(pos == vec->size) {
         return pvec_append(vec, data);
     } else {
-        if(prev_reserve(vec, vec->size + 1) != 0) {
+        if(pvec_reserve(vec, vec->size + 1) != 0) {
             return NULL;
         }
 
