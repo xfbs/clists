@@ -14,14 +14,18 @@ TEST_SUITE(alloc) {
 
 /* freeing.c */
 TEST(freeingEmpty);
+TEST(freeingSingle);
 TEST(freeingFull);
 TEST(purgingEmpty);
+TEST(purgingSingle);
 TEST(purgingFull);
 
 TEST_SUITE(freeing) {
     TEST_ADD(freeingEmpty),
+    TEST_ADD(freeingSingle),
     TEST_ADD(freeingFull),
     TEST_ADD(purgingEmpty),
+    TEST_ADD(purgingSingle),
     TEST_ADD(purgingFull),
     TEST_SUITE_CLOSURE
 };

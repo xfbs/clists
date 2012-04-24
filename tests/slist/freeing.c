@@ -21,14 +21,20 @@ TEST(purgingEmpty)
 
     ret = slist_purge(list);
     assertEquals(ret, 0);
+    assertEquals(list->size, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
     free(list);
 }
 
-TEST(purgingFull)
+TEST(purgingSingle)
 {
     list = slist_new();
     assertNotEquals(list, NULL);
+
     node = malloc(sizeof(slist_node_t));
+    assertNotEquals(node, NULL);
+
     memset(node, 0, sizeof(slist_node_t));
     list->head = node;
     list->tail = node;
@@ -36,14 +42,20 @@ TEST(purgingFull)
 
     ret = slist_purge(list);
     assertEquals(ret, 0);
+    assertEquals(list->size, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
     free(list);
 }
 
-TEST(freeingFull)
+TEST(freeingSingle)
 {
     list = slist_new();
     assertNotEquals(list, NULL);
+
     node = malloc(sizeof(slist_node_t));
+    assertNotEquals(node, NULL);
+
     memset(node, 0, sizeof(slist_node_t));
     list->head = node;
     list->tail = node;
@@ -51,4 +63,52 @@ TEST(freeingFull)
 
     ret = slist_free(list);
     assertEquals(ret, 0);
-}   
+}
+
+TEST(purgingFull)
+{
+    list = slist_new();
+    assertNotEquals(list, NULL);
+
+    node = malloc(sizeof(slist_node_t));
+    assertNotEquals(node, NULL);
+
+    memset(node, 0, sizeof(slist_node_t));
+    list->head = node;
+
+    node->next = malloc(sizeof(slist_node_t));
+    assertNotEquals(node->next, NULL);
+
+    memset(node, 0, sizeof(slist_node_t));
+    list->tail = node;
+    list->size = 2;
+
+    ret = slist_purge(list);
+    assertEquals(ret, 0);
+    assertEquals(list->size, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+    free(list);
+}
+
+TEST(freeingFull)
+{
+    list = slist_new();
+    assertNotEquals(list, NULL);
+
+    node = malloc(sizeof(slist_node_t));
+    assertNotEquals(node, NULL);
+
+    memset(node, 0, sizeof(slist_node_t));
+    list->head = node;
+
+    node->next = malloc(sizeof(slist_node_t));
+    assertNotEquals(node->next, NULL);
+
+    memset(node, 0, sizeof(slist_node_t));
+    list->tail = node;
+    list->size = 2;
+
+    ret = slist_free(list);
+    assertEquals(ret, 0);
+}
