@@ -34,7 +34,7 @@ extern "C" {
 
 typedef struct pvec
 {
-    void *data;
+    void **data;
     size_t size;
     size_t alloc;
 } pvec_t;

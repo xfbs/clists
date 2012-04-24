@@ -87,7 +87,7 @@ int pvec_equal(pvec_t *veca, pvec_t *vecb)
         return -1;
     }
 
-    if(memcmp(vaca->data, vecb->data, veca->size) != 0) {
+    if(memcmp(veca->data, vecb->data, veca->size) != 0) {
         return -1;
     }
 
@@ -96,6 +96,7 @@ int pvec_equal(pvec_t *veca, pvec_t *vecb)
 
 int pvec_reserve(pvec_t *vec, size_t size)
 {
+    return -1; // TODO
 }
 
 int pvec_append(pvec_t *vec, void *data)
@@ -104,8 +105,8 @@ int pvec_append(pvec_t *vec, void *data)
         return -1;
     }
 
-    pvec->data[pvec->size] = data;
-    pvec->size++;
+    vec->data[vec->size] = data;
+    vec->size++;
     return 0;
 }
 
@@ -115,12 +116,12 @@ int pvec_prepend(pvec_t *vec, void *data)
         return -1;
     }
 
-    if(pvec->size > 0) {
-        memmove(&pvec->data[1], &pvec->data[0], pvec->size * sizeof(void*));
+    if(vec->size > 0) {
+        memmove(&vec->data[1], &vec->data[0], vec->size * sizeof(void*));
     }
 
-    pvec->data[0] = data;
-    pvec->size++;
+    vec->data[0] = data;
+    vec->size++;
     return 0;
 }
 
