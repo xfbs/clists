@@ -51,22 +51,34 @@ TEST(insertEmpty);
 TEST(insertBeginning);
 TEST(insertBack);
 TEST(insertMiddle);
+TEST(insertInvalid);
+TEST(insertAll);
 
 TEST_SUITE(insertion) {
     TEST_ADD(insertEmpty),
     TEST_ADD(insertBeginning),
     TEST_ADD(insertBack),
     TEST_ADD(insertMiddle),
+    TEST_ADD(insertInvalid),
+    TEST_ADD(insertAll),
     TEST_SUITE_CLOSURE
 };
 
 /* removing.c */
 TEST(removeEmpty);
 TEST(removeBeginning);
+TEST(removeBack);
+TEST(removeMiddle);
+TEST(removeInvalid);
+TEST(removeAll);
 
 TEST_SUITE(removing) {
     TEST_ADD(removeEmpty),
     TEST_ADD(removeBeginning),
+    TEST_ADD(removeBack),
+    TEST_ADD(removeBeginning),
+    TEST_ADD(removeInvalid),
+    TEST_ADD(removeAll),
     TEST_SUITE_CLOSURE
 };
 

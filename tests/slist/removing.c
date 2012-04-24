@@ -73,7 +73,7 @@ TEST(removeBack)
     assertEquals(ret, 0);
     assertEquals(list->size, 1);
     assertEquals(list->head, list->tail);
-    assertEquals(list->head, node);
+    assertNotEquals(list->tail, NULL);
 
     ret = slist_remove(list, 0);
     assertEquals(ret, 0);
@@ -118,3 +118,95 @@ TEST(removeMiddle)
     ret = slist_free(list);
     assertEquals(ret, 0);
 }
+
+TEST(removeInvalid)
+{
+    list = slist_new();
+    assertNotEquals(list, NULL);
+
+    ret = slist_append(list, (void*)0x1234);
+    assertEquals(ret, 0);
+
+    /* remove off bounds */
+    ret = slist_remove(list, 1);
+    assertNotEquals(ret, 0);
+
+    ret = slist_remove(list, 2);
+    assertNotEquals(ret, 0);
+
+    assertEquals(list->size, 1);
+    assertEquals(list->head, list->tail);
+    assertNotEquals(list->head, NULL);
+    assertEquals(list->head->data, (void*)0x1234);
+
+    ret = slist_free(list);
+    assertEquals(ret, 0);
+}
+
+TEST(removeAll)
+{
+    list = slist_new();
+    assertNotEquals(list, NULL);
+
+    /* add data to list */
+    ret = slist_append(list, (void*)0x1234);
+    assertEquals(ret, 0);
+    ret = slist_append(list, (void*)0x2341);
+    assertEquals(ret, 0);
+    ret = slist_append(list, (void*)0x3412);
+    assertEquals(ret, 0);
+    ret = slist_append(list, (void*)0x4123);
+    assertEquals(ret, 0);
+
+    /* remove from middle */
+    ret = slist_remove(list, 2);
+    assertEquals(ret, 0);
+    assertEquals(list->size, 3);
+    assertNotEquals(list->head, NULL);
+    assertNotEquals(list->head->next, NULL);
+    assertNotEquals(list->head->next->next, NULL);
+    assertEquals(list->head->data, (void*)0x1234);
+    assertEquals(list->head->next->data, (void*)0x2341);
+    assertEquals(list->head->next->next, list->tail);
+    assertEquals(list->tail->data, (void*)0x4123);
+
+    /* remove from beginning */
+    ret = slist_remove(list, 0);
+    assertEquals(ret, 0);
+    assertEquals(list->size, 2);
+    assertNotEquals(list->head, NULL);
+    assertNotEquals(list->tail, NULL);
+    assertEquals(list->head->next, list->tail);
+    assertEquals(list->head->data, (void*)0x2341);
+    assertEquals(list->tail->data, (void*)0x4123);
+
+    /* remove nonexisting */
+    ret = slist_remove(list, 2);
+    assertNotEquals(ret, 0);
+    ret = slist_remove(list, 3);
+    assertNotEquals(ret, 0);
+
+    /* remove from end */
+    ret = slist_remove(list, 1);
+    assertEquals(ret, 0);
+    assertEquals(list->size, 1);
+    assertEquals(list->head, list->tail);
+    assertNotEquals(list->head, NULL);
+    assertEquals(list->head->data, (void*)0x2341);
+
+    /* remove last */
+    ret = slist_remove(list, 0);
+    assertEquals(ret, 0);
+    assertEquals(list->size, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+
+    /* remove nonexistant */
+    ret = slist_remove(list, 0);
+    assertNotEquals(ret, 0);
+
+    /* free list */
+    ret = slist_free(list);
+    assertEquals(ret, 0);
+}
+
