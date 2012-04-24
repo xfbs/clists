@@ -35,11 +35,11 @@ extern "C" {
 typedef struct pvec
 {
     void *data;
-    size_t length;
-    size_t capacity;
+    size_t size;
+    size_t alloc;
 } pvec_t;
 
-pvec_t *pvec_new();
+pvec_t *pvec_new(size_t size);
 pvec_t *pvec_copy(pvec_t *vec);
 int pvec_init(pvec_t *vec);
 int pvec_purge(pvec_t *vec);
