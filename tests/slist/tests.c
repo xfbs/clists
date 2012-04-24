@@ -82,6 +82,18 @@ TEST_SUITE(removing) {
     TEST_SUITE_CLOSURE
 };
 
+/* setting.c */
+TEST(settingEmpty);
+TEST(settingInvalid);
+TEST(settingAll);
+
+TEST_SUITE(setting) {
+    TEST_ADD(settingEmpty),
+    TEST_ADD(settingInvalid),
+    TEST_ADD(settingAll),
+    TEST_SUITE_CLOSURE
+};
+
 TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
@@ -89,6 +101,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(prepending),
     TEST_SUITE_ADD(insertion),
     TEST_SUITE_ADD(removing),
+    TEST_SUITE_ADD(setting),
     TEST_SUITES_CLOSURE
 };
 
