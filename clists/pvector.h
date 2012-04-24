@@ -45,6 +45,7 @@ int pvec_init(pvec_t *vec);
 int pvec_purge(pvec_t *vec);
 int pvec_free(pvec_t *vec);
 int pvec_equal(pvec_t *veca, pvec_t *vecb);
+int pvec_reserve(pvec_t *vec, size_t size);
 
 int pvec_append(pvec_t *vec, void *data);
 int pvec_prepend(pvec_t *vec, void *data);
