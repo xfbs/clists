@@ -143,3 +143,30 @@ int pvec_insert(pvec_t *vec, size_t pos, void *data)
 
     return 0;
 }
+
+int pvec_remove(pvec_t *vec, size_t pos)
+{
+    memmove(&vec->data[pos], &vec->data[pos+1], vec->size - pos - 1);
+    vec->size--;
+    return 0;
+}
+
+int pvec_set(pvec_t *vec, size_t pos, void *data)
+{
+    if(pos >= vec->size) {
+        return -1;
+    } else {
+        vec->data[pos] = data;
+    }
+
+    return 0;
+}
+
+void *pvec_get(pvec_t *vec, size_t pos)
+{
+    if(pos >= vec->size) {
+        return NULL;
+    } else {
+        return vec->data[pos];
+    }
+}
