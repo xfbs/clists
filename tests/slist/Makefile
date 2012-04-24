@@ -3,11 +3,12 @@ CFLAGS = -g -Wall -pedantic --std=gnu99 -I.. -I../..
 LDFLAGS = -L../cu/ -L../.. -lcu -lclists
 
 OBJS = alloc.o freeing.o appending.o prepending.o insertion.o removing.c tests.o
+TSTS = ../../libclists.a
 
 all: test
 
-test: $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+test: $(OBJS) $(TSTS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c -o $@ $<
