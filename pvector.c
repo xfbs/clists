@@ -133,7 +133,7 @@ int pvec_insert(pvec_t *vec, size_t pos, void *data)
         return pvec_append(vec, data);
     } else {
         if(pvec_reserve(vec, vec->size + 1) != 0) {
-            return NULL;
+            return -1;
         }
 
         memmove(&vec->data[pos+1], &vec->data[pos], vec->size - pos);
