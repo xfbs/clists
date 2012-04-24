@@ -1,25 +1,144 @@
-#include "pvector.h"
+/*  File: pvector.c
+ *  
+ *  Copyright (C) 2011, Patrick M. Elsen
+ *
+ *  This file is part of CLists (http://github.com/xfbs/CLists)
+ *  Author: Patrick M. Elsen <pelsen.vn (a) gmail.com>
+ *
+ *  All rights reserved.
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
+#include "clists/pvector.h"
 
-void **pvector_data_resize(void **old_data, size_t old_size, size_t new_size)
+pvec_t *pvec_new(size_t size)
 {
-    void **new_data;
-
-    // try to get space with realloc
-    new_data = relloc(old_data, new_size * sizeof(void*));
-
-    // if that didn't work, try using malloc
-    if (!new_data) {
-        // allocate new memory
-        new_data = calloc(new_size, sizeof(void**));
-
-        // copy memory
-        memcpy(new_data, old_data, sizeof(void*) * ((old_size > new_size) ? new_size : old_size));
-
-        // free old mem
-        free(old_data);
+    pvec_t *vec = malloc(sizeof(pvec_t));
+    if(vec == NULL) {
+        return NULL;
     }
 
-    // return new data
-    return(new_data);
+    memset(vec, 0, sizeof(pvec_t));
+
+    if(size != 0) {
+        vec->data = malloc(size * sizeof(void*));
+        if(vec->data != NULL) {
+            vec->alloc = size;
+        }
+    }
+
+    return vec;
+}
+
+pvec_t *pvec_copy(pvec_t *vec)
+{
+    pvec_t *cpy = pvec_new(vec->size);
+    if(cpy == NULL || cpy->alloc < vec->size) {
+        return NULL;
+    }
+
+    if(vec->size != 0) {
+        memcpy(cpy->data, vec->data, vec->size * sizeof(void*));
+        cpy->size = vec->size;
+    }
+
+    return cpy;
+}
+
+int pvec_init(pvec_t *vec)
+{
+    memset(vec, 0, sizeof(pvec_t));
+    return 0;
+}
+
+int pvec_purge(pvec_t *vec)
+{
+    free(vec->data);
+    vec->data = NULL;
+    vec->size = 0;
+    vec->alloc = 0;
+    return 0;
+}
+
+int pvec_free(pvec_t *vec)
+{
+    int ret;
+    ret = pvec_purge(vec);
+    free(vec);
+    return ret;
+}
+
+int pvec_equal(pvec_t *veca, pvec_t *vecb)
+{
+    if(veca->size != vecb->size) {
+        return -1;
+    }
+
+    if(memcmp(vaca->data, vecb->data, veca->size) != 0) {
+        return -1;
+    }
+
+    return 0;
+}
+
+int pvec_reserve(pvec_t *vec, size_t size)
+{
+}
+
+int pvec_append(pvec_t *vec, void *data)
+{
+    if(pvec_reserve(vec, vec->size + 1) != 0) {
+        return -1;
+    }
+
+    pvec->data[pvec->size] = data;
+    pvec->size++;
+    return 0;
+}
+
+int pvec_prepend(pvec_t *vec, void *data)
+{
+    if(pvec_reserve(vec, vec->size + 1) != 0) {
+        return -1;
+    }
+
+    if(pvec->size > 0) {
+        memmove(&pvec->data[1], &pvec->data[0], pvec->size * sizeof(void*));
+    }
+
+    pvec->data[0] = data;
+    pvec->size++;
+    return 0;
+}
+
+int pvec_insert(pvec_t *vec, size_t pos, void *data)
+{
+    if(pos == 0) {
+        return pvec_prepend(vec, data);
+    } else if(pos == vec->size) {
+        return pvec_append(vec, data);
+    } else {
+        if(prev_reserve(vec, vec->size + 1) != 0) {
+            return NULL;
+        }
+
+        memmove(&vec->data[pos+1], &vec->data[pos], vec->size - pos);
+        vec->data[pos] = data;
+        vec->size++;
+    }
+
+    return 0;
 }
