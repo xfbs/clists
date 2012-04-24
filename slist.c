@@ -154,7 +154,9 @@ int slist_insert(slist_t *list, size_t pos, void *data)
 
 int slist_remove(slist_t *list, size_t pos)
 {
-    if (pos == 0) {
+    if(list->size == 0) {
+        return -1;
+    } else if(pos == 0) {
         slist_pop(list);
     } else if(pos >= list->size) {
         return -1;
