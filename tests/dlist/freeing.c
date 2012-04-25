@@ -78,6 +78,7 @@ TEST(purgingFull)
 
     node->next = malloc(sizeof(dlist_node_t));
     assertNotEquals(node->next, NULL);
+    node->next->prev = node;
 
     memset(node, 0, sizeof(dlist_node_t));
     list->tail = node;
@@ -104,6 +105,7 @@ TEST(freeingFull)
 
     node->next = malloc(sizeof(dlist_node_t));
     assertNotEquals(node->next, NULL);
+    node->next->prev = node;
 
     memset(node, 0, sizeof(dlist_node_t));
     list->tail = node;
