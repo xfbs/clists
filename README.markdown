@@ -1,25 +1,54 @@
-CLists
+clists
 ======
 
-CLists is a collection of data structures implemented in C/C++. Currently, these are all linked list implementations (`slist` and `dlist`), but I plan to add implementations of vectors (similar to `std::vector` in C++) and of maps (similar to `std::map` in C++). All of these implementations aren't fully optimizied, but they are legible (I try to keep them well commented) so that anyone can understand, change or rewrite them.
+This is a project to build some simple reusable data structures in C that are simple to use.
 
 slist
 -----
 
-SList is the implementation of a (single linked list)[http://en.wikipedia.org/wiki/Singly_linked_list#Singly_linked_lists]. The code is in `slist.h` and `slist.c`, testing code can be found in `stest.c` as well as `sbench.c`. It uses the struct `slist`, which contains a pointer to the first and last node and the size of the list. Having a pointer to the last node means that appending to the list is efficient, the pointer to the first node means that pushing to the list is efficient. All functions that work with slists are prefixed with `slist_`. Information about the functions and their parameters can be found in `slist.h`.
+SList is an implementation of a singly linked list (the nodes only store a pointer to the next node, not the previous node). To use the code, include `clists/slist.h` and link against `libclists.a`. The functions found in the header file are pretty much self-explanatory, a simple usage could look like this:
+
+    // allocate new list
+    slist_t *list = slist_new();
+    int number = 5;
+    
+    // add pointer to number to list
+    slist_append(list, &number);
+    
+    // output the number
+    printf("the number is: %d\n", slist_get(list, 0));
+    
+    // free the list
+    slist_free(list);
 
 dlist
 -----
 
-DList is the implementation of a (doubly linked list)[http://en.wikipedia.org/wiki/Doubly_linked_list]. The code is in `dlist.h` and `dlist.c`, testing code can be found in `dtest.c` and `dbench.c`. It uses the struct `dlist` internally, which has pointers to the head of the list (first node), the tail of the list (last node) and the size of the list. Having a pointer to the head and the tail means that appending and pushing is efficient. All functions that work with dlists are prefixed with `dlist_`. Information of the API can be found in `dlist.h`.
+Similar to SList, DList is also an implementation of a linked list, but this one is double linked (the nodes have both pointers to the previous and next node). The header file to include is located in `clists/dlist.h`, again you have to link agains `libclists.a`. The usage is also similar (pretty much the same, but with dlist_ prefixed instead of slist_):
+
+    // allocate new list
+    dlist_t *list = dlist_new();
+    int number = 5;
+    
+    // add pointer to number
+    dlist_append(list, &number);
+    
+    // output number
+    printf("the number is: %d\n", dlist_get(list, 0));
+    
+    // free the list
+    slist_free(list);
 
 compiling
 ---------
 
-All C code in this project is C99, thus when compiling you may need to pass a flag to your compiler to make it aware of this. To compile the slist and dlist tests, you can use these commands:
+The Makefile knows both how to compile the code (and produce a library file called `libclists.a`) and how to compile and run the tests.
 
-    gcc -std=c99 -o stest stest.c slist.c debug.c
-    gcc -std=c99 -o dtest dtest.c dlist.c debug.c
+    # compile the code
+    make all
+    
+    # compile and run the tests
+    make tests
 
 contributing
 ------------
