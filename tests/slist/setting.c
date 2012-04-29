@@ -16,7 +16,7 @@ TEST(settingEmpty)
     assertEquals(list->head, NULL);
     assertEquals(list->tail, NULL);
 
-    ret = slist_set(list, 0, (void*)0x1234);
+    ret = slist_set(list, 1, (void*)0x1234);
     assertNotEquals(ret, 0);
     assertEquals(list->size, 0);
     assertEquals(list->head, NULL);

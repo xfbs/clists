@@ -4,7 +4,6 @@
 static int ret;
 static void *data;
 static slist_t *list;
-static slist_node_t *node;
 
 TEST(poppingEmpty)
 {

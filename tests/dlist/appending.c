@@ -3,7 +3,6 @@
 
 static int ret;
 static dlist_t *list;
-static dlist_node_t *node;
 
 TEST(appendEmpty)
 {

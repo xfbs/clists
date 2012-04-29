@@ -179,6 +179,7 @@ TEST(insertAll)
     assertNotEquals(list->head, NULL);
     assertNotEquals(list->tail, NULL);
     assertEquals(list->head->next, list->tail);
+    assertEquals(list->tail->prev, list->head);
     assertEquals(list->head->data, (void*)0x2341);
 
     /* insert to the end */
@@ -186,6 +187,7 @@ TEST(insertAll)
     assertEquals(ret, 0);
     assertEquals(list->size, 3);
     assertNotEquals(list->tail, NULL);
+    assertEquals(list->head->next, list->tail->prev);
     assertEquals(list->tail->data, (void*)0x3412);
 
     /* insert to middle */
