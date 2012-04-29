@@ -59,12 +59,29 @@ TEST_SUITE(prepending) {
     TEST_SUITE_CLOSURE
 };
 
+/* inserting.c */
+TEST(insertEmpty);
+TEST(insertBeginning);
+TEST(insertBack);
+TEST(insertMiddle);
+TEST(insertAll);
+
+TEST_SUITE(inserting) {
+    TEST_ADD(insertEmpty),
+    TEST_ADD(insertBeginning),
+    TEST_ADD(insertBack),
+    TEST_ADD(insertMiddle),
+    TEST_ADD(insertAll),
+    TEST_SUITE_CLOSURE
+};
+
 TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
     TEST_SUITE_ADD(purging),
     TEST_SUITE_ADD(appending),
     TEST_SUITE_ADD(prepending),
+    TEST_SUITE_ADD(inserting),
     TEST_SUITES_CLOSURE
 };
 
