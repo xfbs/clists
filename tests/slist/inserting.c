@@ -50,6 +50,7 @@ TEST(insertBeginning)
     assertNotEquals(list->head->next, NULL);
     assertNotEquals(list->head->next, list->tail);
     assertNotEquals(list->head->next, list->head);
+    assertEquals(list->head->next->next, list->tail);
     assertEquals(list->head->data, (void*)0x2222);
     assertEquals(list->tail->data, (void*)0x1234);
     assertEquals(list->head->next->data, (void*)0x4321);

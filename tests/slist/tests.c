@@ -64,7 +64,7 @@ TEST(insertMiddle);
 TEST(insertInvalid);
 TEST(insertAll);
 
-TEST_SUITE(insertion) {
+TEST_SUITE(inserting) {
     TEST_ADD(insertEmpty),
     TEST_ADD(insertBeginning),
     TEST_ADD(insertBack),
@@ -147,7 +147,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(purging),
     TEST_SUITE_ADD(appending),
     TEST_SUITE_ADD(prepending),
-    TEST_SUITE_ADD(insertion),
+    TEST_SUITE_ADD(inserting),
     TEST_SUITE_ADD(removing),
     TEST_SUITE_ADD(setting),
     TEST_SUITE_ADD(getting),
