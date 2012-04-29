@@ -46,7 +46,7 @@ TEST(appendFull)
     assertEquals(ret, 0);
     assertEquals(list->size, 3);
     assertNotEquals(list->head, NULL);
-    assertEquals(list->head->data, (void*)0x3412);
+    assertEquals(list->tail->data, (void*)0x3412);
 
     ret = dlist_free(list);
     assertEquals(ret, 0);
