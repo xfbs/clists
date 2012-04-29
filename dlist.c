@@ -25,7 +25,7 @@
 #include "clists/dlist.h"
 static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos);
 
-dlist_t *dlist_new()
+dlist_t *dlist_new(void)
 {
     dlist_t *list = malloc(sizeof(dlist_t));
     memset(list, 0, sizeof(dlist_t));

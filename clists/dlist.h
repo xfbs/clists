@@ -50,7 +50,7 @@ typedef struct dlist
     size_t size;
 } dlist_t;
 
-dlist_t *dlist_new();
+dlist_t *dlist_new(void);
 int dlist_init(dlist_t *list);
 int dlist_purge(dlist_t *list);
 int dlist_free(dlist_t *list);

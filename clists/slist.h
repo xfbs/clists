@@ -49,7 +49,7 @@ typedef struct slist
     size_t size;
 } slist_t;
 
-slist_t *slist_new();
+slist_t *slist_new(void);
 int slist_init(slist_t *list);
 int slist_purge(slist_t *list);
 int slist_free(slist_t *list);

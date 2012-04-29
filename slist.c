@@ -25,7 +25,7 @@
 #include "clists/slist.h"
 static slist_node_t *slist_node_get(slist_t *list, size_t pos);
 
-slist_t *slist_new()
+slist_t *slist_new(void)
 {
     slist_t *list = malloc(sizeof(slist_t));
     if(list == NULL)
