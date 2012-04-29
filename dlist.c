@@ -106,32 +106,33 @@ int dlist_prepend(dlist_t *list, void *data)
 int dlist_insert(dlist_t *list, size_t pos, void *data)
 {
     if(pos == 0) {
-        dlist_prepend(list, data);
+        return dlist_prepend(list, data);
     } else if(pos == list->size) {
-        dlist_append(list, data);
+        return dlist_append(list, data);
     } else if(pos > list->size) {
-        return -1;
+        return -2;
     } else {
         dlist_node_t *new = malloc(sizeof(dlist_node_t));
         if(new == NULL) {
-            return -1;
+            return -3;
         }
         memset(new, 0, sizeof(dlist_node_t));
         new->data = data;
 
         dlist_node_t *node = dlist_node_get(list, pos-1);
 
-        if(node) {
+        if(node != NULL) {
             node->next->prev = new;
             new->next = node->next;
             new->prev = node;
             node->next = new;
         } else {
-            return -1;
+            return -4;
         }
+
+        list->size++;
     }
 
-    list->size++;
     return 0;
 }
 
