@@ -5,16 +5,20 @@ static int ret;
 static slist_t *list;
 static slist_node_t *node;
 
-TEST(freeingEmpty)
+TEST(purgingEmpty)
 {
     list = slist_new();
     assertNotEquals(list, NULL);
 
-    ret = slist_free(list);
+    ret = slist_purge(list);
     assertEquals(ret, 0);
+    assertEquals(list->size, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+    free(list);
 }
 
-TEST(freeingSingle)
+TEST(purgingSingle)
 {
     list = slist_new();
     assertNotEquals(list, NULL);
@@ -27,11 +31,15 @@ TEST(freeingSingle)
     list->tail = node;
     list->size = 1;
 
-    ret = slist_free(list);
+    ret = slist_purge(list);
     assertEquals(ret, 0);
+    assertEquals(list->size, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+    free(list);
 }
 
-TEST(freeingFull)
+TEST(purgingFull)
 {
     list = slist_new();
     assertNotEquals(list, NULL);
@@ -49,6 +57,11 @@ TEST(freeingFull)
     list->tail = node;
     list->size = 2;
 
-    ret = slist_free(list);
+    ret = slist_purge(list);
     assertEquals(ret, 0);
+    assertEquals(list->size, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+    free(list);
 }
+

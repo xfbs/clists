@@ -16,14 +16,20 @@ TEST_SUITE(alloc) {
 TEST(freeingEmpty);
 TEST(freeingSingle);
 TEST(freeingFull);
-TEST(purgingEmpty);
-TEST(purgingSingle);
-TEST(purgingFull);
 
 TEST_SUITE(freeing) {
     TEST_ADD(freeingEmpty),
     TEST_ADD(freeingSingle),
     TEST_ADD(freeingFull),
+    TEST_SUITE_CLOSURE
+};
+
+/* purging.c */
+TEST(purgingEmpty);
+TEST(purgingSingle);
+TEST(purgingFull);
+
+TEST_SUITE(purging) {
     TEST_ADD(purgingEmpty),
     TEST_ADD(purgingSingle),
     TEST_ADD(purgingFull),
@@ -98,14 +104,27 @@ TEST_SUITE(setting) {
     TEST_SUITE_CLOSURE
 };
 
+TEST(gettingEmpty);
+TEST(gettingSingle);
+TEST(gettingFull);
+
+TEST_SUITE(getting) {
+    TEST_ADD(gettingEmpty),
+    TEST_ADD(gettingSingle),
+    TEST_ADD(gettingFull),
+    TEST_SUITE_CLOSURE
+};
+
 TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
+    TEST_SUITE_ADD(purging),
     TEST_SUITE_ADD(appending),
     TEST_SUITE_ADD(prepending),
     TEST_SUITE_ADD(insertion),
     TEST_SUITE_ADD(removing),
     TEST_SUITE_ADD(setting),
+    TEST_SUITE_ADD(getting),
     TEST_SUITES_CLOSURE
 };
 
