@@ -75,6 +75,30 @@ TEST_SUITE(inserting) {
     TEST_SUITE_CLOSURE
 };
 
+/* getting.c */
+TEST(gettingEmpty);
+TEST(gettingSingle);
+TEST(gettingFull);
+
+TEST_SUITE(getting) {
+    TEST_ADD(gettingEmpty),
+    TEST_ADD(gettingSingle),
+    TEST_ADD(gettingFull),
+    TEST_SUITE_CLOSURE
+};
+
+/* setting.c */
+TEST(settingEmpty);
+TEST(settingInvalid);
+TEST(settingAll);
+
+TEST_SUITE(setting) {
+    TEST_ADD(settingEmpty),
+    TEST_ADD(settingInvalid),
+    TEST_ADD(settingAll),
+    TEST_SUITE_CLOSURE
+};
+
 TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
@@ -82,6 +106,8 @@ TEST_SUITES {
     TEST_SUITE_ADD(appending),
     TEST_SUITE_ADD(prepending),
     TEST_SUITE_ADD(inserting),
+    TEST_SUITE_ADD(getting),
+    TEST_SUITE_ADD(setting),
     TEST_SUITES_CLOSURE
 };
 

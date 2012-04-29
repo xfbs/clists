@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -g -Wall -pedantic --std=gnu99 -I.. -I../..
 LDFLAGS = -L../cu/ -L../.. -lcu -lclists
 
-OBJS = alloc.o freeing.o purging.o appending.o prepending.o inserting.o tests.o
+OBJS = alloc.o freeing.o purging.o appending.o prepending.o inserting.o getting.o setting.o tests.o
 TSTS = ../../libclists.a
 
 all: test
