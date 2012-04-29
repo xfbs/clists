@@ -296,14 +296,19 @@ dlist_t *dlist_copy(dlist_t *list)
 
 static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
 {
-    if(!list->size)
+    if(list->size == 0)
         return NULL;
 
     if(pos >= list->size)
         return NULL;
 
-    dlist_node_t *node;
+    if((pos-1) == list->size)
+        return list->tail;
 
+    if(pos == 0)
+        return list->head;
+
+    dlist_node_t *node;
     if(pos < (list->size/2)) {
         // pos is before the middle if the list,
         // thus we loop from the beginning
@@ -325,7 +330,7 @@ static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
         }
     }
 
-    if(pos == 0) {
+    if(pos != 0) {
         return NULL;
     } else {
         return node;
