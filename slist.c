@@ -249,9 +249,12 @@ void *slist_last(slist_t *list)
 
 int slist_equal(slist_t *lista, slist_t *listb)
 {
+    if((lista != listb) && ((lista == NULL) || (listb == NULL)))
+        return 0;
+
     // check if they have the same size
     if (slist_size(lista) != slist_size(listb))
-        return -1;
+        return 0;
     
     // the nodes to loop through
     slist_node_t *lista_node = lista->head;
@@ -261,14 +264,14 @@ int slist_equal(slist_t *lista, slist_t *listb)
     while (lista_node && listb_node) {
         // return false if their data isn't the same
         if (lista_node->data != listb_node->data)
-            return -1;
+            return 0;
 
         // iterate to the next nodes
         lista_node = lista_node->next;
         listb_node = listb_node->next;
     }
 
-    return 0;
+    return 1;
 }
 
 /*
