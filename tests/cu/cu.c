@@ -177,7 +177,8 @@ static void cu_run_fork(const char *ts_name, cu_test_suite_t *ts)
 
         close(fd);
 
-        fprintf(stdout, " -> %s [DONE]\n\n", ts_name);
+        // commented out for more compact output
+        //fprintf(stdout, " -> %s [DONE]\n\n", ts_name);
         fflush(stdout);
     }
 
