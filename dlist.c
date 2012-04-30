@@ -242,20 +242,20 @@ void *dlist_last(dlist_t *list)
 int dlist_equal(dlist_t *lista, dlist_t *listb)
 {
     if(dlist_size(lista) != dlist_size(listb))
-        return -1;
+        return 0;
 
     dlist_node_t *lista_node = lista->head;
     dlist_node_t *listb_node = listb->head;
 
     while (lista_node && listb_node) {
         if(lista_node->data != listb_node->data)
-            return -1;
+            return 0;
 
         lista_node = lista_node->next;
         listb_node = listb_node->next;
     }
 
-    return 0;
+    return 1;
 }
 
 dlist_t *dlist_copy(dlist_t *list)
