@@ -73,7 +73,7 @@ TEST(settingAll)
 
     ret = dlist_set(list, 1, (void*)0x4123);
     assertNotEquals(list->tail, NULL);
-    assertEquals(list->head->next, (void*)0x4123);
+    assertEquals(list->head->next->data, (void*)0x4123);
 
     assertEquals(list->tail->data, (void*)0x3412);
     ret = dlist_set(list, 2, (void*)0x4123);
