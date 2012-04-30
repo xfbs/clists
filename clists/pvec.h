@@ -1,4 +1,4 @@
-/*  File: pvector.h
+/*  File: pvec.h
  *  
  *  Copyright (C) 2011, Patrick M. Elsen
  *
@@ -22,8 +22,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef _PVECTOR_H
-#define _PVECTOR_H
+#ifndef _PVEC_H
+#define _PVEC_H
 
 #include <stdlib.h>
 #include <string.h>

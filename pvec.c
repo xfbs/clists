@@ -1,4 +1,4 @@
-/*  File: pvector.c
+/*  File: pvec.c
  *  
  *  Copyright (C) 2011, Patrick M. Elsen
  *
@@ -22,7 +22,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "clists/pvector.h"
+#include "clists/pvec.h"
 
 pvec_t *pvec_new(size_t size)
 {

@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99
 LDFLAGS = 
-OBJS = slist.o dlist.o pvector.o
+OBJS = slist.o dlist.o pvec.o
 TARGETS = libclists.a
 TESTS_DIR = tests
 HEADER_DIR = clists
