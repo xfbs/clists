@@ -30,6 +30,7 @@
 /** Declared here, because I didn't find header file where it is declared */
 char *strsignal(int sig);
 
+const char *cu_name = NULL;
 const char *cu_current_test;
 const char *cu_current_test_suite;
 int cu_success_test_suites = 0;
@@ -311,9 +312,13 @@ void cu_fail_assertation(const char *file, int line, const char *msg)
 
 static void cu_print_results(void)
 {
-    fprintf(stdout, "\n");
+    /* fprintf(stdout, "\n"); */
     fprintf(stdout, "==================================================\n");
-    fprintf(stdout, "|               |  failed  |  succeed  |  total  |\n");
+    if(cu_name) {
+        fprintf(stdout, "| %13.13s |  failed  |  succeed  |  total  |\n", cu_name);
+    } else {
+        fprintf(stdout, "|               |  failed  |  succeed  |  total  |\n");
+    }
     fprintf(stdout, "|------------------------------------------------|\n");
     fprintf(stdout, "| assertations: |  %6d  |  %7d  |  %5d  |\n",
                 cu_fail_checks, cu_success_checks,
@@ -330,6 +335,11 @@ static void cu_print_results(void)
 void cu_set_out_prefix(const char *str)
 {
     strncpy(cu_out_prefix, str, CU_OUT_PREFIX_LENGTH);
+}
+
+void cu_set_name(const char *str)
+{
+    cu_name = str;
 }
 
 static void redirect_out_err(const char *test_name)

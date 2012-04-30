@@ -64,6 +64,12 @@
     cu_set_out_prefix(str)
 
 /**
+ * Set name of this test
+ */
+#define CU_SET_NAME(str) \
+    cu_set_name(str)
+
+/**
  * Assertations
  * Assertations with suffix 'M' (e.g. assertTrueM) is variation of macro
  * where is possible to specify error message.
@@ -123,6 +129,7 @@ extern int cu_fail_checks;
 #define CU_OUT_PREFIX_LENGTH 30
 extern char cu_out_prefix[CU_OUT_PREFIX_LENGTH+1];
 
+void cu_set_name(const char *name);
 void cu_run(int argc, char *argv[]);
 void cu_success_assertation(void);
 void cu_fail_assertation(const char *file, int line, const char *msg);

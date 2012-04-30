@@ -172,6 +172,7 @@ TEST_SUITES {
 
 int main(int argc, char *argv[])
 {
+    CU_SET_NAME("slist");
     CU_SET_OUT_PREFIX("output/");
     CU_RUN(argc, argv);
 
