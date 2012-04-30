@@ -75,6 +75,20 @@ TEST_SUITE(inserting) {
     TEST_SUITE_CLOSURE
 };
 
+/* removing.c */
+TEST(removeEmpty);
+TEST(removeInvalid);
+TEST(removeSingle);
+TEST(removeAll);
+
+TEST_SUITE(removing) {
+    TEST_ADD(removeEmpty),
+    TEST_ADD(removeInvalid),
+    TEST_ADD(removeSingle),
+    TEST_ADD(removeAll),
+    TEST_SUITE_CLOSURE
+};
+
 /* getting.c */
 TEST(gettingEmpty);
 TEST(gettingSingle);
@@ -106,6 +120,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(appending),
     TEST_SUITE_ADD(prepending),
     TEST_SUITE_ADD(inserting),
+    TEST_SUITE_ADD(removing),
     TEST_SUITE_ADD(getting),
     TEST_SUITE_ADD(setting),
     TEST_SUITES_CLOSURE
