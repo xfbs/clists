@@ -31,6 +31,22 @@
 #define dlist_size(list) ((list) ? (list)->size : 0)
 #define dlist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define dlist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
+#define dlist_foreach(list, __data) \
+    for(void *__node = list->head, *__data = ((list->head) ? \
+                list->head->data : \
+                NULL); \
+            __node != NULL; \
+            __data = ((__node = (void*)((dlist_node_t*)__node)->next) ? \
+                ((dlist_node_t*)__node)->data : \
+                NULL))
+#define dlist_foreach_backwards(list, __data) \
+    for(void *__node = list->tail, *__data = ((list->tail) ? \
+                list->tail->data : \
+                NULL); \
+            __node != NULL; \
+            __data = ((__node = (void*)((dlist_node_t*)__node)->prev) ? \
+                ((dlist_node_t*)__node)->data : \
+                NULL))
 
 #ifdef __cplusplus
 extern "C" {

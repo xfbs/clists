@@ -113,6 +113,7 @@ TEST_SUITE(setting) {
     TEST_SUITE_CLOSURE
 };
 
+/* popping.c */
 TEST(poppingEmpty);
 TEST(poppingSingle);
 TEST(poppingFull);
@@ -121,6 +122,16 @@ TEST_SUITE(popping) {
     TEST_ADD(poppingEmpty),
     TEST_ADD(poppingSingle),
     TEST_ADD(poppingFull),
+    TEST_SUITE_CLOSURE
+};
+
+/* foreach.c */
+TEST(foreachEmpty);
+TEST(foreachSingle);
+
+TEST_SUITE(foreach) {
+    TEST_ADD(foreachEmpty),
+    TEST_ADD(foreachSingle),
     TEST_SUITE_CLOSURE
 };
 
@@ -135,6 +146,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(getting),
     TEST_SUITE_ADD(setting),
     TEST_SUITE_ADD(popping),
+    TEST_SUITE_ADD(foreach),
     TEST_SUITES_CLOSURE
 };
 
