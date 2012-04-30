@@ -140,10 +140,18 @@ TEST_SUITE(comparing) {
 /* foreach.c */
 TEST(foreachEmpty);
 TEST(foreachSingle);
+TEST(foreachFull);
+TEST(foreachBackEmpty);
+TEST(foreachBackSingle);
+TEST(foreachBackFull);
 
 TEST_SUITE(foreach) {
     TEST_ADD(foreachEmpty),
     TEST_ADD(foreachSingle),
+    TEST_ADD(foreachFull),
+    TEST_ADD(foreachBackEmpty),
+    TEST_ADD(foreachBackSingle),
+    TEST_ADD(foreachBackFull),
     TEST_SUITE_CLOSURE
 };
 
