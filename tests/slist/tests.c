@@ -104,6 +104,7 @@ TEST_SUITE(setting) {
     TEST_SUITE_CLOSURE
 };
 
+/* getting.c */
 TEST(gettingEmpty);
 TEST(gettingSingle);
 TEST(gettingFull);
@@ -141,6 +142,18 @@ TEST_SUITE(comparing) {
     TEST_SUITE_CLOSURE
 };
 
+/* foreach.c */
+TEST(foreachEmpty);
+TEST(foreachSingle);
+TEST(foreachFull);
+
+TEST_SUITE(foreach) {
+    TEST_ADD(foreachEmpty),
+    TEST_ADD(foreachSingle),
+    TEST_ADD(foreachFull),
+    TEST_SUITE_CLOSURE
+};
+
 TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
@@ -153,6 +166,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(getting),
     TEST_SUITE_ADD(popping),
     TEST_SUITE_ADD(comparing),
+    TEST_SUITE_ADD(foreach),
     TEST_SUITES_CLOSURE
 };
 

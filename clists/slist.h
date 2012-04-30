@@ -31,6 +31,14 @@
 #define slist_size(list) ((list) ? (list)->size : 0)
 #define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
+#define slist_foreach(list, __data) \
+    for(void *__node = list->head, *__data = ((list->head) ? \
+                list->head->data : \
+                NULL); \
+            __node != NULL; \
+            __data = ((__node = (void*)((slist_node_t*)__node)->next) ? \
+                ((slist_node_t*)__node)->data : \
+                NULL))
 
 #ifdef __cplusplus
 extern "C" {
