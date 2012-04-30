@@ -1,5 +1,5 @@
 .DEFAULT: all
-TESTS = slist dlist
+TESTS = slist dlist pvec
 
 all: compile
 clean: $(TESTS:%=%/clean) cu/clean
