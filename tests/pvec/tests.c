@@ -26,9 +26,22 @@ TEST_SUITE(freeing) {
     TEST_SUITE_CLOSURE
 };
 
+/* purging.c */
+TEST(purgingEmpty);
+TEST(purgingSingle);
+TEST(purgingReserved);
+
+TEST_SUITE(purging) {
+    TEST_ADD(purgingEmpty),
+    TEST_ADD(purgingSingle),
+    TEST_ADD(purgingReserved),
+    TEST_SUITE_CLOSURE
+};
+
 TEST_SUITES {
     TEST_SUITE_ADD(alloc),
     TEST_SUITE_ADD(freeing),
+    TEST_SUITE_ADD(purging),
     TEST_SUITES_CLOSURE
 };
 
