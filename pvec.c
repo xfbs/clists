@@ -96,7 +96,18 @@ int pvec_equal(pvec_t *veca, pvec_t *vecb)
 
 int pvec_reserve(pvec_t *vec, size_t size)
 {
-    return -1; // TODO
+    if(vec->alloc < size) {
+        vec->data = realloc(vec->data, size * sizeof(void*));
+        
+        if(vec->data == NULL) {
+            memset(vec, 0, sizeof(pvec_t));
+            return -1;
+        } else {
+            vec->alloc = size;
+        }
+    }
+
+    return 0;
 }
 
 int pvec_append(pvec_t *vec, void *data)
