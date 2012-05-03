@@ -35,3 +35,20 @@ TEST(reservingMore)
     ret = pvec_free(vec);
     assertEquals(ret, 0);
 }
+
+TEST(reservingLess)
+{
+    vec = pvec_new(0);
+    assertNotEquals(vec, NULL);
+
+    for(int i = 10; i > 0; i--) {
+        ret = pvec_reserve(vec, i);
+        assertEquals(ret, 0);
+        assertNotEquals(vec->data, NULL);
+        assertEquals(vec->size, 0);
+        assertTrue(vec->alloc >= i);
+    }
+
+    ret = pvec_free(vec);
+    assertEquals(ret, 0);
+}

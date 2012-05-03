@@ -41,10 +41,12 @@ TEST_SUITE(purging) {
 /* reserving.c */
 TEST(reservingEmpty);
 TEST(reservingMore);
+TEST(reservingLess);
 
 TEST_SUITE(reserving) {
     TEST_ADD(reservingEmpty),
     TEST_ADD(reservingMore),
+    TEST_ADD(reservingLess),
     TEST_SUITE_CLOSURE
 };
 
