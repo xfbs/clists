@@ -39,16 +39,20 @@ Similar to SList, DList is also an implementation of a linked list, but this one
     // free the list
     slist_free(list);
 
-compiling
----------
+compiling and installing
+------------------------
 
-The Makefile knows both how to compile the code (and produce a library file called `libclists.a`) and how to compile and run the tests.
+Using the Makefile, the code can be compiled, some tests can be run and the library can be installed to the system (check the Makefile
+for further options, like where it should be installed to. 
 
     # compile the code
     make all
     
     # compile and run the tests
     make tests
+    
+    # install library
+    sudo make install
 
 contributing
 ------------
