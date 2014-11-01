@@ -1,25 +1,38 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=c99
-LDFLAGS = 
 OBJS = slist.o dlist.o pvec.o
-TARGETS = libclists.a
+TARGET = libclists.a
+HEADERS = dlist.h pvec.h slist.h
+HEADERS_DIR = clists
 TESTS_DIR = tests
-HEADER_DIR = clists
 
-all: $(TARGETS)
+INSTALL = install -p -m 0644
+INSTALL_TOP = /usr/local
+INSTALL_INC = $(INSTALL_TOP)/include/clists
+INSTALL_LIB = $(INSTALL_TOP)/lib
+
+MKDIR = mkdir -p
+RM = rm -f
+
+all: $(TARGET)
 
 libclists.a: $(OBJS)
 	ar cr $@ $^
 	ranlib $@
 
-%.o: %.c $(HEADER_DIR)/%.h
+%.o: %.c $(HEADERS_DIR)/%.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-tests: libclists.a $(OBJS)
+tests: $(TARGET) $(OBJS)
 	@cd $(TESTS_DIR) && make run
 
+install: $(TARGET)
+	$(MKDIR) $(INSTALL_INC) $(INSTALL_LIB)
+	$(INSTALL) $(TARGET) $(INSTALL_LIB)
+	cd $(HEADERS_DIR) && $(INSTALL) $(HEADERS) $(INSTALL_INC)
+
 clean:
-	rm -f *.o *.a
+	$(RM) -f *.o *.a
 	@cd $(TESTS_DIR) && make clean
 
 .PHONY: all tests clean
