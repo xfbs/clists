@@ -82,6 +82,7 @@ void *dlist_pop(dlist_t *list);
 
 int dlist_equal(dlist_t *lista, dlist_t *listb);
 dlist_t *dlist_copy(dlist_t *list);
+void **dlist_to_array(dlist_t *list);
 
 #ifndef dlist_size
 size_t dlist_size(dlist_t *list);

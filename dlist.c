@@ -294,6 +294,22 @@ dlist_t *dlist_copy(dlist_t *list)
     return copy;
 }
 
+void **dlist_to_array(dlist_t *list)
+{
+    if(list->size == 0) return NULL;
+    void **array = malloc(list->size);
+    dlist_node_t *node = list->head;
+
+    int index = 0;
+    while(node) {
+        array[index] = node->data;
+        node = node->next;
+        index++;
+    }
+
+    return array;
+}
+
 static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
 {
     if(list->size == 0)
