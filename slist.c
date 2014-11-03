@@ -309,6 +309,22 @@ slist *slist_copy(slist *list)
 }
 */
 
+void **slist_to_array(slist_t *list)
+{
+    if(list->size == 0) return NULL;
+    void **array = malloc(list->size);
+    slist_node_t *node = list->head;
+
+    int index = 0;
+    while(node) {
+        array[index] = node->data;
+        node = node->next;
+        index++;
+    }
+
+    return array;
+}
+
 static slist_node_t *slist_node_get(slist_t *list, size_t pos)
 {
     if (list->size == 0)
