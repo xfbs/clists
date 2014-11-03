@@ -54,7 +54,9 @@ for further options, like where it should be installed to.
     # install library
     sudo make install
 
-contributing
-------------
+todo
+----
 
-Feel free to contribute to this project by sending pull requests or however you'd like. One thing to note is that I'd like the license of this code to remain free (preferably GPL).
+ - write more tests for all functions
+ - finish some of the functions
+ - document the code more extensively
