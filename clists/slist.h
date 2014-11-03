@@ -75,11 +75,11 @@ int slist_equal(slist_t *lista, slist_t *listb);
 slist_t *slist_copy(slist_t *list);
 void **slist_to_array(slist_t *list);
 
-#ifndef slist_size(list)
+#ifndef slist_size
 size_t slist_size(slist_t *list);
 #endif
 
-#ifndef slist_first(list)
+#ifndef slist_first
 void *slist_first(slist_t *list);
 #endif
 
