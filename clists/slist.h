@@ -1,5 +1,6 @@
 /*  File: slist.h
  *
+ *  License
  *  Copyright (C) 2011, Patrick M. Elsen
  *
  *  This file is part of CLists (http://github.com/xfbs/CLists)
@@ -21,38 +22,21 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- *  ==About==
- *  SList is an implementation of a single linked list, in which
- *  nodes have a pointer to the next node, thereby linking them.
- *  Technically, you only need to know the position of the first
- *  node to work with a single linked list, but in this implementation
- *  single linked lists are represented with a dedicated data
- *  structure (slist_t), which stores not only the first node,
- *  but also the last node as well as the list size. This is done
- *  for efficiency, as otherwise the whole list has to be traversed
- *  to know it's size.
+ *  Design Specifications
+ *  - implementation of single linked lists in C
+ *  - simple
+ *  - efficient
+ *  - intuitive
+ *  - stores void pointers for maximum flexibility
  *
- *  All functions that work with the SList data structure take a
- *  pointer to an slist struct (slist_t*). Such a pointer can come
- *  from the slist_new() function, which creates a new object on
- *  the heap, initializes it and returns it's pointer, or an object
- *  on the stack can be initialized with slist_init(&obj). See the
- *  following examples:
- *  
- *      // create an slist on the heap (internally uses malloc)
- *      slist_t *one = slist_new();
- *
- *      // create an slist on the stack and initialize it
- *      slist_t two;
- *      slist_init(&two);
- *
- *      // add some data to both lists
- *      int num = 6;
- *      slist_append(one,  (void*)&num);
- *      slist_append(&two, (void*)&num);
- *
- *  For more information, see the comments above each function or
- *  in the implementation.
+ *  Implementation
+ *  => slist_t
+ *   - central single linked list datatype
+ *   - stores some parameters for efficiency (size, tail node)
+ *  => slist_node_t
+ *   - actual single linked list node
+ *   - not typically 'seen' by user
+ *   - automatically allocated/freed on insertion/deletion
  */
 
 #ifndef _SLIST_H
@@ -61,9 +45,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* simple data access functions are implemented as macros for speed */
 #define slist_size(list) ((list) ? (list)->size : 0)
 #define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
+
+/*  foreach loop implementation for slist, use like this, assuming the
+ *  list that is to be iterated is called 'list' and of type slist_t*:
+ *
+ *      void *item;
+ *      slist_foreach(list, item) {
+ *          printf("%p", item);
+ *      }
+ */
 #define slist_foreach(list, __data) \
     for(void *__node = list->head, *__data = ((list->head) ? \
                 list->head->data : \
