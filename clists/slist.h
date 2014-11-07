@@ -106,18 +106,6 @@ slist_t *slist_copy(slist_t *list);
 //pvec_t *slist_to_pvec(slist_t *list);
 void **slist_to_array(slist_t *list);
 
-#ifndef slist_size
-size_t slist_size(slist_t *list);
-#endif
-
-#ifndef slist_first
-void *slist_first(slist_t *list);
-#endif
-
-#ifndef slist_last
-void *slist_last(slist_t *list);
-#endif
-
 #ifdef __cplusplus
 }
 #endif
