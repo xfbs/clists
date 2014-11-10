@@ -349,6 +349,32 @@ slist_t *slist_chop(slist_t *list, size_t pos)
     return new;
 }
 
+slist_t *slist_join(slist_t *dest, slist_t *src)
+{
+    /* if any of the parameters are NULL, return NULL to
+     * indicate an error */
+    if(dest == NULL || src == NULL)
+        return NULL;
+
+    /* if there is nothing to copy, just return dest */
+    if(src->size == 0)
+        return dest;
+
+    /* if dest is an empty list, we can get away by simply
+     * memcpy-ing src to dest and then clearing src out */
+    if(dest->size == 0) {
+        memcpy(dest, src, sizeof(slist_t));
+        memset(src,    0, sizeof(slist_t));
+    } else {
+        /* otherwise, do it the hard way. */
+        dest->tail->next = src->head;
+        dest->tail       = src->tail;
+        dest->size      += src->size;
+    }
+
+    return dest;
+}
+
 slist_t *slist_copy(slist_t *list)
 {
     /* allocate a new slist */
