@@ -43,6 +43,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "slist.h"
 
 /* simple data access functions are implemented as macros for speed */
 #define dlist_size(list) ((list) ? (list)->size : 0)
@@ -96,26 +97,69 @@ typedef struct dlist
     size_t size;
 } dlist_t;
 
-/* dlist creation/destruction functions
+/*  creation/destruction functions
+ *
+ *  the new function creates a new dlist object on the heap
+ *   (using malloc), initializes it and returns a pointer to
+ *   it. 
+ *  this object (as well as all the nodes) can be freed
+ *   using the free function.
+ *
+ *  init is meant for initializing an dlist object, for
+ *   example a stack object. 
+ *  the purge function works like the free function, but it 
+ *   only frees the nodes and not the memory of the object 
+ *   itself.
  */
 dlist_t *dlist_new  (void);
 int      dlist_init (dlist_t *list);
 int      dlist_purge(dlist_t *list);
 int      dlist_free (dlist_t *list);
 
+/*  insertion and removal of data from a list
+ *
+ *  append adds data to the end of the list.
+ *  prepend adds data to the beginning of the list,
+ *   shifting everything to the right.
+ *  insert adds data in between existing data.
+ *   elements (so that the new element is as pos and
+ *   everything after it is shifted one to the right).
+ *  remove shifts all data after the element one to the
+ *   left.
+ */
 int dlist_append (dlist_t *list, void *data);
 int dlist_prepend(dlist_t *list, void *data);
 int dlist_insert (dlist_t *list, size_t pos, void *data);
 int dlist_remove (dlist_t *list, size_t pos);
 
-
+/* data setting/accessing functions
+ *
+ * get returns the data at pos
+ * pop removes and returns the first element of the list
+ * set changes the data at pos to the supplied value
+ */
 int   dlist_set(dlist_t *list, size_t pos, void *data);
 void *dlist_get(dlist_t *list, size_t pos);
 void *dlist_pop(dlist_t *list);
 
+/* list mangling functions
+ * chop splits the list, leaving elements [0,pos-1] in the
+ *  original list and returning [pos,...] as a new one
+ * join adds all data from src to dest, leaving src as an
+ *  empty list, and returns dest.
+ */
 dlist_t *dlist_chop(dlist_t *list, size_t pos);
 dlist_t *dlist_join(dlist_t *dest, slist_t *src);
 
+/*  conversion functions
+ *  copy creates a new dlist with the same data as the
+ *   one it is passed. 
+ *  the from_* functions convert some other data type
+ *   to a dlist.
+ *  the to_array function returns a pointer to an array
+ *   that contains the same data as is in the dlist. this
+ *   array needs to be freed by the user.
+ */
 dlist_t *dlist_copy      (dlist_t *list);
 dlist_t *dlist_from_slist(slist_t *list);
 dlist_t *dlist_from_array(void   **array, size_t size);

@@ -94,23 +94,27 @@ typedef struct slist
     size_t size;
 } slist_t;
 
-/*  slist creation/destruction functions
+/*  creation/destruction functions
+ *
  *  the new function creates a new slist object on the heap
  *   (using malloc), initializes it and returns a pointer to
- *   it. This object (as well as all the nodes) can be freed
+ *   it. 
+ *  this object (as well as all the nodes) can be freed
  *   using the free function.
  *
  *  init is meant for initializing an slist object, for
- *  example a stack object. the purge function works like
- *  the free function, but it only frees the notes and not
- *  the memory of the object itself.
+ *   example a stack object. 
+ *  the purge function works like the free function, but it 
+ *   only frees the nodes and not the memory of the object 
+ *   itself.
  */
 slist_t *slist_new  (void);
 int      slist_init (slist_t *list);
 int      slist_purge(slist_t *list);
 int      slist_free (slist_t *list);
 
-/*  functions to write data to a slist
+/*  insertion and removal of data from a list
+ *
  *  append adds data to the end of the list.
  *  prepend adds data to the beginning of the list,
  *   shifting everything to the right.
@@ -125,9 +129,11 @@ int slist_prepend(slist_t *list, void *data);
 int slist_insert (slist_t *list, size_t pos, void *data);
 int slist_remove (slist_t *list, size_t pos);
 
-/* data access functions
- * get returns the data at pos, while pop removes and
- * returns the first element of the list
+/* data setting/accessing functions
+ *
+ * get returns the data at pos
+ * pop removes and returns the first element of the list
+ * set changes the data at pos to the supplied value
  */
 int   slist_set(slist_t *list, size_t pos, void *data);
 void *slist_get(slist_t *list, size_t pos);
@@ -135,9 +141,9 @@ void *slist_pop(slist_t *list);
 
 /* list mangling functions
  * chop splits the list, leaving elements [0,pos-1] in the
- * original list and returning [pos,...] as a new one
+ *  original list and returning [pos,...] as a new one
  * join adds all data from src to dest, leaving src as an
- * empty list, and returns dest.
+ *  empty list, and returns dest.
  */
 slist_t *slist_chop(slist_t *list, size_t pos);
 slist_t *slist_join(slist_t *dest, slist_t *src);
