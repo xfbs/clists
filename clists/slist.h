@@ -151,8 +151,8 @@ int slist_equal(slist_t *lista, slist_t *listb);
  */
 slist_t *slist_copy      (slist_t *list);
 slist_t *slist_from_array(void **array, size_t size);
-dlist_t *slist_to_dlist  (slist_t *list);
-pvec_t  *slist_to_pvec   (slist_t *list);
+slist_t *slist_from_dlist(dlist_t *list);
+slist_t *slist_from_pvec (slist_t *list);
 void   **slist_to_array  (slist_t *list);
 
 #ifdef __cplusplus
