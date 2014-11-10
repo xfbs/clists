@@ -49,6 +49,26 @@
 #define dlist_size(list) ((list) ? (list)->size : 0)
 #define dlist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define dlist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
+
+/*  macro foreach loop implementations for dlist
+ *
+ *  these macros can be used as foreach loops, with one going from
+ *  beginning to end and one for traversing the list backwards (which
+ *  is efficient because it's a doubly linked list, each node has a
+ *  pointer to the previous node as well)
+ *  assuming that list is of type dlist_t*, use them like this:
+ *
+ *      void *item;
+ *      dlist_foreach(list, item) {
+ *          printf("%p", item);
+ *      }
+ *
+ *  for backwards traversal:
+ *
+ *      dlist_forach_backwards(list, item) {
+ *          printf("%p", item);
+ *      }
+ */
 #define dlist_foreach(list, __data) \
     for(void *__node = list->head, *__data = ((list->head) ? \
                 list->head->data : \
