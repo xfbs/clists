@@ -1,6 +1,5 @@
 /*  File: slist.h
  *
- *  License
  *  Copyright (C) 2011, Patrick M. Elsen
  *
  *  This file is part of CLists (http://github.com/xfbs/CLists)
@@ -97,9 +96,9 @@ typedef struct slist
 
 /*  slist creation/destruction functions
  *  the new function creates a new slist object on the heap
- *  (using malloc), initializes it and returns a pointer to
- *  it. This object (as well as all the nodes) can be freed
- *  using the free function.
+ *   (using malloc), initializes it and returns a pointer to
+ *   it. This object (as well as all the nodes) can be freed
+ *   using the free function.
  *
  *  init is meant for initializing an slist object, for
  *  example a stack object. the purge function works like
@@ -112,28 +111,25 @@ int      slist_purge(slist_t *list);
 int      slist_free (slist_t *list);
 
 /*  functions to write data to a slist
- *  append adds data to the end of the list, prepend to the
- *  beginning, insert adds data in between existing data
- *  elements (so that the new element is as pos and
- *  everything after it is shifted one to the right). 
+ *  append adds data to the end of the list.
+ *  prepend adds data to the beginning of the list,
+ *   shifting everything to the right.
+ *  insert adds data in between existing data.
+ *   elements (so that the new element is as pos and
+ *   everything after it is shifted one to the right).
  *  remove shifts all data after the element one to the
- *  left, and set sets the data of a given element.
- *
- *  the most efficient operations for slist are the append
- *  and prepend operations since pointers to the first and
- *  last node are stored, meaning that there is no need
- *  to traverse the list.
+ *   left.
  */
 int slist_append (slist_t *list, void *data);
 int slist_prepend(slist_t *list, void *data);
 int slist_insert (slist_t *list, size_t pos, void *data);
 int slist_remove (slist_t *list, size_t pos);
-int slist_set    (slist_t *list, size_t pos, void *data);
 
 /* data access functions
  * get returns the data at pos, while pop removes and
  * returns the first element of the list
  */
+int   slist_set(slist_t *list, size_t pos, void *data);
 void *slist_get(slist_t *list, size_t pos);
 void *slist_pop(slist_t *list);
 
@@ -148,17 +144,16 @@ slist_t *slist_join(slist_t *dest, slist_t *src);
 
 /*  conversion functions
  *  copy creates a new slist with the same data as the
- *  one it is passed. 
+ *   one it is passed. 
  *  the from_* functions convert some other data type
- *  to a slist.
+ *   to a slist.
  *  the to_array function returns a pointer to an array
- *  that contains the same data as is in the slist. this
- *  array needs to be freed by the user.
+ *   that contains the same data as is in the slist. this
+ *   array needs to be freed by the user.
  */
 slist_t *slist_copy      (slist_t *list);
-slist_t *slist_from_array(void   **array, size_t size);
 slist_t *slist_from_dlist(dlist_t *list);
-slist_t *slist_from_pvec (slist_t *list);
+slist_t *slist_from_array(void   **array, size_t size);
 void   **slist_to_array  (slist_t *list);
 
 #ifdef __cplusplus
