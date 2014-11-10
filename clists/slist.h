@@ -71,12 +71,22 @@
 extern "C" {
 #endif
 
+/*  the key feature of single linked lists is that the data
+ *  is represented by nodes, each node posessing a pointer to
+ *  the next node. this is the node structure used by slist.
+ */
 typedef struct slist_node
 {
     struct slist_node *next;
     void *data;
 } slist_node_t;
 
+/*  the main slist struct. it stores a pointer to the first
+ *  and the last nodes in the list, as well as the size of
+ *  the list (since obtaining that is computationally expensive
+ *  linear to the size of the list, as all nodes need to be
+ *  traversed)
+ */
 typedef struct slist
 {
     struct slist_node *head;
@@ -84,27 +94,66 @@ typedef struct slist
     size_t size;
 } slist_t;
 
-slist_t *slist_new(void);
-int slist_init(slist_t *list);
-int slist_purge(slist_t *list);
-int slist_free(slist_t *list);
+/*  slist creation/destruction functions
+ *  the new function creates a new slist object on the heap
+ *  (using malloc), initializes it and returns a pointer to
+ *  it. This object (as well as all the nodes) can be freed
+ *  using the free function.
+ *
+ *  init is meant for initializing an slist object, for
+ *  example a stack object. the purge function works like
+ *  the free function, but it only frees the notes and not
+ *  the memory of the object itself.
+ */
+slist_t *slist_new  (void);
+int      slist_init (slist_t *list);
+int      slist_purge(slist_t *list);
+int      slist_free (slist_t *list);
 
-int slist_append(slist_t *list, void *data);
+/*  functions to write data to a slist
+ *  append adds data to the end of the list, prepend to the
+ *  beginning, insert adds data in between existing data
+ *  elements (so that the new element is as pos and
+ *  everything after it is shifted one to the right). 
+ *  remove shifts all data after the element one to the
+ *  left, and set sets the data of a given element.
+ *
+ *  the most efficient operations for slist are the append
+ *  and prepend operations since pointers to the first and
+ *  last node are stored, meaning that there is no need
+ *  to traverse the list.
+ */
+int slist_append (slist_t *list, void *data);
 int slist_prepend(slist_t *list, void *data);
-int slist_insert(slist_t *list, size_t pos, void *data);
-int slist_remove(slist_t *list, size_t pos);
-int slist_set(slist_t *list, size_t pos, void *data);
+int slist_insert (slist_t *list, size_t pos, void *data);
+int slist_remove (slist_t *list, size_t pos);
+int slist_set    (slist_t *list, size_t pos, void *data);
 
+/* data access functions
+ * get returns the data at pos, while pop removes and
+ * returns the first element of the list
+ */
 void *slist_get(slist_t *list, size_t pos);
 void *slist_pop(slist_t *list);
 
 int slist_equal(slist_t *lista, slist_t *listb);
-slist_t *slist_copy(slist_t *list);
+
 
 // [TODO] converstion functions
-//dlist_t *slist_to_dlist(slist_t *list);
-//pvec_t *slist_to_pvec(slist_t *list);
-void **slist_to_array(slist_t *list);
+/*  conversion functions
+ *  copy creates a new slist with the same data as the
+ *  one it is passed. from_array takes an array of data
+ *  and a length, and creates a slist object from it.
+ *  
+ *  to_dlist creates a doubly linked list with the same
+ *  data as the slist. to_pvec creates a pointer vector,
+ *  and finally to_array exports the slist as an array.
+ */
+slist_t *slist_copy      (slist_t *list);
+slist_t *slist_from_array(void **array, size_t size);
+dlist_t *slist_to_dlist  (slist_t *list);
+pvec_t  *slist_to_pvec   (slist_t *list);
+void   **slist_to_array  (slist_t *list);
 
 #ifdef __cplusplus
 }
