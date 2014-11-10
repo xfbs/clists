@@ -136,18 +136,23 @@ int slist_set    (slist_t *list, size_t pos, void *data);
 void *slist_get(slist_t *list, size_t pos);
 void *slist_pop(slist_t *list);
 
-int slist_equal(slist_t *lista, slist_t *listb);
+/* list mangling functions
+ * chop splits the list, leaving elements [0,pos-1] in the
+ * original list and returning [pos,...] as a new one
+ * join adds all data from src to dest, leaving src as an
+ * empty list, and returns dest.
+ */
+slist_t *slist_chop(slist_t *list, size_t pos);
+slist_t *slist_join(slist_* *dest, slist_t *src);
 
-
-// [TODO] converstion functions
 /*  conversion functions
  *  copy creates a new slist with the same data as the
- *  one it is passed. from_array takes an array of data
- *  and a length, and creates a slist object from it.
- *  
- *  to_dlist creates a doubly linked list with the same
- *  data as the slist. to_pvec creates a pointer vector,
- *  and finally to_array exports the slist as an array.
+ *  one it is passed. 
+ *  the from_* functions convert some other data type
+ *  to a slist.
+ *  the to_array function returns a pointer to an array
+ *  that contains the same data as is in the slist. this
+ *  array needs to be freed by the user.
  */
 slist_t *slist_copy      (slist_t *list);
 slist_t *slist_from_array(void **array, size_t size);
