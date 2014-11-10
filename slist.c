@@ -365,6 +365,28 @@ slist_t *slist_from_array(void *array, size_t len)
     return list;
 }
 
+slist_t *slist_from_dlist(dlist_t *dlist)
+{
+    /* allocate new slist */
+    slist_t *list = slist_new();
+
+    /* memory allocation error checking */
+    if(list == NULL)
+        return NULL;
+
+    /* loop through the dlist, appending data to
+     * the slist as we go */
+    dlist_node_t = *node;
+    for(node = dlist->head; node != NULL, node = node->next) {
+        int ret = slist_append(list, node->data);
+
+        /* check the return value for errors */
+        if(ret < 0)
+            return NULL;
+    }
+
+    return list;
+}
 
 
 void **slist_to_array(slist_t *list)
