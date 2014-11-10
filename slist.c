@@ -314,79 +314,140 @@ void *slist_pop(slist_t *list)
     return data;
 }
 
-
-/*
 slist *slist_copy(slist *list)
 {
-    // allocate a new slist
-    slist *copy = slist_alloc();
+    /* allocate a new slist */
+    slist_t *copy = slist_new();
 
-    // head node or list
-    slist_node *list_node = list->head;
+    /* memory error checking */
+    if(copy == NULL)
+        return NULL;
 
-    // copy head node of list
-    slist_node *copy_node = slist_node_copy(list_node);
+    /* loop thought the original slist */
+    slist_node_t *node;
+    for(node = list->head; node != NULL; node=node->next) {
+        /* add data as we go */
+        int ret = slist_append(copy, node->data);
 
-    // set head node
-    copy->head = copy_node;
-
-    // loop through nodes
-    while (list_node && list_node->next) {
-        // copy nodes
-        copy_node->next = slist_node_copy(list_node->next);
-
-        // go to next nodes
-        copy_node = copy_node->next;
-        list_node = list_node->next;
+        /* if ret=-1, something went wrong with memory
+         * allocation while appending. technically, we'd
+         * have to clean up, but as this can really only
+         * happen if something if wrong with the system,
+         * we just return NULL because nothing good can 
+         * come out of a system with a failed malloc call
+         */
+        if(ret < 0)
+            return NULL;
     }
-
-    // set copy's tail node
-    copy->tail = copy_node;
-
-    // set copy's size
-    copy->size = list->size;
 
     return copy;
 }
-*/
+
+slist_t *slist_from_array(void *array, size_t len)
+{
+    /* create new slist */
+    slist_t *list = slist_new();
+
+    /* memory allocarion error checking */
+    if(list == NULL)
+        return NULL;
+
+    /* loop through data, adding it to slist as we go */
+    size_t i;
+    for(i = 0; i < len; ++i) {
+        int ret = slist_append(list, array[i]);
+
+        /* memory error checking */
+        if(ret < 0)
+            return NULL;
+    }
+
+    return list;
+}
+
+
 
 void **slist_to_array(slist_t *list)
 {
-    if(list->size == 0) return NULL;
-    void **array = malloc(list->size);
-    slist_node_t *node = list->head;
+    /* creating an empty array doesn't make sense so
+     * simply return NULL if list is empty */
+    if(list->size == 0)
+        return NULL;
 
-    int index = 0;
-    while(node) {
-        array[index] = node->data;
+    /* allocate an array with the size of the list */
+    void **array = malloc(list->size * sizeof(void*));
+    
+    /* memory error checking */
+    if(array == NULL)
+        return NULL;
+
+    /* loop through the list, adding data to the array
+     * as we go and making sure that we are in no case
+     * adding anything past the end of the array */
+    slist_node_t *node list->head;
+    size_t i = 0;
+    while((node != NULL) && (i < list->size)) {
+        /* write data */
+        array[i] = node->data;
+
+        /* proceed to next node and update i */
         node = node->next;
-        index++;
+        ++i;
+    }
+
+    /* if all went well, i should now point to the
+     * last element written, which is list->size-1
+     */
+    if(i != (list->size-1)) {
+        /* something went wrong. free the array and
+         * set it to NULL to indicate this to the
+         * caller */
+        free(array);
+        array = NULL;
     }
 
     return array;
 }
 
+/* this is an internal function used to extract the node at
+ * pos of a given list, or NULL if it doesn't exist */
 static slist_node_t *slist_node_get(slist_t *list, size_t pos)
 {
+    /* obviously, an empty list does not have any nodes
+     * that could be extracted, so return NULL
+     */
     if (list->size == 0)
         return NULL;
 
+    /* shortcuts */
     if (pos == 0)
+        /* head is the first element, at pos=0 */
         return list->head;
     else if (pos == (list->size-1))
+        /* tail is the last element, at pos=size-1 */
         return list->tail;
     else if (pos >= list->size)
+        /* anything greater or equal than size is beyond
+         * the lendth of the list, thus there is no node
+         * that could be extracted */
         return NULL;
 
+    /* if none of the shortcuts worked, extract the node
+     * by traversing the list */
     slist_node_t *node = list->head;
     while ((node != NULL) && (pos != 0)) {
+        /* pos is now the 'distance' between the current
+         * node and the one we want. decrease pos as we
+         * get closer to it, and once pos=0, we have what
+         * we were looking for. if we encounter NULL on
+         * the way, there is an error in the list! */
         pos--;
         node = node->next;
     }
 
+    /* error in the list! bad! */
     if(pos != 0)
         return NULL;
 
     return node;
 }
-
