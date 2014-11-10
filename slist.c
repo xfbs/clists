@@ -404,7 +404,7 @@ slist_t *slist_copy(slist_t *list)
     return copy;
 }
 
-slist_t *slist_from_array(void *array, size_t len)
+slist_t *slist_from_array(void **array, size_t len)
 {
     /* create new slist */
     slist_t *list = slist_new();
@@ -437,8 +437,8 @@ slist_t *slist_from_dlist(dlist_t *dlist)
 
     /* loop through the dlist, appending data to
      * the slist as we go */
-    dlist_node_t = *node;
-    for(node = dlist->head; node != NULL, node = node->next) {
+    dlist_node_t *node;
+    for(node = dlist->head; node != NULL; node = node->next) {
         int ret = slist_append(list, node->data);
 
         /* check the return value for errors */
@@ -467,7 +467,7 @@ void **slist_to_array(slist_t *list)
     /* loop through the list, adding data to the array
      * as we go and making sure that we are in no case
      * adding anything past the end of the array */
-    slist_node_t *node list->head;
+    slist_node_t *node = list->head;
     size_t i = 0;
     while((node != NULL) && (i < list->size)) {
         /* write data */

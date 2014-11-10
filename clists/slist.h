@@ -44,6 +44,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "dlist.h"
 
 /* simple data access functions are implemented as macros for speed */
 #define slist_size(list) ((list) ? (list)->size : 0)
@@ -143,7 +144,7 @@ void *slist_pop(slist_t *list);
  * empty list, and returns dest.
  */
 slist_t *slist_chop(slist_t *list, size_t pos);
-slist_t *slist_join(slist_* *dest, slist_t *src);
+slist_t *slist_join(slist_t *dest, slist_t *src);
 
 /*  conversion functions
  *  copy creates a new slist with the same data as the
@@ -155,7 +156,7 @@ slist_t *slist_join(slist_* *dest, slist_t *src);
  *  array needs to be freed by the user.
  */
 slist_t *slist_copy      (slist_t *list);
-slist_t *slist_from_array(void **array, size_t size);
+slist_t *slist_from_array(void   **array, size_t size);
 slist_t *slist_from_dlist(dlist_t *list);
 slist_t *slist_from_pvec (slist_t *list);
 void   **slist_to_array  (slist_t *list);
