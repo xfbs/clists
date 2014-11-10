@@ -314,7 +314,42 @@ void *slist_pop(slist_t *list)
     return data;
 }
 
-slist *slist_copy(slist *list)
+slist_t *slist_chop(slist_t *list, size_t pos)
+{
+    /* check if pos actually points to anything useful */
+    if(pos >= list->size)
+        return NULL;
+
+    /* allocate new slist */
+    slist_t *new = slist_new();
+
+    /* check if we should transfer the whole list */
+    if(pos == 0) {
+        memcpy(new, list, sizeof(slist_t));
+        memset(list,   0, sizeof(slist_t));
+        return new;
+    }
+
+    /* get the node just before pos */
+    slist_node_t *node = slist_node_get(list, pos-1);
+
+    /* make sure it actually exists */
+    if(node == NULL) {
+        free(new);
+        return NULL;
+    }
+
+    /* chop the list! */
+    new->tail = list->tail;
+    new->head = node->next;
+    new->size = list->size - pos;
+    list->tail = node;
+    list->size = pos;
+
+    return new;
+}
+
+slist_t *slist_copy(slist_t *list)
 {
     /* allocate a new slist */
     slist_t *copy = slist_new();
