@@ -258,21 +258,32 @@ void *dlist_pop(dlist_t *list)
 
     switch(list->size) {
         case 0:
+            /* can't pop anything from an empty list */
             return NULL;
             break;
         case 1:
+            /* if list has size 1, we have to set it to
+             * be empty after extracting the data */
             node = list->head;
             data = node->data;
             memset(list, 0, sizeof(dlist_t));
             break;
         default:
+            /* extract head node */
             node = list->head;
 
+            /* delete back reference to this node */
             if(node->next)
                 node->next->prev = NULL;
 
+            /* make list->head point to node after
+             * head node */
             list->head = node->next;
+
+            /* update size to account for extracted
+             * node */
             list->size--;
+
             data = node->data;
             break;
     }
@@ -283,166 +294,204 @@ void *dlist_pop(dlist_t *list)
 
 int dlist_remove(dlist_t *list, size_t pos)
 {
+    /* can't remove anything from an empty list */
     if(list->size == 0)
         return -1;
 
+    /* can't remove if pos is not valid */
     if(pos >= list->size)
         return -1;
 
+    /* removing at position 0 is basically popping but
+     * discarding the data */
     if(pos == 0) {
         dlist_pop(list);
     } else {
+        /* extract the node we want to remove */
         dlist_node_t *node = dlist_node_get(list, pos);
 
+        /* make sure the node exists */
         if(node == NULL)
             return -1;
 
-        if(node == list->tail)
+        /* since we have a guarantee that pos!=0, we
+         * only have two cases left: pos could be in the
+         * middle of the list or it could be at the
+         * end. distinguish between the two: */
+        if(node == list->tail) {
+            /* this is the last node. make the node before
+             * it the last node */
             list->tail = node->prev;
-
-        if(node->next != NULL)
+        } else {
+            /* node is not the last node in the list. make
+             * the backpointer of the node after it point
+             * to the node before it */
             node->next->prev = node->prev;
+        }
 
-        if(node->prev != NULL)
-            node->prev->next = node->next;
+        /* connect the node before it with what comes after
+         * the node or if node is last, indicate the previous
+         * node that it's the last */
+        node->prev->next = node->next;
 
-        free(node);
+        /* update list size to reflect removed node */
         list->size--;
+        free(node);
     }
 
     return 0;
 }
 
-#ifndef dlist_size
-size_t dlist_size(dlist_t *list)
-{
-    return((list) ? list->size : 0);
-}
-#endif
-
-#ifndef dlist_first
-void *dlist_first(dlist_t *list)
-{
-    dlist_node_t *node = list->head;
-    return((node) ? node->data : NULL);
-}
-#endif
-
-#ifndef dlist_last
-void *dlist_last(dlist_t *list)
-{
-    dlist_node_t *node = list->tail;
-    return((node) ? node->data : NULL);
-}
-#endif
-
-int dlist_equal(dlist_t *lista, dlist_t *listb)
-{
-    if(dlist_size(lista) != dlist_size(listb))
-        return 0;
-
-    dlist_node_t *lista_node = lista->head;
-    dlist_node_t *listb_node = listb->head;
-
-    while (lista_node && listb_node) {
-        if(lista_node->data != listb_node->data)
-            return 0;
-
-        lista_node = lista_node->next;
-        listb_node = listb_node->next;
-    }
-
-    return 1;
-}
-
+/* create a copy of a list */
 dlist_t *dlist_copy(dlist_t *list)
 {
-    dlist_t *copy = dlist_new();
+    /* create new list */
+    dlist_t *clist = dlist_new();
 
-    dlist_node_t *o_node = list->head;
-    dlist_node_t *c_node;
+    /* node is the one from the original list
+     * and copy is the one we create as copy */
+    dlist_node_t *node = list->head;
+    dlist_node_t *cnode;
 
-    if(o_node != NULL) {
-        c_node = malloc(sizeof(dlist_node_t));
-        if(c_node == NULL) {
+    if(node != NULL) {
+        /* allocate new copy node */
+        cnode = malloc(sizeof(dlist_node_t));
+
+        /* make sure allocation worked */
+        if(cnode == NULL)
             return NULL;
-        }
 
-        memset(c_node, 0, sizeof(dlist_node_t));
-        c_node->data = o_node->data;
-        copy->head = c_node;
+        /* initialize node */
+        memset(cnode, 0, sizeof(dlist_node_t));
+
+        /* copy data */
+        cnode->data = clist->data;
+
+        /* set this node as head of list */
+        clist->head = cnode;
         
-        while((o_node = o_node->next) != NULL) {
-            // copy node
-            c_node->next = malloc(sizeof(dlist_node_t));
-            if(c_node->next == NULL) {
-                return NULL;
-            }
+        /* once the head node exists, we can iterate
+         * through the other nodes and add the sequentially */
+        while((node = node->next) != NULL) {
+            /* copy the current node */
+            cnode->next = malloc(sizeof(dlist_node_t));
 
-            memset(c_node->next, 0, sizeof(dlist_node_t));
-            c_node->next->data = o_node->data;
-            c_node->next->prev = c_node;
-            c_node = c_node->next;
+            /* make sure memory allocation worked */
+            if(cnode->next == NULL)
+                return NULL;
+
+            /* initialize memory */
+            memset(cnode->next, 0, sizeof(dlist_node_t));
+
+            /* set node data and prev pointer */
+            cnode->next->data = node->data;
+            cnode->next->prev = cnode;
+
+            /* move to next node */
+            cnode = cnode->next;
         }
     }
     
-    copy->tail = c_node;
+    /* set tail of list */
+    copy->tail = cnode;
+
+    /* copy list size */
     copy->size = list->size;
     return copy;
 }
 
 void **dlist_to_array(dlist_t *list)
 {
-    if(list->size == 0) return NULL;
+    /* creating an empty array doesn't make sense so
+     * simply return NULL if list is empty */
+    if(list->size == 0)
+        return NULL;
+
+    /* allocate memory for array */
     void **array = malloc(list->size);
+
+    /* make sure memory allocation worked */
+    if(array == NULL)
+        return NULL;
+
+    /* extract first node for walking through it */
     dlist_node_t *node = list->head;
 
-    int index = 0;
-    while(node) {
-        array[index] = node->data;
+    /* walk through the dlist, noting the index
+     * because we don't want a buffer overflow (even
+     * if the list is corrupt) */
+    size_t i = 0;
+    while((node != NULL) && (i < list->size)) {
+        /* copy data to array */
+        array[i] = node->data;
+
+        /* proceed to next node */
         node = node->next;
-        index++;
+
+        /* go to next index */
+        ++i;
     }
 
     return array;
 }
 
+/* internal function used to extract a node at a
+ * given position or NULL if it doesn't exists. this
+ * function is smart about accessing the list, working
+ * backwards if pos is closer to tail of list.
+ */
 static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
 {
+    /* can't return a node of an empty list */
     if(list->size == 0)
         return NULL;
 
+    /* can't return a node at an invalid pos */
     if(pos >= list->size)
         return NULL;
 
+    /* easy access nodes */
     if((pos-1) == list->size)
         return list->tail;
-
     if(pos == 0)
         return list->head;
 
+    /* if we get here, we have the guarantee that pos
+     * is within the list and neither the head nor the
+     * tail of the list */
     dlist_node_t *node;
     if(pos < (list->size/2)) {
-        // pos is before the middle if the list,
-        // thus we loop from the beginning
+        /* pos is located closer to the head than the
+         * tail, so work from there */
         node = list->head;
 
+        /* traverse the list forwards while decrementing
+         * pos - pos describes the distance between the
+         * current node and the one we need */
         while (node && pos) {
-            pos--;
             node = node->next;
+            pos--;
         }
     } else {
-        // pos is after the middle of the list,
-        // thus we loop from the end of the list
+        /* pos is located closer to the tail of the list
+         * so work from there */
         node = list->tail;
+
+        /* since pos should describe the distance between
+         * the current node and the node we need, change
+         * it to work backwards */
         pos = (list->size - pos) - 1;
 
+        /* get the node */
         while (node && pos) {
-            pos--;
             node = node->prev;
+            pos--;
         }
     }
 
+    /* if pos is not 0, it means that at some point while
+     * traversing the list, we encountered a NULL. not good.
+     * return NULL because there's not much we can do */
     if(pos != 0) {
         return NULL;
     } else {
