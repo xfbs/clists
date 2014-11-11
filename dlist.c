@@ -27,78 +27,137 @@ static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos);
 
 dlist_t *dlist_new(void)
 {
+    /* allocate memory for new list */
     dlist_t *list = malloc(sizeof(dlist_t));
+
+    /* check if memory allocation worked */
+    if(list == NULL)
+        return NULL;
+
+    /* initialize the new list */
     memset(list, 0, sizeof(dlist_t));
     return list;
 }
 
 int dlist_init(dlist_t *list)
 {
+    /* make sure list actually exists */
+    if(list == NULL)
+        return -1;
+
+    /* initialize list */
     memset(list, 0, sizeof(dlist_t));
     return 0;
 }
 
+/* free every node of the list and reset the
+ * list */
 int dlist_purge(dlist_t *list)
 {
+    /* start at frist node of the list */
     dlist_node_t *node = list->head;
 
+    /* free every node that is encountered */
     while (node) {
         free(node);
         node = node->next;
     }
 
+    /* initialize list */
     memset(list, 0, sizeof(dlist_t));
     return 0;
 }
 
 int dlist_free(dlist_t *list)
 {
+    /* error checking */
+    if(list == NULL)
+        return -1;
+
+    /* free all nodes */
     int ret = dlist_purge(list);
+
     free(list);
+
+    /* return whatever purge gave pack to propagate
+     * eventual errors */
     return ret;
 }
 
 int dlist_append(dlist_t *list, void *data)
 {
+    /* allocate new node */
     dlist_node_t *node = malloc(sizeof(dlist_node_t));
+
+    /* make sure the malloc call worked */
     if(node == NULL) {
         return -1;
     }
+
+    /* initialize node */
     memset(node, 0, sizeof(dlist_node_t));
+
+    /* set node data */
     node->data = data;
 
+    /* two cases possible: either list is empty, 
+     * and we have to set the node as the first,
+     * last and only node, or the list has other
+     * nodes and we can simplt append to the end
+     */
     if(list->tail != NULL) {
+        /* link the new node with the previous
+         * last node of the list */
         node->prev = list->tail;
         list->tail->next = node;
+
+        /* make out node the new last node */
         list->tail = node;
     } else {
+        /* make this node the one and only */
         list->head = node;
         list->tail = node;
     }
 
+    /* increase size to reflect added node */
     list->size++;
     return 0;
 }
 
-
 int dlist_prepend(dlist_t *list, void *data)
 {
+    /* allocate new node */
     dlist_node_t *node = malloc(sizeof(dlist_node_t));
+
+    /* make sure allocation worked */
     if(node == NULL) {
         return -1;
     }
+
+    /* initialize node */
     memset(node, 0, sizeof(dlist_node_t));
+
+    /* set node data */
     node->data = data;
 
+    /* just as in dlist_append, we have to check if
+     * the list was empty and this will be the first,
+     * last and only node or if we can simply prepend
+     * to existing nodes */
     if(list->head != NULL) {
+        /* connect node with previous head of list */
         node->next = list->head;
         list->head->prev = node;
+
+        /* set this node as the new head */
         list->head = node;
     } else {
+        /* make this node the one and only */
         list->head = node;
         list->tail = node;
     }
 
+    /* increment size to reflect added node */
     list->size++;
     return 0;
 }
@@ -106,30 +165,59 @@ int dlist_prepend(dlist_t *list, void *data)
 int dlist_insert(dlist_t *list, size_t pos, void *data)
 {
     if(pos == 0) {
+        /* inserting at pos=0 is the same as prepending */
         return dlist_prepend(list, data);
     } else if(pos == list->size) {
+        /* inserting to the end of the list is the same
+         * as appending */
         return dlist_append(list, data);
     } else if(pos > list->size) {
+        /* can't add data past the end of the list
+         * (otherwise, there would be gaps in the data)
+         */
         return -2;
     } else {
+        /* the previous if statements guarantee, that if we
+         * get here, the data is to be inserted in the middle
+         * of the list and not as first or last element */
+
+        /* allocate new node */
         dlist_node_t *new = malloc(sizeof(dlist_node_t));
+
+        /* make sure allocation worked */
         if(new == NULL) {
             return -3;
         }
+
+        /* initialize node */
         memset(new, 0, sizeof(dlist_node_t));
+
+        /* set node data */
         new->data = data;
 
+        /* extract the node before where we want to insert
+         * ours */
         dlist_node_t *node = dlist_node_get(list, pos-1);
 
+        /* make sure this node exists (guaranteed to exist,
+         * but who knows anything for certain right?) */
         if(node != NULL) {
+            /* so currently node and node->next are doubly
+             * linked, and our goal is to be sneaky and
+             * put our node in between */
             node->next->prev = new;
             new->next = node->next;
             new->prev = node;
             node->next = new;
         } else {
+            /* technically it should be impossible to get 
+             * here if you're using the library functions
+             */
+            free(new);
             return -4;
         }
 
+        /* increase list size to reflect added node */
         list->size++;
     }
 
@@ -138,9 +226,12 @@ int dlist_insert(dlist_t *list, size_t pos, void *data)
 
 int dlist_set(dlist_t *list, size_t pos, void *data)
 {
+    /* get the node at pos */
     dlist_node_t *node = dlist_node_get(list, pos);
 
+    /* make sure it exists (if not, error!) */
     if(node) {
+        /* set the node data */
         node->data = data;
         return 0;
     } else {
@@ -150,7 +241,13 @@ int dlist_set(dlist_t *list, size_t pos, void *data)
 
 void *dlist_get(dlist_t *list, size_t pos)
 {
+    /* get node at pos */
     dlist_node_t *node = dlist_node_get(list, pos);
+
+    /* return node->data if node exists, otherwise
+     * NULL (since NULL can be a valid value, be sure
+     * to check if pos is valid!)
+     */
     return((node) ? node->data : NULL);
 }
 
