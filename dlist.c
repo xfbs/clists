@@ -224,6 +224,56 @@ int dlist_insert(dlist_t *list, size_t pos, void *data)
     return 0;
 }
 
+int dlist_remove(dlist_t *list, size_t pos)
+{
+    /* can't remove anything from an empty list */
+    if(list->size == 0)
+        return -1;
+
+    /* can't remove if pos is not valid */
+    if(pos >= list->size)
+        return -1;
+
+    /* removing at position 0 is basically popping but
+     * discarding the data */
+    if(pos == 0) {
+        dlist_pop(list);
+    } else {
+        /* extract the node we want to remove */
+        dlist_node_t *node = dlist_node_get(list, pos);
+
+        /* make sure the node exists */
+        if(node == NULL)
+            return -1;
+
+        /* since we have a guarantee that pos!=0, we
+         * only have two cases left: pos could be in the
+         * middle of the list or it could be at the
+         * end. distinguish between the two: */
+        if(node == list->tail) {
+            /* this is the last node. make the node before
+             * it the last node */
+            list->tail = node->prev;
+        } else {
+            /* node is not the last node in the list. make
+             * the backpointer of the node after it point
+             * to the node before it */
+            node->next->prev = node->prev;
+        }
+
+        /* connect the node before it with what comes after
+         * the node or if node is last, indicate the previous
+         * node that it's the last */
+        node->prev->next = node->next;
+
+        /* update list size to reflect removed node */
+        list->size--;
+        free(node);
+    }
+
+    return 0;
+}
+
 int dlist_set(dlist_t *list, size_t pos, void *data)
 {
     /* get the node at pos */
@@ -292,54 +342,66 @@ void *dlist_pop(dlist_t *list)
     return data;
 }
 
-int dlist_remove(dlist_t *list, size_t pos)
+dlist_t *dlist_chop(dlist_t *list, size_t pos)
 {
-    /* can't remove anything from an empty list */
+    /* you can't chop a list up if it doesn't have any
+     * data in it */
     if(list->size == 0)
-        return -1;
+        return NULL;
 
-    /* can't remove if pos is not valid */
-    if(pos >= list->size)
-        return -1;
+    /* chopping anything past the end of the list
+     * is not possible */
+    if(list->size <= pos)
+        return NULL;
 
-    /* removing at position 0 is basically popping but
-     * discarding the data */
+    /* allocate new dlist */
+    dlist_t *chopped = dlist_new();
+
+    /* make sure allocation was successful */
+    if(list == NULL)
+        return NULL;
+
+    /* the pos that is supplied is supposed to be
+     * the first element of the chopped list */
     if(pos == 0) {
-        dlist_pop(list);
+        /* transfer list to new chopped list */
+        memcpy(chopped, list, sizeof(dlist_t));
+
+        /* reset original list */
+        memset(list, 0, sizeof(dlist_t));
     } else {
-        /* extract the node we want to remove */
-        dlist_node_t *node = dlist_node_get(list, pos);
+        /* find the node just before where the
+         * chopping is supposed to take place */
+        dlist_node_t *node = dlist_node_get(list, pos-1);
 
-        /* make sure the node exists */
-        if(node == NULL)
-            return -1;
-
-        /* since we have a guarantee that pos!=0, we
-         * only have two cases left: pos could be in the
-         * middle of the list or it could be at the
-         * end. distinguish between the two: */
-        if(node == list->tail) {
-            /* this is the last node. make the node before
-             * it the last node */
-            list->tail = node->prev;
-        } else {
-            /* node is not the last node in the list. make
-             * the backpointer of the node after it point
-             * to the node before it */
-            node->next->prev = node->prev;
+        /* make sure node exists and there are
+         * nodes after it that can be transferred */
+        if((node == NULL) || (node->next == NULL)) {
+            free(chopped);
+            return NULL;
         }
 
-        /* connect the node before it with what comes after
-         * the node or if node is last, indicate the previous
-         * node that it's the last */
-        node->prev->next = node->next;
+        /* transfer all nodes past node to chopped */
+        chopped->head = node->next;
+        chopped->tail = list->tail;
+        list->tail = node;
 
-        /* update list size to reflect removed node */
-        list->size--;
-        free(node);
+        /* disconnect nodes */
+        node->next = NULL;
+        chopped->head->prev = NULL;
     }
 
-    return 0;
+    return chopped;
+}
+
+dlist_t *dlist_join(dlist_t *dest, dlist_t *src)
+{
+    // TODO
+}
+
+int dlist_reverse(dlist_t *list)
+{
+    // TODO
 }
 
 /* create a copy of a list */
@@ -398,6 +460,36 @@ dlist_t *dlist_copy(dlist_t *list)
     /* copy list size */
     copy->size = list->size;
     return copy;
+}
+
+dlist_t *dlist_from_slist(slist_t *list)
+{
+    // TODO
+}
+
+dlist_t *dlist_from_array(void **array, size_t size)
+{
+    /* create new dlist */
+    dlist_t *list = dlist_new();
+
+    /* make sure allocation worked */
+    if(list == NULL)
+        return NULL;
+
+    /* loop through the array, adding stuff to the list
+     * as we go */
+    int i;
+    for(i = 0; i < size; ++i) {
+        int ret = dlist_append(list, array[i]);
+
+        /* make sure appending worked */
+        if(ret < 0) {
+            dlist_free(list);
+            return NULL;
+        }
+    }
+
+    return list;
 }
 
 void **dlist_to_array(dlist_t *list)

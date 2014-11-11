@@ -167,9 +167,13 @@ void *dlist_pop(dlist_t *list);
  *  original list and returning [pos,...] as a new one
  * join adds all data from src to dest, leaving src as an
  *  empty list, and returns dest.
+ * reverse reverses the list, this function only exists for
+ *  dlists because it's inefficient to do on a single linked
+ *  list.
  */
-dlist_t *dlist_chop(dlist_t *list, size_t pos);
-dlist_t *dlist_join(dlist_t *dest, slist_t *src);
+dlist_t *dlist_chop   (dlist_t *list, size_t pos);
+dlist_t *dlist_join   (dlist_t *dest, slist_t *src);
+int      dlist_reverse(dlist_t *list);
 
 /*  conversion functions
  *  copy creates a new dlist with the same data as the
