@@ -90,6 +90,8 @@ int slist_free(slist_t *list)
 
     free(list);
 
+    /* return whatever purge gave back
+     * to propagate eventual errors */
     return ret;
 }
 
