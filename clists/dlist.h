@@ -43,6 +43,14 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+/* forward declaration of data types, since slist
+ * has functions working on them they need to be
+ * declared before including the header
+ */
+typedef struct dlist      dlist_t;
+typedef struct dlist_node dlist_node_t;
+
 #include "slist.h"
 
 /* simple data access functions are implemented as macros for speed */
@@ -97,12 +105,12 @@ extern "C" {
  * and insertion are also constant-time functions. this is
  * the central node structure for double linked lists:
  */
-typedef struct dlist_node
+struct dlist_node
 {
     struct dlist_node *prev;
     struct dlist_node *next;
     void *data;
-} dlist_node_t;
+};
 
 /* this is the dlist datatype, the one that is being 'handled'
  * by the user. it contains pointers to the first and last
@@ -110,12 +118,12 @@ typedef struct dlist_node
  * the list (again, for efficiency). the library functions
  * work with pointers to this structure
  */
-typedef struct dlist
+struct dlist
 {
     struct dlist_node *head;
     struct dlist_node *tail;
     size_t size;
-} dlist_t;
+};
 
 /*  creation/destruction functions
  *
@@ -172,7 +180,7 @@ void *dlist_pop(dlist_t *list);
  *  list.
  */
 dlist_t *dlist_chop   (dlist_t *list, size_t pos);
-dlist_t *dlist_join   (dlist_t *dest, slist_t *src);
+dlist_t *dlist_join   (dlist_t *dest, dlist_t *src);
 int      dlist_reverse(dlist_t *list);
 
 /*  conversion functions

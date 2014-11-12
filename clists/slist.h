@@ -43,6 +43,14 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+/* forward declaration of data types, since dlist
+ * has functions working on them they need to be
+ * declared before including the header
+ */
+typedef struct slist      slist_t;
+typedef struct slist_node slist_node_t;
+
 #include "dlist.h"
 
 /* simple data access functions are implemented as macros for speed */
@@ -75,11 +83,11 @@ extern "C" {
  *  is represented by nodes, each node posessing a pointer to
  *  the next node. this is the node structure used by slist.
  */
-typedef struct slist_node
+struct slist_node
 {
     struct slist_node *next;
     void *data;
-} slist_node_t;
+};
 
 /*  the main slist struct. it stores a pointer to the first
  *  and the last nodes in the list, as well as the size of
@@ -87,12 +95,12 @@ typedef struct slist_node
  *  linear to the size of the list, as all nodes need to be
  *  traversed)
  */
-typedef struct slist
+struct slist
 {
     struct slist_node *head;
     struct slist_node *tail;
     size_t size;
-} slist_t;
+};
 
 /*  creation/destruction functions
  *
