@@ -476,7 +476,7 @@ dlist_t *dlist_copy(dlist_t *list)
         memset(cnode, 0, sizeof(dlist_node_t));
 
         /* copy data */
-        cnode->data = clist->data;
+        cnode->data = node->data;
 
         /* set this node as head of list */
         clist->head = cnode;
@@ -504,11 +504,11 @@ dlist_t *dlist_copy(dlist_t *list)
     }
     
     /* set tail of list */
-    copy->tail = cnode;
+    clist->tail = cnode;
 
     /* copy list size */
-    copy->size = list->size;
-    return copy;
+    clist->size = list->size;
+    return clist;
 }
 
 dlist_t *dlist_from_slist(slist_t *list)
