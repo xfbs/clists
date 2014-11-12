@@ -396,12 +396,61 @@ dlist_t *dlist_chop(dlist_t *list, size_t pos)
 
 dlist_t *dlist_join(dlist_t *dest, dlist_t *src)
 {
-    // TODO
+    /* if there is nothing to be copied, don't
+     * do anything */
+    if(src->size == 0)
+        return dest;
+
+    /* if dest is empty, we can get away with
+     * simply copying data */
+    if(dest->size == 0) {
+        memcpy(dest, src, sizeof(dlist_t));
+    } else {
+        /* otherwise, it seems like we have to
+         * do some actual work. eww. so let's
+         * copy some nodes! */
+        dest->tail->next = src->head;
+        src->head->prev = dest->tail;
+        dest->tail = src->tail;
+    }
+
+    /* initialize src (because we just extracted
+     * all it's nodes) */
+    memset(src, 0, sizeof(dlist_t));
+
+    return dest;
 }
 
 int dlist_reverse(dlist_t *list)
 {
-    // TODO
+    /* this is a fun one: reverse the order of
+     * all nodes of the list. when I say 'fun',
+     * I really mean 'easy'. but do make sure the
+     * list actually exists! */
+    if(list == NULL)
+        return -1;
+
+    /* for every node, swap node->next and
+     * node->prev */
+    dlist_node_t *node = list->head;
+    dlist_node_t *tmp;
+    while(node) {
+        tmp = node->next;
+        node->next = node->prev;
+        node->prev = tmp;
+
+        /* since we just swapped next and prev,
+         * going forward in the list is done by
+         * going to node->prev */
+        node = node->prev;
+    }
+
+    /* finally, swap list->head and list->tail */
+    tmp = list->head;
+    list->head = list->tail;
+    list->tail = list->head;
+
+    return 0;
 }
 
 /* create a copy of a list */
@@ -464,7 +513,30 @@ dlist_t *dlist_copy(dlist_t *list)
 
 dlist_t *dlist_from_slist(slist_t *list)
 {
-    // TODO
+    /* allocate new dlist */
+    dlist_t *new = dlist_new();
+
+    /* make sure allocation worked */
+    if(new == NULL)
+        return NULL;
+
+    /* iterate through the slist, adding elements
+     * to our very own dlist as we go */
+    slist_node_t *node = list->head;
+    while(node) {
+        int ret = dlist_append(new, node->data);
+
+        /* make sure appending worked */
+        if(ret < 0) {
+            dlist_free(new);
+            return NULL;
+        }
+
+        /* proceed to next node */
+        node = node->next;
+    }
+
+    return new;
 }
 
 dlist_t *dlist_from_array(void **array, size_t size)
