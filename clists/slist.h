@@ -38,8 +38,7 @@
  *   - automatically allocated/freed on insertion/deletion
  */
 
-#ifndef _SLIST_H
-#define _SLIST_H
+#pragma once
 
 #include <stdlib.h>
 #include <string.h>
@@ -86,7 +85,7 @@ extern "C" {
 struct slist_node
 {
     struct slist_node *next;
-    void *data;
+    char data[0];
 };
 
 /*  the main slist struct. it stores a pointer to the first
@@ -99,6 +98,7 @@ struct slist
 {
     struct slist_node *head;
     struct slist_node *tail;
+    size_t length;
     size_t size;
 };
 
@@ -116,8 +116,8 @@ struct slist
  *   only frees the nodes and not the memory of the object 
  *   itself.
  */
-slist_t *slist_new  (void);
-int      slist_init (slist_t *list);
+slist_t *slist_new  (size_t size);
+int      slist_init (slist_t *list, size_t size);
 int      slist_purge(slist_t *list);
 int      slist_free (slist_t *list);
 
@@ -167,10 +167,9 @@ slist_t *slist_join(slist_t *dest, slist_t *src);
  */
 slist_t *slist_copy      (slist_t *list);
 slist_t *slist_from_dlist(dlist_t *list);
-slist_t *slist_from_array(void   **array, size_t size);
+slist_t *slist_from_array(void   **array, size_t length, size_t size);
 void   **slist_to_array  (slist_t *list);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* include guard */
