@@ -48,6 +48,8 @@
 
 #pragma once
 
+#define SLIST_THREADSAFE
+
 #include <stdlib.h>
 #include <string.h>
 #ifdef SLIST_THREADSAFE
@@ -67,6 +69,19 @@ typedef struct slist_node slist_node_t;
 #define slist_size(list) ((list) ? (list)->size : 0)
 #define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
+
+#ifdef SLIST_THREADSAFE
+#define SLIST_READ_LOCK(list, retval) \
+    if(0 != pthread_rwlock_rdlock(&(list)->lock)) return (retval)
+#define SLIST_WRITE_LOCK(list, retval) \
+    if(0 != pthread_rwlock_wrlock(&(list)->lock)) return (retval)
+#define SLIST_UNLOCK(list, retval) \
+    if(0 != pthread_rwlock_unlock(&(list)->lock)) return (retval)
+#else
+#define SLIST_READ_LOCK(list, retval)
+#define SLIST_WRITE_LOCK(list, retval)
+#define SLIST_UNLOCK(list, retval)
+#endif
 
 /*  foreach loop implementation for slist, use like this, assuming the
  *  list that is to be iterated is called 'list' and of type slist_t*:
