@@ -26,16 +26,24 @@
  *  - simple
  *  - efficient
  *  - intuitive
- *  - stores void pointers for maximum flexibility
+ *  - stores data in place but can also be used to store
+ *    arbitrary pointers
  *
  *  Implementation
  *  => slist_t
- *   - central single linked list datatype
- *   - stores some parameters for efficiency (size, tail node)
+ *   - used to represent a linked list
+ *   - stores some important parameters (head of list, size of data)
+ *   - stores additional data for efficiency (tail of list, length)
  *  => slist_node_t
- *   - actual single linked list node
- *   - not typically 'seen' by user
- *   - automatically allocated/freed on insertion/deletion
+ *   - actual list node
+ *   - stores pointer to next node as well as a user-defined amount
+ *     of arbitrary data
+ *   - ideally not exposed to user
+ *
+ *  ToDo
+ *   - implement map/reduce functions (?)
+ *   - test things
+ *   - make it thread safe
  */
 
 #pragma once
@@ -60,11 +68,13 @@ typedef struct slist_node slist_node_t;
 /*  foreach loop implementation for slist, use like this, assuming the
  *  list that is to be iterated is called 'list' and of type slist_t*:
  *
+ *  FIXME: this is broken right now due to a change in the way the
+ *  data is handled in the lists.
+ *
  *      void *item;
  *      slist_foreach(list, item) {
  *          printf("%p", item);
  *      }
- */
 #define slist_foreach(list, __data) \
     for(void *__node = list->head, *__data = ((list->head) ? \
                 list->head->data : \
@@ -73,6 +83,7 @@ typedef struct slist_node slist_node_t;
             __data = ((__node = (void*)((slist_node_t*)__node)->next) ? \
                 ((slist_node_t*)__node)->data : \
                 NULL))
+*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,6 +92,8 @@ extern "C" {
 /*  the key feature of single linked lists is that the data
  *  is represented by nodes, each node posessing a pointer to
  *  the next node. this is the node structure used by slist.
+ *
+ *  FIXME: zero length array is kinda iffy. can we do this better?
  */
 struct slist_node
 {
@@ -93,12 +106,23 @@ struct slist_node
  *  the list (since obtaining that is computationally expensive
  *  linear to the size of the list, as all nodes need to be
  *  traversed)
+ *
+ *  FIXME: length and size may be confusing. (one is length of
+ *  the list, the other is the size of the arbitrary data in
+ *  each node).
  */
 struct slist
 {
+    // head of the list (first node)
     struct slist_node *head;
+
+    // tail of the list (last node, for efficiency)
     struct slist_node *tail;
+
+    // length of the list (how many nodes, for for efficency)
     size_t length;
+
+    // size of data in each node (same for all nodes)
     size_t size;
 };
 
