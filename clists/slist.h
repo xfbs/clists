@@ -50,6 +50,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#ifdef SLIST_THREADSAFE
+#include <pthread.h>
+#endif
 
 /* forward declaration of data types, since dlist
  * has functions working on them they need to be
@@ -113,6 +116,10 @@ struct slist_node
  */
 struct slist
 {
+#ifdef SLIST_THREADSAFE
+    pthread_rwlock_t lock;
+#endif
+
     // head of the list (first node)
     struct slist_node *head;
 
@@ -169,7 +176,7 @@ int slist_remove (slist_t *list, size_t pos);
  */
 int   slist_set(slist_t *list, size_t pos, void *data);
 void *slist_get(slist_t *list, size_t pos);
-void *slist_pop(slist_t *list);
+int   slist_pop(slist_t *list, void *data);
 
 /* list mangling functions
  * chop splits the list, leaving elements [0,pos-1] in the
@@ -188,11 +195,13 @@ slist_t *slist_join(slist_t *dest, slist_t *src);
  *  the to_array function returns a pointer to an array
  *   that contains the same data as is in the slist. this
  *   array needs to be freed by the user.
+ *
+ *  FIXME: conversion functions from/to array
  */
 slist_t *slist_copy      (slist_t *list);
 slist_t *slist_from_dlist(dlist_t *list);
-slist_t *slist_from_array(void   **array, size_t length, size_t size);
-void   **slist_to_array  (slist_t *list);
+//slist_t *slist_from_array(void   **array, size_t length, size_t size);
+//void   **slist_to_array  (slist_t *list);
 
 #ifdef __cplusplus
 }
