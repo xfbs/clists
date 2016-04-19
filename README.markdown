@@ -1,4 +1,4 @@
-clists
+clists [![Build Status](https://travis-ci.org/xfbs/clists.svg?branch=master)](https://travis-ci.org/xfbs/clists)
 ======
 
 This is a project to build some simple reusable data structures in C that are simple to use.
