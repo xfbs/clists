@@ -60,3 +60,5 @@ todo
  - write more tests for all functions
  - finish some of the functions
  - document the code more extensively
+ - make it thread safe
+ - think about alignment
