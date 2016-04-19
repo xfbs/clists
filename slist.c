@@ -225,7 +225,7 @@ int slist_remove(slist_t *list, size_t pos)
     } else if(pos == 0) {
         /* removing the first element can be done efficiently
          * by using the pop function */
-        slist_pop(list);
+        slist_pop(list, NULL);
     } else if(pos >= list->length) {
         /* can't remove something which is not in the list */
         return -1;
@@ -291,7 +291,7 @@ void *slist_get(slist_t *list, size_t pos)
     return((node) ? node->data : NULL);
 }
 
-void *slist_pop(slist_t *list)
+int slist_pop(slist_t *list, void *data)
 {
     /* FIXME!!!
      * how are we supposed to do this method when we keep
@@ -310,11 +310,11 @@ void *slist_pop(slist_t *list)
      * so might be smart to check size before doing
      * a pop */
     if (head == NULL)
-        return NULL;
+        return -1;
 
     /* save the data, because we're going to free the
      * memory of the node later */
-    void *data = head->data;
+    //void *data = head->data;
 
     if (head->next) {
         /* if list will not be empty after the pop,
@@ -330,7 +330,7 @@ void *slist_pop(slist_t *list)
     list->length--;
     free(head);
 
-    return data;
+    return 0;
 }
 
 slist_t *slist_chop(slist_t *list, size_t pos)
