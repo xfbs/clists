@@ -18,9 +18,19 @@ TEST(prependingMultiple);
 TEST(insertFirst);
 TEST(insertLast);
 TEST(insertMiddle);
+TEST(insertIllegal);
 TEST(removeFirst);
 TEST(removeLast);
 TEST(removeMiddle);
+TEST(removeIllegal);
+
+/* accessing.c */
+TEST(settingData);
+TEST(settingIllegal);
+TEST(gettingData);
+TEST(gettingIllegal);
+TEST(poppingData);
+TEST(poppingEmpty);
 
 TEST_SUITE(creation) {
     TEST_ADD(allocation),
@@ -50,9 +60,21 @@ TEST_SUITE(insertion) {
     TEST_ADD(insertFirst),
     TEST_ADD(insertLast),
     TEST_ADD(insertMiddle),
+    TEST_ADD(insertIllegal),
     TEST_ADD(removeFirst),
     TEST_ADD(removeLast),
     TEST_ADD(removeMiddle),
+    TEST_ADD(removeIllegal),
+    TEST_SUITE_CLOSURE
+};
+
+TEST_SUITE(accessing) {
+    TEST_ADD(settingData),
+    TEST_ADD(settingIllegal),
+    TEST_ADD(gettingData),
+    TEST_ADD(gettingIllegal),
+    TEST_ADD(poppingData),
+    TEST_ADD(poppingEmpty),
     TEST_SUITE_CLOSURE
 };
 
@@ -62,6 +84,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(destruction),
     TEST_SUITE_ADD(pending),
     TEST_SUITE_ADD(insertion),
+    TEST_SUITE_ADD(accessing),
     TEST_SUITES_CLOSURE
 };
 int main(int argc, char *argv[])

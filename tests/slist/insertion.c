@@ -217,6 +217,11 @@ TEST(insertMiddle)
     assertEquals(ret, 0);
 }
 
+TEST(insertIllegal)
+{
+    ///...
+}
+
 TEST(removeFirst)
 {
     // test removal of the first element of
@@ -326,4 +331,9 @@ TEST(removeMiddle)
     // free 'er
     ret = slist_free(list);
     assertEquals(ret, 0);
+}
+
+TEST(removeIllegal) 
+{
+    //...
 }
