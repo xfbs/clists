@@ -38,90 +38,91 @@ TEST(initialization)
     assertEquals(list.tail, NULL);
 }
 
-/*
 TEST(purgingEmpty)
 {
-    // /* test purging an empty list *
-    slist_t *list = slist_new();
+    slist_t *list = slist_new(sizeof(void*));
     assertNotEquals(list, NULL);
 
-    /* make sure list is empty *
     assertEquals(list->head, NULL);
     assertEquals(list->tail, NULL);
-    assertEquals(list->size, 0);
+    assertEquals(list->size, sizeof(void*));
+    assertEquals(list->length, 0);
 
-    /* purge list and check return and
-     * state of list *
     ret = slist_purge(list);
     assertEquals(ret, 0);
     assertEquals(list->head, NULL);
     assertEquals(list->tail, NULL);
-    assertEquals(list->size, 0);
+    assertEquals(list->length, 0);
+    assertEquals(list->size, sizeof(void*))
 }
 
 TEST(purgingSingle)
 {
-    /* test purging a list with a single
-     * node *
-    slist_t *list = slist_new();
+    slist_t *list = slist_new(sizeof(int));
     assertNotEquals(list, NULL);
 
-    /* add single node *
-    ret = slist_append(list, (void*)0xBADC0DE5);
+    int data = 0xBADC0DE5;
+    ret = slist_append(list, &data);
     assertEquals(ret, 0);
 
-    /* make sure list contains single node *
     assertNotEquals(list->head, NULL);
     assertEquals(list->tail, list->head);
-    assertEquals(list->size, 1);
+    assertEquals(list->length, 1);
+    assertEquals(list->size, sizeof(int));
 
-    /* purge list and check return and
-     * state of list *
     ret = slist_purge(list);
     assertEquals(ret, 0);
     assertEquals(list->head, NULL);
     assertEquals(list->tail, NULL);
-    assertEquals(list->size, 0);
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 0);
 }
 
 TEST(purgingMultiple)
 {
-    /* test purging if there are multiple
-     * nodes in the list
-     *
-    slist_t *list = slist_new();
+    // test purging if there are multiple
+    // entries (nodes) in the list
+    // we can't check if the nodes are
+    // free()'d properly, this is something
+    // that should be tested with valgrind.
+
+    slist_t *list = slist_new(sizeof(int));
     assertNotEquals(list, NULL);
 
-    /* add nodes *
-    ret = slist_append(list, (void*)0xDECAFBAD);
-    assertEquals(ret, 0);
-    ret = slist_append(list, (void*)0xCAFEBABE);
-    assertEquals(ret, 0);
-    ret = slist_append(list, (void*)0xC0DEC0DE);
-    assertEquals(ret, 0);
+    // add nodes
+    int data[] = {0xDECAFBAD, 0xCAFEBABE, 0xC0DEC0DE, 0};
+    for(int i = 0; data[i] != 0; i++) {
+        ret = slist_append(list, &data[i]);
+        assertEquals(ret, 0);
+    }
 
-    /* make sure nodes are in place *
-    assertEquals(list->size, 3);
+    // make sure the nodes are all set properly
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 3);
     assertNotEquals(list->head, NULL);
     assertNotEquals(list->head->next, NULL);
     assertNotEquals(list->head->next->next, NULL);
     assertEquals(list->head->next->next->next, NULL);
 
-    /* free list and check return value
-     * and list state *
+    // try the purge and see if it works
     ret = slist_purge(list);
     assertEquals(ret, 0);
     assertEquals(list->head, NULL);
     assertEquals(list->tail, NULL);
-    assertEquals(list->size, 0);
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 0);
 }
 
 TEST(freeingEmpty)
 {
-    /* test freeing by checking return
-     * values of the free function
-     *
-    slist_t *list = slist_new();
+    // test the free function by checking
+    // it's return value. we can't check
+    // anything else because by the time
+    // slist_free() returns, the slist has
+    // been free()'d and it's contents
+    // may have been overwritten.
+
+    slist_t *list = slist_new(sizeof(int));
     assertNotEquals(list, NULL);
 
     ret = slist_free(list);
@@ -130,50 +131,52 @@ TEST(freeingEmpty)
 
 TEST(freeingSingle)
 {
-    /* test freeing if list contains a
-     * a single node
-     *
-    slist_t *list = slist_new();
+    // test slist_free on a list that
+    // contains a single node.
+
+    slist_t *list = slist_new(sizeof(int));
     assertNotEquals(list, NULL);
 
-    /* add a single node *
-    ret = slist_append(list, (void*)0xDECAFBAD);
+    // add single node
+    int data = 0xDECAFBAD;
+    ret = slist_append(list, &data);
     assertEquals(ret, 0);
 
-    /* make sure node is in place *
-    assertEquals(list->size, 1);
+    // verify the node exists
+    assertEquals(list->length, 1);
+    assertEquals(list->size, sizeof(int));
     assertEquals(list->head, list->tail);
     assertNotEquals(list->head, NULL);
 
+    // run free and check return value
     ret = slist_free(list);
     assertEquals(ret, 0);
 }
 
 TEST(freeingMultiple)
 {
-    /* test freeing if there are multiple
-     * nodes in the list
-     *
-    slist_t *list = slist_new();
+    // test slist_free() if there are
+    // multiple items in the list
+
+    slist_t *list = slist_new(sizeof(int));
     assertNotEquals(list, NULL);
 
-    /* add nodes *
-    ret = slist_append(list, (void*)0xDECAFBAD);
-    assertEquals(ret, 0);
-    ret = slist_append(list, (void*)0xCAFEBABE);
-    assertEquals(ret, 0);
-    ret = slist_append(list, (void*)0xC0DEC0DE);
-    assertEquals(ret, 0);
+    // add nodes to the list
+    int data[] = {0xDECAFBAD, 0xCAFEBABE, 0xC0DEC0DE, 0};
+    for(int i = 0; data[i] != 0; i++) {
+        ret = slist_append(list, &data[i]);
+        assertEquals(ret, 0);
+    }
 
-    /* make sure nodes are in place *
-    assertEquals(list->size, 3);
+    // make sure the nodes are in place
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 3);
     assertNotEquals(list->head, NULL);
     assertNotEquals(list->head->next, NULL);
     assertNotEquals(list->head->next->next, NULL);
     assertEquals(list->head->next->next->next, NULL);
 
-    /* free list and check return value *
+    // free the list and check the return value
     ret = slist_free(list);
     assertEquals(ret, 0);
 }
-*/
