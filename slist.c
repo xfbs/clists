@@ -92,12 +92,14 @@ int slist_purge(slist_t *list)
         cur = next;
     }
 
-    // FIXME: we should zero everything _but_ the
-    // lock struct before unlocking...
+    // zero everything
+    list->head = NULL;
+    list->tail = NULL;
+    list->length = 0;
+
+    // only now can we release the lock again
     SLIST_UNLOCK(list, -1);
 
-    /* initialize list to make it empty */
-    memset(list, 0, sizeof(slist_t));
     return 0;
 }
 
