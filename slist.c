@@ -293,7 +293,7 @@ int slist_remove(slist_t *list, size_t pos)
         free(node);
         list->length--;
 
-        SLIST_WRITE_LOCK(list, -1);
+        SLIST_UNLOCK(list, -1);
     }
 
     return 0;
