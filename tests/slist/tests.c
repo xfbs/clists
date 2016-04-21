@@ -15,6 +15,12 @@ TEST(appendingSingle);
 TEST(appendingMultiple);
 TEST(prependingSingle);
 TEST(prependingMultiple);
+TEST(insertFirst);
+TEST(insertLast);
+TEST(insertMiddle);
+TEST(removeFirst);
+TEST(removeLast);
+TEST(removeMiddle);
 
 TEST_SUITE(creation) {
     TEST_ADD(allocation),
@@ -32,15 +38,21 @@ TEST_SUITE(destruction) {
     TEST_SUITE_CLOSURE
 };
 
-TEST_SUITE(appending) {
+TEST_SUITE(pending) {
     TEST_ADD(appendingSingle),
     TEST_ADD(appendingMultiple),
+    TEST_ADD(prependingSingle),
+    TEST_ADD(prependingMultiple),
     TEST_SUITE_CLOSURE
 };
 
-TEST_SUITE(prepending) {
-    TEST_ADD(prependingSingle),
-    TEST_ADD(prependingMultiple),
+TEST_SUITE(insertion) {
+    TEST_ADD(insertFirst),
+    TEST_ADD(insertLast),
+    TEST_ADD(insertMiddle),
+    TEST_ADD(removeFirst),
+    TEST_ADD(removeLast),
+    TEST_ADD(removeMiddle),
     TEST_SUITE_CLOSURE
 };
 
@@ -48,8 +60,8 @@ TEST_SUITE(prepending) {
 TEST_SUITES {
     TEST_SUITE_ADD(creation),
     TEST_SUITE_ADD(destruction),
-    TEST_SUITE_ADD(appending),
-    TEST_SUITE_ADD(prepending),
+    TEST_SUITE_ADD(pending),
+    TEST_SUITE_ADD(insertion),
     TEST_SUITES_CLOSURE
 };
 int main(int argc, char *argv[])
