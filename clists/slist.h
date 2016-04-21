@@ -67,6 +67,7 @@ typedef struct slist_node slist_node_t;
 
 /* simple data access functions are implemented as macros for speed */
 #define slist_size(list) ((list) ? (list)->size : 0)
+#define slist_length(list) ((list) ? (list)->length : 0)
 #define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
 
