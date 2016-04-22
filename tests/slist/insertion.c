@@ -219,7 +219,35 @@ TEST(insertMiddle)
 
 TEST(insertIllegal)
 {
-    ///...
+    slist_t *list = slist_new(sizeof(int));
+    assertNotEquals(list, NULL);
+
+    int data = 0xCAFEBABE;
+
+    // try adding to a position that is not in the list
+    ret = slist_insert(list, 5, &data);
+    assertNotEquals(ret, 0);
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+
+    // actually put some data into list
+    for(int i = 0; i < 3; i++) {
+        ret = slist_insert(list, slist_length(list), &data);
+        assertEquals(ret, 0);
+        data += 1;
+    }
+
+    // try adding to a position that is not in the list
+    ret = slist_insert(list, 5, &data);
+    assertNotEquals(ret, 0);
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 3);
+    assertNotEquals(list->head, list->tail);
+
+    ret = slist_free(list);
+    assertEquals(ret, 0);
 }
 
 TEST(removeFirst)
