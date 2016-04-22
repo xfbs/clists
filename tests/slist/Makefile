@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic --std=gnu99 -I.. -I../..
-LDFLAGS = -L../cu/ -L../.. -lcu -lclists -lpthreads
+LDFLAGS = -L../cu/ -L../.. -lcu -lclists -lpthread
 
 OBJS = creation.o insertion.o accessing.o tests.o
 TSTS = ../../libclists.a
