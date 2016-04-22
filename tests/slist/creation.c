@@ -54,6 +54,9 @@ TEST(purgingEmpty)
     assertEquals(list->tail, NULL);
     assertEquals(list->length, 0);
     assertEquals(list->size, sizeof(void*))
+
+    ret = slist_free(list);
+    assertEquals(ret, 0);
 }
 
 TEST(purgingSingle)
@@ -76,6 +79,9 @@ TEST(purgingSingle)
     assertEquals(list->tail, NULL);
     assertEquals(list->size, sizeof(int));
     assertEquals(list->length, 0);
+
+    ret = slist_free(list);
+    assertEquals(ret, 0);
 }
 
 TEST(purgingMultiple)
@@ -111,6 +117,9 @@ TEST(purgingMultiple)
     assertEquals(list->tail, NULL);
     assertEquals(list->size, sizeof(int));
     assertEquals(list->length, 0);
+
+    ret = slist_free(list);
+    assertEquals(ret, 0);
 }
 
 TEST(freeingEmpty)
