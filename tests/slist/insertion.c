@@ -363,5 +363,43 @@ TEST(removeMiddle)
 
 TEST(removeIllegal) 
 {
-    //...
+    // test removal of nonexisting element in list
+
+    slist_t *list = slist_new(sizeof(int));
+    assertNotEquals(list, NULL);
+
+    // try removing 
+    ret = slist_remove(list, 0);
+    assertNotEquals(ret, 0);
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+
+    ret = slist_remove(list, 4);
+    assertNotEquals(ret, 0);
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 0);
+    assertEquals(list->head, NULL);
+    assertEquals(list->tail, NULL);
+
+    // fill 'er up!
+    int data[] = {0xDECAFBAD, 0xCAFEBABE, 0xC0DEC0DE, 0};
+    for(int i = 0; data[i] != 0; i++) {
+        ret = slist_append(list, &data[i]);
+        assertEquals(ret, 0);
+    }
+
+    // make sure she's fill up
+    assertEquals(list->length, 3);
+
+    // remove nonexisting
+    ret = slist_remove(list, 5);
+    assertNotEquals(ret, 0);
+    assertEquals(list->size, sizeof(int));
+    assertEquals(list->length, 3);
+    assertNotEquals(list->head, list->tail);
+
+    ret = slist_free(list);
+    assertEquals(ret, 0);
 }
