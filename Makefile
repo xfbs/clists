@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -pedantic -std=c99
+CFLAGS = -g -Wall -pedantic -std=gnu99
 OBJS = slist.o dlist.o
 TARGET = libclists.a
 HEADERS = dlist.h slist.h
