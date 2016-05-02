@@ -1,7 +1,7 @@
 clists [![Build Status](https://travis-ci.org/xfbs/clists.svg?branch=master)](https://travis-ci.org/xfbs/clists)
 ======
 
-This is a project to build some simple reusable data structures in C that are simple to use.
+This is a project to implement some data structures in a reusable way so they are painless to use.
 
 slist
 -----
@@ -57,8 +57,8 @@ for further options, like where it should be installed to.
 todo
 ----
 
- - write more tests for all functions
- - finish some of the functions
- - document the code more extensively
- - make it thread safe
- - think about alignment
+ -  write more tests for all functions
+ -  finish some of the functions
+ -  document the code more extensively
+ -  think about alignment
+ -  make a generic `list_t` type, along with functions to work with that
