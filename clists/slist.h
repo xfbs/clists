@@ -52,9 +52,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#ifdef SLIST_THREADSAFE
-#include <pthread.h>
-#endif
 
 /* forward declaration of data types, since dlist
  * has functions working on them they need to be
@@ -70,19 +67,6 @@ typedef struct slist_node slist_node_t;
 #define slist_length(list) ((list) ? (list)->length : 0)
 #define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
 #define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
-
-#ifdef SLIST_THREADSAFE
-#define SLIST_READ_LOCK(list, retval) \
-    if(0 != pthread_rwlock_rdlock(&(list)->lock)) return (retval)
-#define SLIST_WRITE_LOCK(list, retval) \
-    if(0 != pthread_rwlock_wrlock(&(list)->lock)) return (retval)
-#define SLIST_UNLOCK(list, retval) \
-    if(0 != pthread_rwlock_unlock(&(list)->lock)) return (retval)
-#else
-#define SLIST_READ_LOCK(list, retval)
-#define SLIST_WRITE_LOCK(list, retval)
-#define SLIST_UNLOCK(list, retval)
-#endif
 
 /*  foreach loop implementation for slist, use like this, assuming the
  *  list that is to be iterated is called 'list' and of type slist_t*:
@@ -149,56 +133,88 @@ struct slist
     size_t size;
 };
 
-/*  creation/destruction functions
+/* creation/destruction functions
+ * 
+ * slist_new(size) creates a new slist_t object on the
+ *  heap with elements of the given size, and returns
+ *  a pointer to it on success and NULL on error.
  *
- *  the new function creates a new slist object on the heap
- *   (using malloc), initializes it and returns a pointer to
- *   it. 
- *  this object (as well as all the nodes) can be freed
- *   using the free function.
+ * slist_init(list, size) initializes a given slist
+ *  object for use with elements of the given size,
+ *  returning 0 on success.
  *
- *  init is meant for initializing an slist object, for
- *   example a stack object. 
- *  the purge function works like the free function, but it 
- *   only frees the nodes and not the memory of the object 
- *   itself.
+ * slist_purge(list) takes an existing list and removes
+ *  all elements from it, returning 0 on success
+ *
+ * slist_free(list) takes an existing list that has
+ *  been allocated on the heap with slist_new(size),
+ *  frees all of the data and then the list itself.
  */
 slist_t *slist_new  (size_t size);
 int      slist_init (slist_t *list, size_t size);
 int      slist_purge(slist_t *list);
 int      slist_free (slist_t *list);
 
-/*  insertion and removal of data from a list
+/* insertion and removal of data from a list
  *
- *  append adds data to the end of the list.
- *  prepend adds data to the beginning of the list,
- *   shifting everything to the right.
- *  insert adds data in between existing data.
- *   elements (so that the new element is as pos and
- *   everything after it is shifted one to the right).
- *  remove shifts all data after the element one to the
- *   left.
+ * slist_append(list, data) appends data to the end
+ *  of the list. if data is not NULL, it copies from
+ *  the data, otherwise it does not initialize the
+ *  new data. it returns a pointer to the data on
+ *  success, and NULL on error.
+ *
+ * slist_prepend(list, data) prepends data to the
+ *  beginning of the list. if data is not NULL, it
+ *  copies the given data into the list, otherwise
+ *  it does not initialize the new data. it returns
+ *  a pointer to the new data on success, and NULL
+ *  on error.
+ *
+ * slist_insert(list, pos, data) inserts data at a 
+ *  given position in the list. if data is not NULL,
+ *  it copies the content over, otherwise it does
+ *  not initialize it. returns a pointer to the new
+ *  data on success, and NULL on error.
+ *
+ * remove(list, pos) removes a given element from
+ *  the list.
  */
-int slist_append (slist_t *list, void *data);
-int slist_prepend(slist_t *list, void *data);
-int slist_insert (slist_t *list, size_t pos, void *data);
-int slist_remove (slist_t *list, size_t pos);
+void *slist_append (slist_t *list, void *data);
+void *slist_prepend(slist_t *list, void *data);
+void *slist_insert (slist_t *list, size_t pos, void *data);
+int   slist_remove (slist_t *list, size_t pos);
 
 /* data setting/accessing functions
  *
- * get returns the data at pos
- * pop removes and returns the first element of the list
- * set changes the data at pos to the supplied value
+ * slist_set(list, pos, data) sets the element at pos
+ *  to the given data, if data is not NULL. it returns
+ *  a pointer to the data in any case, or NULL if 
+ *  there has been an error.
+ *
+ * slist_get(list, pos) returns a pointer to the data
+ *  at pos.
+ *
+ * slist_pop(list, data) removes the first element of
+ *  the list, writing it's data to the data (if it
+ *  isn't NULL). it returns a pointer to the data
+ *  on success, or NULL on error.
+ *
+ * TODO: add an unshift method (same as pop, but
+ * takes from the end)
  */
-int   slist_set(slist_t *list, size_t pos, void *data);
+void *slist_set(slist_t *list, size_t pos, void *data);
 void *slist_get(slist_t *list, size_t pos);
-int   slist_pop(slist_t *list, void *data);
+void *slist_pop(slist_t *list, void *data);
 
 /* list mangling functions
- * chop splits the list, leaving elements [0,pos-1] in the
- *  original list and returning [pos,...] as a new one
- * join adds all data from src to dest, leaving src as an
- *  empty list, and returns dest.
+ *
+ * slist_chop(list, pos) splits the list, leaving elements 
+ *  upto pos in the original list and from pos to the
+ *  end in a new one.
+ *
+ * slist_join(dest, src) adds all data from src to dest, 
+ *  leaving src as an empty list, and returns dest or
+ *  NULL on error.
  */
 slist_t *slist_chop(slist_t *list, size_t pos);
 slist_t *slist_join(slist_t *dest, slist_t *src);
