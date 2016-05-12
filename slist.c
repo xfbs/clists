@@ -420,112 +420,85 @@ slist_t *slist_copy(slist_t *list)
     slist_node_t *node;
     for(node = list->head; node != NULL; node=node->next) {
         /* add data as we go */
-        int ret = slist_append(copy, node->data);
+        slist_t *result = slist_append(copy, node->data);
 
-        /* if ret=-1, something went wrong with memory
-         * allocation while appending. technically, we'd
-         * have to clean up, but as this can really only
-         * happen if something if wrong with the system,
-         * we just return NULL because nothing good can 
-         * come out of a system with a failed malloc call
-         */
-        if(ret < 0)
+        if(result == NULL) {
+            slist_free(copy);
             return NULL;
+        }
     }
 
     return copy;
 }
 
+/*
 slist_t *slist_from_array(void **array, size_t len, size_t size)
 {
-    /* create new slist */
     slist_t *list = slist_new(size);
 
-    /* memory allocarion error checking */
     if(list == NULL)
         return NULL;
-
-    /* loop through data, adding it to slist as we go */
+    
     size_t i;
     for(i = 0; i < len; ++i) {
-        int ret = slist_append(list, array[i]);
+        slist_t *ret = slist_append(list, array[i]);
 
-        /* memory error checking */
-        if(ret < 0)
+        if(ret == NULL)
             return NULL;
     }
 
     return list;
 }
+*/
 
+/*
 slist_t *slist_from_dlist(dlist_t *dlist)
 {
-    /* allocate new slist */
     slist_t *list = slist_new(dlist->size);
 
-    /* memory allocation error checking */
     if(list == NULL)
         return NULL;
 
-    /* loop through the dlist, appending data to
-     * the slist as we go */
     dlist_node_t *node;
     for(node = dlist->head; node != NULL; node = node->next) {
         int ret = slist_append(list, node->data);
 
-        /* check the return value for errors */
         if(ret < 0)
             return NULL;
     }
 
     return list;
 }
+*/
 
-
+/*
 void **slist_to_array(slist_t *list)
 {
-    /* FIXME!!!
-     */
-
-    /* creating an empty array doesn't make sense so
-     * simply return NULL if list is empty */
     if(list->size == 0)
         return NULL;
 
-    /* allocate an array with the size of the list */
     void **array = malloc(list->size * sizeof(void*));
     
-    /* memory error checking */
     if(array == NULL)
         return NULL;
 
-    /* loop through the list, adding data to the array
-     * as we go and making sure that we are in no case
-     * adding anything past the end of the array */
     slist_node_t *node = list->head;
     size_t i = 0;
     while((node != NULL) && (i < list->size)) {
-        /* write data */
         array[i] = node->data;
 
-        /* proceed to next node and update i */
         node = node->next;
         ++i;
     }
 
-    /* if all went well, i should now point to the
-     * last element written, which is list->size-1
-     */
     if(i != (list->size-1)) {
-        /* something went wrong. free the array and
-         * set it to NULL to indicate this to the
-         * caller */
         free(array);
         array = NULL;
     }
 
     return array;
 }
+*/
 
 /* this is an internal function used to extract the node at
  * pos of a given list, or NULL if it doesn't exist */
