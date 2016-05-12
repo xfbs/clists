@@ -116,10 +116,6 @@ struct slist_node
  */
 struct slist
 {
-#ifdef SLIST_THREADSAFE
-    pthread_rwlock_t lock;
-#endif
-
     // head of the list (first node)
     struct slist_node *head;
 
@@ -133,26 +129,33 @@ struct slist
     size_t size;
 };
 
-/* creation/destruction functions
- * 
- * slist_new(size) creates a new slist_t object on the
- *  heap with elements of the given size, and returns
- *  a pointer to it on success and NULL on error.
- *
- * slist_init(list, size) initializes a given slist
+/* CREATION/DESTRUCTION FUNCTIONS */
+
+/* creates a new slist_t object on the heap with 
+ * elements of the given size.
+ * returns a pointer to the list on success or
+ * NULL on error.
+ */
+slist_t *slist_new  (size_t size);
+
+/* slist_init(list, size) initializes a given slist
  *  object for use with elements of the given size,
- *  returning 0 on success.
- *
- * slist_purge(list) takes an existing list and removes
- *  all elements from it, returning 0 on success
- *
- * slist_free(list) takes an existing list that has
+ *  returns a pointer to the list on success, and
+ *  NULL otherwise.
+ */
+slist_t *slist_init (slist_t *list, size_t size);
+
+/* slist_purge(list) takes an existing list and removes
+ *  all elements from it, returning 0 on success.
+ * the list that it is passed must have been initialized
+ *  at some point prior!
+ */
+slist_t *slist_purge(slist_t *list);
+
+/* slist_free(list) takes an existing list that has
  *  been allocated on the heap with slist_new(size),
  *  frees all of the data and then the list itself.
  */
-slist_t *slist_new  (size_t size);
-int      slist_init (slist_t *list, size_t size);
-int      slist_purge(slist_t *list);
 int      slist_free (slist_t *list);
 
 /* insertion and removal of data from a list
@@ -216,7 +219,7 @@ void *slist_pop(slist_t *list, void *data);
  *  leaving src as an empty list, and returns dest or
  *  NULL on error.
  */
-slist_t *slist_chop(slist_t *list, size_t pos);
+slist_t *slist_split(slist_t *list, size_t pos);
 slist_t *slist_join(slist_t *dest, slist_t *src);
 
 /*  conversion functions
