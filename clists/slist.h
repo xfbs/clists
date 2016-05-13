@@ -1,4 +1,7 @@
-/*  File: slist.h
+/*! File: slist.h
+ *  @file slist.h
+ *  @author Patrick Elsen
+ *  @date 9 Sep 2012
  *
  *  Copyright (C) 2011, Patrick M. Elsen
  *
@@ -48,18 +51,10 @@
 
 #pragma once
 
-#define SLIST_THREADSAFE
-
 #include <stdlib.h>
 #include <string.h>
-
-/* forward declaration of data types, since dlist
- * has functions working on them they need to be
- * declared before including the header
- */
 typedef struct slist      slist_t;
 typedef struct slist_node slist_node_t;
-
 #include "dlist.h"
 
 /* simple data access functions are implemented as macros for speed */
@@ -131,30 +126,97 @@ struct slist
 
 /* CREATION/DESTRUCTION FUNCTIONS */
 
-/* creates a new slist_t object on the heap with 
- * elements of the given size.
- * returns a pointer to the list on success or
- * NULL on error.
+/*! Creates a new slist_t object on the heap with 
+ *  elements of the given size.
+ *  
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t *list = slist_new(sizeof(int));
+ *
+ *  if(list == NULL) {
+ *      // error!
+ *  }
+ *  ```
+ *
+ *  @param size the size of the elements that this
+ *      list contains
+ *  @return returns a pointer to the allocated list
+ *      or NULL in case there has been an error
  */
 slist_t *slist_new  (size_t size);
 
-/* slist_init(list, size) initializes a given slist
- *  object for use with elements of the given size,
- *  returns a pointer to the list on success, and
- *  NULL otherwise.
+/*! Initializes a given slist object for use with
+ *  objects of the given size.
+ *
+ *  If the list contains data, it should be
+ *  slist_purge()'d first, otherwise it will
+ *  leak memory.
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t list;
+ *  
+ *  if(NULL == slist_init(&list, sizeof(int))) {
+ *      // error!
+ *  }
+ *  ```
+ *
+ *  @param list the list to be initialized
+ *  @param size the size of the elements that the
+ *      list should hold
+ *  @return a pointer to the initialized list on
+ *      success, or NULL on error
  */
 slist_t *slist_init (slist_t *list, size_t size);
 
-/* slist_purge(list) takes an existing list and removes
- *  all elements from it, returning 0 on success.
- * the list that it is passed must have been initialized
- *  at some point prior!
+/*! Takes an existing (already initialized) list,
+ *  removes all it's elements and frees it.
+ *
+ *  Make sure that the list has been initialized
+ *  and that it has been allocated (is not on the
+ *  stack) as this function will call `free()` on
+ *  it!
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t list;
+ *  slist_init(&list, sizeof(int));
+ *  
+ *  int i = 5;
+ *  slist_append(list, &i);
+ *
+ *  if(NULL == slist_purge(list)) {
+ *      // error!
+ *  }
+ *  ```
+ *
+ *  @param list the list to be purged
+ *  @return the purged list or NULL on error
  */
 slist_t *slist_purge(slist_t *list);
 
-/* slist_free(list) takes an existing list that has
- *  been allocated on the heap with slist_new(size),
- *  frees all of the data and then the list itself.
+/*! Takes an existing list that has been allocated 
+ *  on the heap (for example withwith slist_new()),
+ *  free()s all of the data and then the list itself.
+ *
+ *  Make sure not to call this on lists that are
+ *  on the stack!
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t *list = slist_new(sizeof(int));
+ *  
+ *  int i = 5;
+ *  slist_append(list, &5);
+ *
+ *  if(0 != slist_free(list)) {
+ *      // error!
+ *  }
+ *  ```
  */
 int      slist_free (slist_t *list);
 
@@ -235,8 +297,6 @@ slist_t *slist_join(slist_t *dest, slist_t *src);
  */
 slist_t *slist_copy      (slist_t *list);
 slist_t *slist_from_dlist(dlist_t *list);
-//slist_t *slist_from_array(void   **array, size_t length, size_t size);
-//void   **slist_to_array  (slist_t *list);
 
 #ifdef __cplusplus
 }
