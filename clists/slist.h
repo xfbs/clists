@@ -1,12 +1,8 @@
-/*! File: slist.h
- *  @file slist.h
+/*! @file slist.h
  *  @author Patrick Elsen
  *  @date 9 Sep 2012
- *
- *  Copyright (C) 2011, Patrick M. Elsen
- *
+ *  @copyright 2011, Patrick M. Elsen
  *  This file is part of CLists (http://github.com/xfbs/CLists)
- *  Author: Patrick M. Elsen <pelsen.vn (a) gmail.com>
  *
  *  All rights reserved.
  *
@@ -24,44 +20,20 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- *  Design Specifications
+ *  ### Design Specifications
  *  - implementation of single linked lists in C
  *  - simple
  *  - efficient
  *  - intuitive
- *  - stores data in place but can also be used to store
- *    arbitrary pointers
+ *  - flexible
  *
- *  Implementation
- *  => slist_t
- *   - used to represent a linked list
- *   - stores some important parameters (head of list, size of data)
- *   - stores additional data for efficiency (tail of list, length)
- *  => slist_node_t
- *   - actual list node
- *   - stores pointer to next node as well as a user-defined amount
- *     of arbitrary data
- *   - ideally not exposed to user
- *
- *  ToDo
- *   - implement map/reduce functions (?)
- *   - test things
- *   - make it thread safe
+ *  @todo test the code extensively
  */
 
 #pragma once
 
 #include <stdlib.h>
 #include <string.h>
-typedef struct slist      slist_t;
-typedef struct slist_node slist_node_t;
-#include "dlist.h"
-
-/* simple data access functions are implemented as macros for speed */
-#define slist_size(list) ((list) ? (list)->size : 0)
-#define slist_length(list) ((list) ? (list)->length : 0)
-#define slist_first(list) (((list)->head) ? (list)->head->data : NULL)
-#define slist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
 
 /*  foreach loop implementation for slist, use like this, assuming the
  *  list that is to be iterated is called 'list' and of type slist_t*:
@@ -135,6 +107,132 @@ struct slist
     size_t size;
 };
 
+/* BASIC DATA ACCESS FUNCTIONS */
+
+/*! Returns the size of the elements that the list
+ *  holds in bytes.
+ *
+ *  @param list the list in question
+ *  @return the size of the elements in the list
+ *  @todo implement this as macro for speed
+ *
+ *  ### Error Handling
+ *
+ *  If passed NULL, it will return 0.
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  // create new list with size = sizeof(int)
+ *  slist_t *list = slist_new(sizeof(int));
+ *  assert(list != NULL);
+ *
+ *  // add some elements
+ *  assert(slist_append(list, NULL) != NULL);
+ *  assert(slist_append(list, NULL) != NULL);
+ *
+ *  // there are now two elements in the list
+ *  assert(slist_length(list) == 2);
+ *
+ *  // and each of them are sizeof(int) big
+ *  assert(slist_size(list) == sizeof(int));
+ *  ```
+ */
+size_t slist_size(const slist_t *list);
+
+/*! Returns the length of the list (how many elements
+ *  are in it).
+ *
+ *  @param list the list in question
+ *  @return how many elements the list holds
+ *  @todo implement this as macro for speed
+ *
+ *  ### Error Handling
+ *
+ *  If passed NULL, returns 0.
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t *list = slist_new(sizeof(int));
+ *  assert(list != NULL);
+ *
+ *  // list is empty
+ *  assert(slist_length(list) == 0);
+ *
+ *  // fill 'er up
+ *  assert(slist_append(list, NULL) != NULL);
+ *  assert(slist_append(list, NULL) != NULL);
+ *  assert(slist_append(list, NULL) != NULL);
+ *
+ *  // it isn't empty no more
+ *  assert(slist_length(list) == 3);
+ *  ```
+ */
+size_t slist_length(const slist_t *list);
+
+/*! Returns a pointer to the first element in
+ *  the list.
+ *
+ *  @param list the list in question
+ *  @return a pointer to the first element in the
+ *      list
+ *  @todo implement this as macro for speed
+ *
+ *  ### Error Handling
+ *
+ *  If `list` is NULL or it is empty, returns
+ *  NULL.
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t *list = slist_new(sizeof(int));
+ *  assert(list != NULL);
+ *
+ *  // passing NULL
+ *  assert(slist_first(NULL) == NULL);
+ *
+ *  // passing empty list
+ *  assert(slist_first(list) == NULL);
+ *
+ *  assert(slist_append(list, NULL) != NULL);
+ *  assert(slist_first(list) != NULL);
+ *  ```
+ */
+void *slist_first(const slist_t *list);
+
+/*! Returns a pointer to the last element in
+ *  the list.
+ *
+ *  @param list the list in question
+ *  @return a pointer to the first element in the
+ *      list
+ *  @todo implement this as macro for speed
+ *
+ *  ### Error Handling
+ *
+ *  If `list` is NULL or it is empty, returns
+ *  NULL.
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t *list = slist_new(sizeof(int));
+ *  assert(list != NULL);
+ *
+ *  // passing NULL
+ *  assert(slist_last(NULL) == NULL);
+ *
+ *  // passing empty list
+ *  assert(slist_last(list) == NULL);
+ *
+ *  assert(slist_append(list, NULL) != NULL);
+ *  assert(slist_last(list) != NULL);
+ *  ```
+ */
+void *slist_last(const slist_t *list);
+
 /* CREATION/DESTRUCTION FUNCTIONS */
 
 /*! Creates a new slist_t object on the heap with 
@@ -163,8 +261,9 @@ slist_t *slist_new(size_t size);
 /*! Initializes a given slist object for use with
  *  objects of the given size.
  *
- *  Assumes that the list is either uninitialized
- *  or empty. If not, it will leak memory!
+ *  @warning Assumes that the list is either 
+ *      uninitialized or empty. If not, it will 
+ *      leak memory!
  *
  *  @param list the list to be initialized
  *  @param size the size of the elements that the
@@ -191,9 +290,9 @@ slist_t *slist_init(slist_t *list, size_t size);
 /*! Takes an existing (already initialized) list,
  *  removes all its elements and frees it.
  *
- *  Make sure that the list has been initialized,
- *  otherwise this function will cause undefined
- *  behavior!
+ *  @warning Make sure that the list has been initialized,
+ *      otherwise this function will cause undefined
+ *      behavior!
  *
  *  @param list the list to be purged
  *  @return the purged list
@@ -222,10 +321,10 @@ slist_t *slist_purge(slist_t *list);
  *  on the heap (for example withwith slist_new()),
  *  free()s all of the data and then the list itself.
  *
- *  Make sure to call this on lists that are
- *  that have been allocated on the heap (not on the
- *  stack) as this function will call `free()` on
- *  them!
+ *  @warning Make sure to call this on lists
+ *      that have been allocated on the heap (not on the
+ *      stack) as this function will call `free()` on
+ *      them!
  *
  *  @param list the list to free
  *  @return 0 on success
@@ -252,10 +351,10 @@ int     slist_free (slist_t *list);
 
 /*! Appends some data to the end of a list.
  *
- *  This function returns a pointer to the
- *  newly created element. Please note that
- *  this pointer is only valid until the next
- *  mutating library call.
+ *  @warning This function returns a pointer to the
+ *      newly created element. Please note that
+ *      this pointer is only valid until the next
+ *      mutating library call.
  *
  *  @param list the list to append data to
  *  @param data the data to append, or NULL
