@@ -29,7 +29,7 @@
 #define malloc_node(size) malloc(sizeof(slist_node_t) + (size))
 
 // get the node at pos, or NULL
-static slist_node_t *slist_node_get(slist_t *list, size_t pos);
+static slist_node_t *slist_node_get(const slist_t *list, size_t pos);
 
 size_t slist_size(const slist_t *list) {
     if(list != NULL) {
@@ -474,7 +474,7 @@ slist_t *slist_join(slist_t *dest, slist_t *src)
     return dest;
 }
 
-slist_t *slist_copy(slist_t *list)
+slist_t *slist_copy(const slist_t *list)
 {
     // allocate a new slist
     slist_t *copy = slist_new(list->size);
@@ -488,7 +488,7 @@ slist_t *slist_copy(slist_t *list)
     slist_node_t *node;
     for(node = list->head; node != NULL; node=node->next) {
         // add data as we go
-        slist_t *result = slist_append(copy, node->data);
+        void *result = slist_append(copy, node->data);
 
         // make sure appending worked
         if(result == NULL) {
@@ -505,7 +505,7 @@ int slist_verify(slist_t *list) {
         return -1;
     }
 
-    slist_node_t **nodes_seen = malloc(sizeof(*slist_node_t) * list->length);
+    slist_node_t **nodes_seen = malloc(sizeof(slist_node_t*) * list->length);
     size_t cur_index = 0;
 
     for(slist_node_t *node = list->head; node != NULL; node = node->next) {
@@ -603,7 +603,7 @@ void **slist_to_array(slist_t *list)
 
 /* this is an internal function used to extract the node at
  * pos of a given list, or NULL if it doesn't exist */
-static slist_node_t *slist_node_get(slist_t *list, size_t pos)
+static slist_node_t *slist_node_get(const slist_t *list, size_t pos)
 {
     /* obviously, an empty list does not have any nodes
      * that could be extracted, so return NULL
