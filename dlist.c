@@ -27,6 +27,14 @@
 // allocate new node with given size
 #define malloc_node(size) malloc(sizeof(dlist_node_t) + (size))
 
+// swap two variables
+#define swap(x,y) do {   \ 
+    typeof(x) _x = x;      \
+    typeof(y) _y = y;      \
+    x = _y;                \
+    y = _x;                \
+    } while(0)
+
 // get the node at pos, or NULL
 static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos);
 
@@ -368,154 +376,211 @@ void *dlist_get(dlist_t *list, size_t pos, void *data)
     return node->data;
 }
 
-void *dlist_pop(dlist_t *list)
+void *dlist_pop(dlist_t *list, void *data)
 {
-    void *data;
-    dlist_node_t *node;
+    // this is the node to be popped
+    dlist_node_t *node = list->head;
 
-    switch(list->size) {
-        case 0:
-            /* can't pop anything from an empty list */
-            return NULL;
-            break;
-        case 1:
-            /* if list has size 1, we have to set it to
-             * be empty after extracting the data */
-            node = list->head;
-            data = node->data;
-            memset(list, 0, sizeof(dlist_t));
-            break;
-        default:
-            /* extract head node */
-            node = list->head;
+    // make sure it exists
+    if(node == NULL) {
+        assert(list->tail == NULL);
+        assert(list->length == 0);
+        return NULL;
+    }
 
-            /* delete back reference to this node */
-            if(node->next)
-                node->next->prev = NULL;
+    // check if the list will be empty after
+    // popping
+    if(node->next) {
+        // make the second node the first
+        // node
+        node->next->prev = NULL;
+        list->head = node->next;
+    } else {
+        assert(list->length == 1);
 
-            /* make list->head point to node after
-             * head node */
-            list->head = node->next;
+        // if we popped the last node, we
+        // reset the list
+        list->head = NULL;
+        list->tail = NULL;
+    }
 
-            /* update size to account for extracted
-             * node */
-            list->size--;
+    // update list info
+    list->length--;
 
-            data = node->data;
-            break;
+    // copy data if requested
+    if(data != NULL) {
+        memcpy(data, node->data, list->size);
     }
 
     free(node);
+
     return data;
 }
 
-dlist_t *dlist_chop(dlist_t *list, size_t pos)
-{
-    /* you can't chop a list up if it doesn't have any
-     * data in it */
-    if(list->size == 0)
-        return NULL;
-
-    /* chopping anything past the end of the list
-     * is not possible */
-    if(list->size <= pos)
-        return NULL;
-
-    /* allocate new dlist */
-    dlist_t *chopped = dlist_new();
-
-    /* make sure allocation was successful */
-    if(list == NULL)
-        return NULL;
-
-    /* the pos that is supplied is supposed to be
-     * the first element of the chopped list */
-    if(pos == 0) {
-        /* transfer list to new chopped list */
-        memcpy(chopped, list, sizeof(dlist_t));
-
-        /* reset original list */
-        memset(list, 0, sizeof(dlist_t));
-    } else {
-        /* find the node just before where the
-         * chopping is supposed to take place */
-        dlist_node_t *node = dlist_node_get(list, pos-1);
-
-        /* make sure node exists and there are
-         * nodes after it that can be transferred */
-        if((node == NULL) || (node->next == NULL)) {
-            free(chopped);
-            return NULL;
-        }
-
-        /* transfer all nodes past node to chopped */
-        chopped->head = node->next;
-        chopped->tail = list->tail;
-        list->tail = node;
-
-        /* disconnect nodes */
-        node->next = NULL;
-        chopped->head->prev = NULL;
+int dlist_swap(dlist_t *list, size_t pos_a, size_t pos_b) {
+    // you can't swap an element with itself
+    if(pos_a == pos_b) {
+        return -1;
     }
 
-    return chopped;
+    // make sure that pos_a is smaller than pos_b
+    if(pos_a > pos_b) {
+        swap(pos_a, pos_b);
+    }
+
+    dlist_node_t *node_a = NULL;
+    dlist_node_t *node_b = NULL;
+    dlist_node_t *node;
+
+    // determine if it makes more sense to scan the
+    // list forward or backwards to get both
+    // nodes
+    if(pos_a < ((list->length - pos_b)-1)) {
+        // scan forwards
+        node = list->head;
+
+        for(size_t i = 0; 
+            node != NULL && (node_a == NULL || node_b == NULL); 
+            i++, node = node->next) 
+        {
+            if(i == pos_a) node_a = node;
+            if(i == pos_b) node_b = node;
+        }
+    } else {
+        // scan backwards
+        node = list->tail;
+
+        for(size_t i = list->length-1;
+            node != NULL && (node_a == NULL || node_b == NULL);
+            i++, node = node->prev)
+        {
+            if(i == pos_a) node_a = node;
+            if(i == pos_b) node_b = node;
+        }
+    }
+
+    // if we couldn't find either one of the
+    // nodes, there must be something wrong
+    if(node_a == NULL || node_b == NULL) {
+        return -1;
+    }
+
+    // node_a could be the first node and
+    // node_b could be the last node, so
+    // we have to treat those cases differently
+    if(node_a->prev == NULL) {
+        assert(pos_a == 0);
+        assert(node_a == list->head);
+        list->head = node_b;
+        node_b->prev->next = node_a;
+    } else {
+        swap(node_a->prev->next, node_b->prev->next);
+    }
+
+    if(node_b->next == NULL) {
+        assert(pos_b == (list->length-1));
+        assert(node_b == list->tail);
+        list->tail = node_a;
+        node_a->next->prev = node_b;
+    } else {
+        swap(node_a->next->prev, node_b->next->prev);
+    }
+
+    swap(node_a->next, node_b->next);
+    swap(node_a->prev, node_b->prev);
+
+    return 0;
+}
+
+
+dlist_t *dlist_split(dlist_t *list, size_t pos)
+{
+    // check if pos points at anything
+    // useful
+    if(pos >= list->length) {
+        return NULL;
+    }
+
+    // allocate new dlist
+    dlist_t *new = dlist_new(list->size);
+    assert(new != NULL);
+
+    // check if we should transfer the
+    // whole list
+    if(pos == 0) {
+        memcpy(new, list, sizeof(dlist_t));
+        memset(list,   0, sizeof(dlist_t));
+
+        // data size stays the same
+        list->size = new->size;
+    } else {
+        // get the node just before pos
+        dlist_node_t *node = dlist_node_get(list, pos-1);
+        assert(node != NULL);
+
+        // set head and tail of new list
+        new->tail = list->tail;
+        new->head = node->next;
+
+        // cut list and nodes
+        list->tail = node;
+        node->next->prev = NULL;
+        node->next = NULL;
+
+        // update new length of both
+        // lists
+        new->length = list->length - pos;
+        list->length = pos;
+    }
+
+    return new;
 }
 
 dlist_t *dlist_join(dlist_t *dest, dlist_t *src)
 {
-    /* if there is nothing to be copied, don't
-     * do anything */
-    if(src->size == 0)
-        return dest;
+    // if the data sizes used are not the same,
+    // return NULL to indicate error
+    if(src->size != dest->size) {
+        return NULL;
+    }
 
-    /* if dest is empty, we can get away with
-     * simply copying data */
+    // if there is nothing to be copied, don't
+    // do anything
+    if(src->length == 0) {
+        return dest;
+    }
+
+    // if dest is empty, we can get away with
+    // simply copying data */
     if(dest->size == 0) {
         memcpy(dest, src, sizeof(dlist_t));
     } else {
-        /* otherwise, it seems like we have to
-         * do some actual work. eww. so let's
-         * copy some nodes! */
+        // otherwise, it seems like we have to
+        // do some actual work. eww. so let's
+        // copy some nodes!
         dest->tail->next = src->head;
-        src->head->prev = dest->tail;
-        dest->tail = src->tail;
+        src->head->prev  = dest->tail;
+        dest->tail       = src->tail;
+        dest->length    += src->length;
     }
 
-    /* initialize src (because we just extracted
-     * all it's nodes) */
+    // reset src, but keep data size
     memset(src, 0, sizeof(dlist_t));
+    src->size = dest->size;
 
     return dest;
 }
 
 int dlist_reverse(dlist_t *list)
 {
-    /* this is a fun one: reverse the order of
-     * all nodes of the list. when I say 'fun',
-     * I really mean 'easy'. but do make sure the
-     * list actually exists! */
-    if(list == NULL)
-        return -1;
-
-    /* for every node, swap node->next and
-     * node->prev */
-    dlist_node_t *node = list->head;
-    dlist_node_t *tmp;
-    while(node) {
-        tmp = node->next;
-        node->next = node->prev;
-        node->prev = tmp;
-
-        /* since we just swapped next and prev,
-         * going forward in the list is done by
-         * going to node->prev */
-        node = node->prev;
+    for(dlist_node_t *node = list->head; node != NULL; node = node->prev) {
+        // for every node, swap node->next and
+        // node->prev
+        swap(node->next, node->prev);
     }
-
-    /* finally, swap list->head and list->tail */
-    tmp = list->head;
-    list->head = list->tail;
-    list->tail = list->head;
+    
+    // also swap list head and tail
+    swap(list->head, list->tail);
 
     return 0;
 }
@@ -523,59 +588,28 @@ int dlist_reverse(dlist_t *list)
 /* create a copy of a list */
 dlist_t *dlist_copy(dlist_t *list)
 {
-    /* create new list */
-    dlist_t *clist = dlist_new();
+    // allocate new list
+    dlist_t *copy = dlist_new(list->size);
+
+    // make sure malloc worked
+    if(copy == NULL) {
+        return NULL;
+    }
 
     /* node is the one from the original list
      * and copy is the one we create as copy */
-    dlist_node_t *node = list->head;
-    dlist_node_t *cnode;
+    for(dlist_node_t *node = list->head; node != NULL; node = node->next) {
+        // add data as we go
+        void *result = slist_append(copy, node->data);
 
-    if(node != NULL) {
-        /* allocate new copy node */
-        cnode = malloc(sizeof(dlist_node_t));
-
-        /* make sure allocation worked */
-        if(cnode == NULL)
+        // make sure appending worked
+        if(result == NULL) {
+            slist_free(copy);
             return NULL;
-
-        /* initialize node */
-        memset(cnode, 0, sizeof(dlist_node_t));
-
-        /* copy data */
-        cnode->data = node->data;
-
-        /* set this node as head of list */
-        clist->head = cnode;
-        
-        /* once the head node exists, we can iterate
-         * through the other nodes and add the sequentially */
-        while((node = node->next) != NULL) {
-            /* copy the current node */
-            cnode->next = malloc(sizeof(dlist_node_t));
-
-            /* make sure memory allocation worked */
-            if(cnode->next == NULL)
-                return NULL;
-
-            /* initialize memory */
-            memset(cnode->next, 0, sizeof(dlist_node_t));
-
-            /* set node data and prev pointer */
-            cnode->next->data = node->data;
-            cnode->next->prev = cnode;
-
-            /* move to next node */
-            cnode = cnode->next;
         }
     }
-    
-    /* set tail of list */
-    clist->tail = cnode;
 
-    /* copy list size */
-    clist->size = list->size;
-    return clist;
+    return copy;
 }
 
 /* internal function used to extract a node at a
