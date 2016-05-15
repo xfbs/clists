@@ -404,8 +404,9 @@ int slist_swap(slist_t *list, size_t a, size_t b) {
 slist_t *slist_split(slist_t *list, size_t pos)
 {
     // check if pos actually points to anything useful
-    if(pos >= list->length)
+    if(pos >= list->length) {
         return NULL;
+    }
 
     // allocate new slist
     slist_t *new = slist_new(list->size);
@@ -444,21 +445,15 @@ slist_t *slist_split(slist_t *list, size_t pos)
 
 slist_t *slist_join(slist_t *dest, slist_t *src)
 {
-    // both lists have to exist for this function
-    // to be useful
-    if(dest == NULL || src == NULL) {
+    // if the data sizes used are not the same, return
+    // NULL to indicate an error
+    if(src->size != dest->size) {
         return NULL;
     }
 
     // if there is nothing to copy, just return dest
     if(src->length == 0) {
         return dest;
-    }
-
-    // if the data sizes used are not the same, return
-    // NULL to indicate an error
-    if(src->size != dest->size) {
-        return NULL;
     }
 
     // if dest is an empty list, we can get away by simply
