@@ -37,11 +37,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* simple data access functions are implemented as macros for speed */
-#define dlist_size(list) ((list) ? (list)->size : 0)
-#define dlist_first(list) (((list)->head) ? (list)->head->data : NULL)
-#define dlist_last(list) (((list)->tail) ? (list)->tail->data : NULL)
-
 /*  macro foreach loop implementations for dlist
  *
  *  these macros can be used as foreach loops, with one going from
@@ -106,6 +101,8 @@ struct dlist_node
     char data[0];
 };
 
+typedef struct dlist_node dlist_node_t;
+
 /*! The main dlist struct. 
  *
  *  This is what gets passed around to library
@@ -132,6 +129,8 @@ struct dlist
     //! list
     size_t size;
 };
+
+typedef struct dlist dlist_t;
 
 /*! Returns the size of the elements that the list
  *  holds in bytes.

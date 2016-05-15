@@ -88,6 +88,8 @@ struct slist_node
     char data[0];
 };
 
+typedef struct slist_node slist_node_t;
+
 /*! The main slist struct. 
  *
  *  It stores a pointer to the first
@@ -133,6 +135,8 @@ struct slist
     //! size of data in each node (same for all nodes)
     size_t size;
 };
+
+typedef struct slist slist_t;
 
 /* BASIC DATA ACCESS */
 
