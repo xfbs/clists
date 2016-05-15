@@ -23,12 +23,13 @@
  */
 
 #include "clists/dlist.h"
+#include <assert.h>
 
 // allocate new node with given size
 #define malloc_node(size) malloc(sizeof(dlist_node_t) + (size))
 
 // swap two variables
-#define swap(x,y) do {   \ 
+#define swap(x,y) do {   \
     typeof(x) _x = x;      \
     typeof(y) _y = y;      \
     x = _y;                \
@@ -202,8 +203,8 @@ void *dlist_prepend(dlist_t *list, void *data)
     }
 
     // initialize node
-    node->head = NULL;
-    node->tail = NULL;
+    node->next = NULL;
+    node->prev = NULL;
 
     // set node data, if necessary
     if(data != NULL) {
@@ -586,7 +587,7 @@ int dlist_reverse(dlist_t *list)
 }
 
 /* create a copy of a list */
-dlist_t *dlist_copy(dlist_t *list)
+dlist_t *dlist_copy(const dlist_t *list)
 {
     // allocate new list
     dlist_t *copy = dlist_new(list->size);
@@ -600,16 +601,50 @@ dlist_t *dlist_copy(dlist_t *list)
      * and copy is the one we create as copy */
     for(dlist_node_t *node = list->head; node != NULL; node = node->next) {
         // add data as we go
-        void *result = slist_append(copy, node->data);
+        void *result = dlist_append(copy, node->data);
 
         // make sure appending worked
         if(result == NULL) {
-            slist_free(copy);
+            dlist_free(copy);
             return NULL;
         }
     }
 
     return copy;
+}
+
+int dlist_verify(dlist_t *list) {
+    if(list == NULL) {
+        return -1;
+    }
+
+    dlist_node_t **nodes_seen = malloc(sizeof(dlist_node_t*) * list->length);
+    size_t cur_index = 0;
+
+    for(dlist_node_t *node = list->head; node != NULL; node = node->next) {
+        if((cur_index+1) == list->length) {
+            if(node != list->tail) {
+                return -4;
+            }
+
+            if(node->next != NULL) {
+                return -5;
+            }
+        }
+
+        for(size_t i = 0; i < cur_index; i++) {
+            if(nodes_seen[i] == node) {
+                return -2;
+            }
+        }
+
+        nodes_seen[cur_index] = node;
+        cur_index++;
+    }
+    
+    // FIXME: check backwards!
+
+    return 0;
 }
 
 /* internal function used to extract a node at a
