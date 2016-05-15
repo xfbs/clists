@@ -140,7 +140,7 @@ int slist_free(slist_t *list)
     return 0;
 }
 
-void *slist_append(slist_t *list, void *data)
+void *slist_append(slist_t *list, const void *data)
 {
     // we want to add stuff past the last node
     slist_node_t *node = list->tail;
@@ -178,7 +178,7 @@ void *slist_append(slist_t *list, void *data)
     return node->data;
 }
 
-void *slist_prepend(slist_t *list, void *data)
+void *slist_prepend(slist_t *list, const void *data)
 {
     // allocate memory for new node
     slist_node_t *node = malloc_node(list->size);
@@ -213,7 +213,7 @@ void *slist_prepend(slist_t *list, void *data)
     return node->data;
 }
 
-void *slist_insert(slist_t *list, size_t pos, void *data)
+void *slist_insert(slist_t *list, size_t pos, const void *data)
 {
     // there are some special cases where we can call
     // some optimized functions
@@ -312,7 +312,7 @@ int slist_remove(slist_t *list, size_t pos)
     return 0;
 }
 
-void *slist_set(slist_t *list, size_t pos, void *data)
+void *slist_set(slist_t *list, size_t pos, const void *data)
 {
     // get node
     slist_node_t *node = slist_node_get(list, pos);
@@ -492,7 +492,7 @@ slist_t *slist_copy(const slist_t *list)
     return copy;
 }
 
-int slist_verify(slist_t *list) {
+int slist_verify(const slist_t *list) {
     if(list == NULL) {
         return -1;
     }

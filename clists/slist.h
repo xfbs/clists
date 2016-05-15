@@ -418,7 +418,7 @@ int     slist_free (slist_t *list);
  *  }
  *  ```
  */
-void *slist_append (slist_t *list, void *data);
+void *slist_append (slist_t *list, const void *data);
 
 /*! Prepends some data to the beginning of
  *  a list.
@@ -458,7 +458,7 @@ void *slist_append (slist_t *list, void *data);
  *  }
  *  ```
  */
-void *slist_prepend(slist_t *list, void *data);
+void *slist_prepend(slist_t *list, const void *data);
 
 /*! Inserts an element at the given position.
  *  
@@ -508,7 +508,7 @@ void *slist_prepend(slist_t *list, void *data);
  *  }
  *  ```
  */
-void *slist_insert (slist_t *list, size_t pos, void *data);
+void *slist_insert (slist_t *list, size_t pos, const void *data);
 
 /*! Removes a given element from the list.
  *  
@@ -573,7 +573,7 @@ int   slist_remove (slist_t *list, size_t pos);
  *  assert(slist_set(list, 1, &i) != NULL);
  *  ```
  */
-void *slist_set(slist_t *list, size_t pos, void *data);
+void *slist_set(slist_t *list, size_t pos, const void *data);
 
 /*! Gets a pointer to the data at pos.
  *
@@ -801,7 +801,7 @@ slist_t *slist_copy(const slist_t *list);
  *
  *  It exists only for internal testing purposes.
  */
-int slist_verify(slist_t *list);
+int slist_verify(const slist_t *list);
 
 #ifdef __cplusplus
 }
