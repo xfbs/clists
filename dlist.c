@@ -297,7 +297,7 @@ int dlist_remove(dlist_t *list, size_t pos)
     // extract the node we want to remove
     dlist_node_t *node = dlist_node_get(list, pos);
 
-    /* make sure the node exists */
+    // make sure the node exists
     if(node == NULL) {
         return -1;
     }
@@ -320,43 +320,52 @@ int dlist_remove(dlist_t *list, size_t pos)
         node->next->prev = node->prev;
     }
 
-    /* connect the node before it with what comes after
-     * the node or if node is last, indicate the previous
-     * node that it's the last */
+    // node->next can be NULL, in this case it updates
+    // the previous node to be the last one, or otherwise
+    // connect the previous node to the next one
     node->prev->next = node->next;
 
-    /* update list size to reflect removed node */
-    list->size--;
-    free(node);
+    // update list size to reflect removed node
+    list->length--;
 
+    free(node);
     return 0;
 }
 
-int dlist_set(dlist_t *list, size_t pos, void *data)
+void *dlist_set(dlist_t *list, size_t pos, void *data)
 {
-    /* get the node at pos */
+    // get the node at pos
     dlist_node_t *node = dlist_node_get(list, pos);
 
-    /* make sure it exists (if not, error!) */
-    if(node) {
-        /* set the node data */
-        node->data = data;
-        return 0;
-    } else {
-        return -1;
+    // make sure it exists
+    if(node == NULL) {
+        return NULL;
     }
+
+    // if given, set data
+    if(data != NULL) {
+        memcpy(node->data, data, list->size);
+    }
+
+    return node->data;
 }
 
-void *dlist_get(dlist_t *list, size_t pos)
+void *dlist_get(dlist_t *list, size_t pos, void *data)
 {
-    /* get node at pos */
+    // get the node at pos
     dlist_node_t *node = dlist_node_get(list, pos);
 
-    /* return node->data if node exists, otherwise
-     * NULL (since NULL can be a valid value, be sure
-     * to check if pos is valid!)
-     */
-    return((node) ? node->data : NULL);
+    // make sure it exists
+    if(node == NULL) {
+        return NULL;
+    }
+
+    // if given, get data
+    if(data != NULL) {
+        memcpy(data, node->data, list->size);
+    }
+
+    return node->data;
 }
 
 void *dlist_pop(dlist_t *list)
