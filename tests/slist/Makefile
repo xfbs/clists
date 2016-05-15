@@ -4,7 +4,7 @@ LDFLAGS = -L../cu/ -L../.. -lcu -lclists -lpthread
 
 OBJS = size.o length.c first.c \
 	   last.c new.c init.c purge.c \
-	   append.c prepend.c \
+	   append.c prepend.c insert.c \
 	   tests.o helpers.o
 TSTS = ../../libclists.a
 

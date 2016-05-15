@@ -44,6 +44,9 @@ TEST(prepend_sets_data_correctly);
 TEST(prepend_sets_length_correctly);
 
 /* slist_insert() */
+TEST(insert_works_without_data);
+TEST(insert_returns_null_on_illegal);
+TEST(insert_works_with_data);
 
 /* slist_remove() */
 
@@ -87,6 +90,9 @@ TEST_SUITE(insertion) {
     TEST_ADD(prepend_sets_both_head_and_tail),
     TEST_ADD(prepend_sets_data_correctly),
     TEST_ADD(prepend_sets_length_correctly),
+    TEST_ADD(insert_works_without_data),
+    TEST_ADD(insert_returns_null_on_illegal),
+    TEST_ADD(insert_works_with_data),
     TEST_SUITE_CLOSURE
 };
 
