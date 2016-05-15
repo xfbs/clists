@@ -64,11 +64,20 @@ extern "C" {
  *  Stores some (variable length) data as well as a pointer
  *  to the next node in the list.
  *
- *  When `next` is non-NULL, it means that there are more
- *  elements, if it is NULL, it means that we've hit the
- *  end of the list.
+ *  ### Invariants
  *
- *  FIXME: zero length array is kinda iffy. can we do this better?
+ *  If `next` is NULL, this is the last node of the list.
+ *  If `next` is non-NULL, this is not the last node of
+ *  the list, and the value of `next` is a pointer to
+ *  the next node in the list. All nodes in the list 
+ *  are of the same size (so all elements hold the same
+ *  amount of data, as measured by the length of `data`.
+ *
+ *  Since the list is not circular, `next` may never
+ *  point to an element that has already been in the
+ *  list earlier or to this node.
+ *
+ *  @todo zero length array is kinda iffy. can we do this better?
  */
 struct slist_node
 {
@@ -90,7 +99,25 @@ struct slist_node
  *  The list has some redundant data such as the length and
  *  a pointer to the last node for efficiency reasons.
  *
- *  The list is not circular.
+ *  ### Invariants
+ *
+ *  If the list is not empty, `head` points to the first node
+ *  in the list, otherwise it is NULL.
+ *
+ *  Similarly, `tail` points to the last node in the list if
+ *  it is not empty, and otherwise NULL.
+ *
+ *  `head` and `tail` may only point to the same node if the 
+ *  list has a `length` of 1.
+ *
+ *  `length` is always the length of the list, as measured by
+ *  how many nodes are between `head` and `tail` (including
+ *  `head` and `tail` themselves).
+ *
+ *  `size` is the size of each elements, which stays the same
+ *  during the whole lifetime of the list.
+ *
+ *  The list may not be  circular.
  */
 struct slist
 {
@@ -107,7 +134,7 @@ struct slist
     size_t size;
 };
 
-/* BASIC DATA ACCESS FUNCTIONS */
+/* BASIC DATA ACCESS */
 
 /*! Returns the size of the elements that the list
  *  holds in bytes.
@@ -549,6 +576,10 @@ void *slist_set(slist_t *list, size_t pos, void *data);
  *  This function will return a pointer to the element
  *  at `pos`, or `NULL` on error.
  *
+ *  @warning if data is not NULL, it must point to 
+ *  memory that is at least as large as the size of
+ *  the elements in the list!
+ *
  *  @param list the list to work on
  *  @param pos the position of the element to
  *      retrieve
@@ -572,7 +603,7 @@ void *slist_set(slist_t *list, size_t pos, void *data);
  *  assert(slist_get(list, 1) == NULL);
  *  ```
  */
-void *slist_get(slist_t *list, size_t pos);
+void *slist_get(const slist_t *list, size_t pos, void *data);
 
 /*! Removes the first element of the list.
  *
@@ -612,6 +643,46 @@ void *slist_get(slist_t *list, size_t pos);
  *  ```
  */
 void *slist_pop(slist_t *list, void *data);
+
+/*! Swaps two elements in the list by position.
+ *
+ *  Given two valid positions in the list, this
+ *  function swaps the two elements.
+ *
+ *  @param list the list to operate on
+ *  @param a the index of the first element
+ *  @param b the index of the second element
+ *  @return 
+ *    - 0 on success
+ *    - negative on error
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t *list = slist_new(sizeof(int));
+ *  assert(list != NULL);
+ *
+ *  int num = 5;
+ *  assert(slist_append(list, &num) != NULL);
+ *  num = 10;
+ *  assert(slist_append(list, &num) != NULL);
+ *
+ *  // this does nothing
+ *  assert(slist_swap(list, 0, 0) == 0);
+ *  assert(slist_get(list, 0, &num) != NULL);
+ *  assert(num == 5);
+ *
+ *  // swap elements
+ *  assert(slist_swap(list, 0, 1) == 0);
+ *  assert(slist_get(list, 0, &num) != NULL);
+ *  assert(num == 10);
+ *  assert(slist_get(list, 1, &num) != NULL);
+ *  assert(num == 5);
+ *
+ *  // this doesn't work
+ *  assert(slist_swap(list, 1, 2) < 0);
+ */
+int slist_swap(slist_t *list, size_t a, size_t b);
 
 /*! Splits the list into two lists, so that the
  *  element at pos is the first element of the
@@ -653,6 +724,9 @@ slist_t *slist_split(slist_t *list, size_t pos);
  *  This function copies all elements from `src`
  *  into `dest`, leaving `src` as an empty list.
  *
+ *  @warning The element sizes of both lists
+ *  must be identical!
+ *
  *  @param dest the list to add all elements from
  *      src to
  *  @param src the list from which the elements
@@ -684,17 +758,6 @@ slist_t *slist_split(slist_t *list, size_t pos);
  */
 slist_t *slist_join(slist_t *dest, slist_t *src);
 
-/*  conversion functions
- *  copy creates a new slist with the same data as the
- *   one it is passed. 
- *  the from_* functions convert some other data type
- *   to a slist.
- *  the to_array function returns a pointer to an array
- *   that contains the same data as is in the slist. this
- *   array needs to be freed by the user.
- *
- *  FIXME: conversion functions from/to array
- */
 /*! Creates a copy of a list
  *
  *  This function creates a new list, and fills
@@ -726,6 +789,15 @@ slist_t *slist_join(slist_t *dest, slist_t *src);
  *  ```
  */
 slist_t *slist_copy(const slist_t *list);
+
+/*! Verifies that a list is correct.
+ *
+ *  This method verifies that a list is correct and
+ *  does not have any cycles.
+ *
+ *  It exists only for internal testing purposes.
+ */
+int slist_verify(slist_t *list);
 
 #ifdef __cplusplus
 }
