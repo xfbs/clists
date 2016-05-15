@@ -93,5 +93,7 @@ int main(int argc, char *argv[])
     CU_SET_OUT_PREFIX("output/");
     CU_RUN(argc, argv);
 
-    return 0;
+    // set return value according to whether
+    // there were any failures
+    return (cu_fail_test_suites > 0) ? -1 : 0;
 }
