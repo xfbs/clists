@@ -24,21 +24,59 @@
 
 #include "clists/slist.h"
 #include <assert.h>
+
+// allocate new node with given size
+#define malloc_node(size) malloc(sizeof(slist_node_t) + (size))
+
+// get the node at pos, or NULL
 static slist_node_t *slist_node_get(slist_t *list, size_t pos);
+
+size_t slist_size(const slist_t *list) {
+    if(list != NULL) {
+        return list->size;
+    }
+
+    return 0;
+}
+
+size_t slist_length(const slist_t *list) {
+    if(list != NULL) {
+        return list->length;
+    }
+
+    return 0;
+}
+
+void *slist_first(const slist_t *list) {
+    if(list != NULL && list->head != NULL) {
+        return list->head->data;
+    }
+
+    return NULL;
+}
+
+void *slist_last(const slist_t *list) {
+    if(list != NULL && list->tail != NULL) {
+        return list->tail->data;
+    }
+
+    return NULL;
+}
 
 slist_t *slist_new(size_t size)
 {
-    /* allocate memory for new list */
+    // allocate memory for new list
     slist_t *list = malloc(sizeof(slist_t));
 
-    /* check if memory allocation worked */
-    if(list == NULL)
+    // check if memory allocation worked
+    if(list == NULL) {
         return NULL;
+    }
 
-    /* initialize memory */
+    // initialize memory
     memset(list, 0, sizeof(slist_t));
 
-    /* set size */
+    // set size
     list->size = size;
 
     return list;
@@ -46,14 +84,15 @@ slist_t *slist_new(size_t size)
 
 slist_t *slist_init(slist_t *list, size_t size)
 {
-    /* error checking */
-    if(list == NULL)
+    // make sure list exists
+    if(list == NULL) {
         return NULL;
+    }
 
-    /* initialize memory */
+    // initialize memory
     memset(list, 0, sizeof(slist_t));
 
-    /* set size */
+    // set size
     list->size = size;
 
     return list;
@@ -61,122 +100,114 @@ slist_t *slist_init(slist_t *list, size_t size)
 
 slist_t *slist_purge(slist_t *list)
 {
-    /* start with the first node, pointed to
-     * by list->head */
+    // start with the first node, pointed to
+    // by list->head
     slist_node_t *cur = list->head;
     slist_node_t *next;
 
     while (cur != NULL) {
-        /* store ptr to next node (because we
-         * are freeing this node now and thus
-         * can't access it later) */
+        // remember which node was supposed to
+        // come next so we can safely free cur
         next = cur->next;
 
-        /* free current node */
+        // free current node
         free(cur);
 
-        /* advance to next node */
+        // advance to next node
         cur = next;
     }
 
-    // zero everything, we don't use memset
-    // here because we don't want to overwrite
-    // list->size
+    // reset everything but list->size
     list->head = NULL;
     list->tail = NULL;
     list->length = 0;
 
-    // only now can we release the lock again
     return list;
 }
 
 int slist_free(slist_t *list)
 {
-    /* error checking */
+    // can't free a NULL pointer
     if(list == NULL)
         return -1;
 
-    /* free nodes */
-    slist_t *result = slist_purge(list);
+    // free nodes
+    slist_purge(list);
 
-    /* free list itself */
+    // free list itself
     free(list);
 
-    /* return whatever purge gave back
-     * to propagate eventual errors */
-    return (result == NULL) ? -1 : 0;
+    return 0;
 }
 
 void *slist_append(slist_t *list, void *data)
 {
-    /* we want to add stuff past the last node */
+    // we want to add stuff past the last node
     slist_node_t *node = list->tail;
 
-    /* there are two possibilities here: either
-     * the list is empty and there is no last node,
-     * or it's full and we can simply append after
-     * the last one */
+    // the list could be empty, so we have to
+    // check for that
     if (node != NULL) {
-        /* append to existing node */
-        node->next = malloc(sizeof(slist_node_t) + list->size);
+        // append to existing node
+        node->next = malloc_node(list->size);
         node = node->next;
     } else {
-        /* make it the first node */
-        node = malloc(sizeof(slist_node_t) + list->size);
+        // list is empty, so this is both the
+        // first and the last node.
+        node = malloc_node(list->size);
         list->head = node;
     }
 
-    /* check for memory allocation errors */
-    if(node == NULL)
+    // make sure malloc worked
+    if(node == NULL) {
         return NULL;
+    }
 
-    /* initialize node */
+    // initialize node
     node->next = NULL;
 
-    /* update slist properties */
+    // update slist properties
     list->tail = node;
     list->length++;
 
-    /* set the node's data */
-    if(data != NULL)
+    // set the node's data
+    if(data != NULL) {
         memcpy(node->data, data, list->size);
+    }
 
     return node->data;
 }
 
 void *slist_prepend(slist_t *list, void *data)
 {
-    /* allocate memory for new node */
-    slist_node_t *node = malloc(sizeof(slist_node_t) + list->size);
+    // allocate memory for new node
+    slist_node_t *node = malloc_node(list->size);
 
-    /* memory allocation error checking */
-    if(node == NULL)
+    // make sure malloc worked
+    if(node == NULL) {
         return NULL;
+    }
 
-    /* initialize new node */
-    node->next = NULL;
-
-    /* set it's data */
-    if(data != NULL)
+    // set node data (if some data was supplied)
+    if(data != NULL) {
         memcpy(node->data, data, list->size);
+    }
 
-    /* is the list empty? */
-    if (list->head != NULL) {
-        /* if not, attach existing nodes to
-         * the new node */
-        node->next = list->head;
-    } else {
-        /* list is empty, so this node is the
-         * only node and as such, it is both
-         * the head and the tail of the list
-         */
+    // initialize node: set next to
+    // current head of the list
+    node->next = list->head;
+
+    // if the list was empty, the node needs to
+    // also become the tail of the list, since
+    // it's now the only node
+    if (list->head == NULL) {
         list->tail = node;
     }
 
-    /* make node new head of list */
+    // make node new head of list
     list->head = node;
 
-    /* update list size */
+    // update list size
     list->length++;
 
     return node->data;
@@ -184,42 +215,46 @@ void *slist_prepend(slist_t *list, void *data)
 
 void *slist_insert(slist_t *list, size_t pos, void *data)
 {
+    // there are some special cases where we can call
+    // some optimized functions
     if (pos == 0) {
-        /* insertion at position 0 is the same as prepending,
-         * so use that method */
+        // insertion at position 0 is the same as prepending
         return slist_prepend(list, data);
     } else if (pos == list->length) {
-        /* inserting at list->length is the same as appending,
-         * so use that method */
+        // inserting at list->length is the same as appending
         return slist_append(list, data);
     } else if (pos > list->length) {
-        /* inserting at a non-valid position is not possible */
+        // inserting at a non-valid position is not possible
         return NULL;
     } else {
-        /* get the node located before pos (this is guaranteed
-         * not to be the head or the tail, because of the if
-         * conditions above) and a pointer to the node after
-         * it (which is supposed to not be NULL) */
+        // by this point we know what pos is neither zero, nor
+        // at the end of the list, nor past the end. so
+        // we can safely get the node just before where we
+        // want to insert:
         slist_node_t *prev = slist_node_get(list, pos-1);
         slist_node_t *next = prev->next;
+
+        assert(prev != NULL);
+        assert(next != NULL);
         
-        /* allocate memeory for new node */
-        slist_node_t *node = malloc(sizeof(slist_node_t) + list->size);
-        if(node == NULL)
+        // allocate memeory for new node
+        slist_node_t *node = malloc_node(list->size);
+
+        // make sure allocation worked
+        if(node == NULL) {
             return NULL;
+        }
 
-        /* initialize memory */
-        node->next = NULL;
-
-        /* connect nodes */
+        // connect nodes
         prev->next = node;
         node->next = next;
 
-        /* set data and update list */
+        // set data and update list
         if(data != NULL) {
             memcpy(node->data, data, list->size);
         }
 
+        // update list
         list->length++;
 
         return node->data;
@@ -229,44 +264,48 @@ void *slist_insert(slist_t *list, size_t pos, void *data)
 int slist_remove(slist_t *list, size_t pos)
 {
     if(list->length == 0) {
-        /* can't remove anything from an empty list */
+        // can't remove anything from an empty list
         return -1;
     } else if(pos == 0) {
-        /* removing the first element can be done efficiently
-         * by using the pop function */
+        // removing the first element can be done efficiently
+        // by using the pop function
         slist_pop(list, NULL);
     } else if(pos >= list->length) {
-        /* can't remove something which is not in the list */
-        return -1;
+        // can't remove something which is not in the list
+        return -2;
     } else {
-        /* get a pointer to the node before pos - this is
-         * guaranteed to exist, because we know that the list
-         * is not empty, pos!=0 and pos is valid in the list
-         */
+        // by this point, we know that pos is valid in
+        // the list, because the list contains elements,
+        // pos is not zero and it's not past the end of
+        // the list, so we can safely get a pointer to
+        // the node just before the one we want to delete.
         slist_node_t *prev = slist_node_get(list, pos-1);
         assert(prev != NULL);
-        assert(prev->next != NULL);
 
-        /* pointer to the node we want to remove */
+        // now we can also get a pointer to the node we
+        // want to remove
         slist_node_t *node = prev->next;
+        assert(node != NULL);
 
+        // if the node is the last node in the list, we
+        // have to change list->tail, so we check for that
         if (node->next == NULL) {
             assert(node == list->tail);
 
-            /* if the node to be removed is the last node,
-             * we have to update the list so that prev is now
-             * the tail */
+            // set tail to previous node
             list->tail = prev;
-            prev->next = NULL;
         } else {
             assert(node != list->tail);
-
-            /* connect the previous node the to the next node,
-             * thereby skipping the current node */
-            prev->next = node->next;
         }
         
+        // connect the previous node to the node
+        // after the one we just deleted.
+        prev->next = node->next;
+        
+        // get rid of the node
         free(node);
+
+        // update the list
         list->length--;
     }
 
@@ -275,60 +314,75 @@ int slist_remove(slist_t *list, size_t pos)
 
 void *slist_set(slist_t *list, size_t pos, void *data)
 {
-    /* get node */
+    // get node
     slist_node_t *node = slist_node_get(list, pos);
 
-    /* set data or return error if node doesn't exist */
-    if (node != NULL && data != NULL) {
+    // make sure node exists
+    if(node == NULL) {
+        return NULL;
+    }
+
+    // copy data over if pointer is non-NULL
+    if (data != NULL) {
         memcpy(node->data, data, list->size);
     }
 
-    return (node == NULL) ? NULL : node->data;
+    return node->data;
 }
 
-void *slist_get(slist_t *list, size_t pos)
+void *slist_get(const slist_t *list, size_t pos, void *data)
 {
-    /* get node */
+    // get node
     slist_node_t *node = slist_node_get(list, pos);
 
-    /* extract pointer to data if node exists */
-    void *data = (node) ? node->data : NULL;
+    // make sure node exists
+    if(node == NULL) {
+        return NULL;
+    }
 
-    return data;
+    // copy data over if pointer is non-NULL
+    if(data != NULL) {
+        memcpy(data, node->data, list->size);
+    }
+
+    return node->data;
 }
 
 void *slist_pop(slist_t *list, void *data)
 {
-    /* get pointer to head, this is the node that is
-     * to be removed and it's data returned */
+    // this is the node to be popped
     slist_node_t *head = list->head;
 
-    /* error checking - again, NULL can be valid data,
-     * so might be smart to check size before doing
-     * a pop */
+    // make sure list isn't empty
     if (head == NULL) {
         assert(list->tail == NULL);
         return NULL;
     }
 
-    /* save the data, because we're going to free the
-     * memory of the node later */
-    //void *data = head->data;
-
+    // check if the list will be empty after
+    // popping
     if (head->next) {
-        /* if list will not be empty after the pop,
-         * simply update it to make head point to the
-         * next node */
+        // set the list's head to the node after
+        // our node
         list->head = head->next;
+        
+        // if that will be the last node in the
+        // list, we have to also update list->tail.
+        if(list->head->next == NULL) {
+            list->tail = list->head;
+            assert(list->length == 1);
+        }
     } else {
-        /* if this was the last node, reset list */
+        // if we popped the last node, we reset the
+        // list
         list->head = NULL;
         list->tail = NULL;
     }
 
+    // update list info
     list->length--;
 
-    /* copy data if requested */
+    // copy data if requested
     if(data != NULL) {
         memcpy(data, head->data, list->size);
     }
@@ -336,6 +390,11 @@ void *slist_pop(slist_t *list, void *data)
     free(head);
 
     return data;
+}
+
+int slist_swap(slist_t *list, size_t a, size_t b) {
+    // FIXME
+    return -1;
 }
 
 slist_t *slist_split(slist_t *list, size_t pos)
