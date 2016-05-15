@@ -366,14 +366,6 @@ void *slist_pop(slist_t *list, void *data)
         // set the list's head to the node after
         // our node
         list->head = node->next;
-        
-        // if that will be the last node in the
-        // list, we have to also update list->tail.
-        // FIXME: is this necessary?
-        if(list->head->next == NULL) {
-            list->tail = list->head;
-            assert(list->length == 1);
-        }
     } else {
         assert(list->length == 1);
 
