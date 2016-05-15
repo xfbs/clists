@@ -351,28 +351,32 @@ void *slist_get(const slist_t *list, size_t pos, void *data)
 void *slist_pop(slist_t *list, void *data)
 {
     // this is the node to be popped
-    slist_node_t *head = list->head;
+    slist_node_t *node = list->head;
 
     // make sure list isn't empty
-    if (head == NULL) {
+    if (node == NULL) {
         assert(list->tail == NULL);
+        assert(list->length == 0);
         return NULL;
     }
 
     // check if the list will be empty after
     // popping
-    if (head->next) {
+    if (node->next) {
         // set the list's head to the node after
         // our node
-        list->head = head->next;
+        list->head = node->next;
         
         // if that will be the last node in the
         // list, we have to also update list->tail.
+        // FIXME: is this necessary?
         if(list->head->next == NULL) {
             list->tail = list->head;
             assert(list->length == 1);
         }
     } else {
+        assert(list->length == 1);
+
         // if we popped the last node, we reset the
         // list
         list->head = NULL;
@@ -384,10 +388,10 @@ void *slist_pop(slist_t *list, void *data)
 
     // copy data if requested
     if(data != NULL) {
-        memcpy(data, head->data, list->size);
+        memcpy(data, node->data, list->size);
     }
 
-    free(head);
+    free(node);
 
     return data;
 }
