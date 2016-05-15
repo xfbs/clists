@@ -62,3 +62,5 @@ todo
  -  document the code more extensively
  -  think about alignment
  -  make a generic `list_t` type, along with functions to work with that
+ -  run tis-interpreter and valgrind against everything!
+ -  document error codes
