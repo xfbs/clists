@@ -1,90 +1,100 @@
 #include "cu/cu.h"
 
-/* creation.c */
-TEST(allocation);
-TEST(initialization);
-TEST(purgingEmpty);
-TEST(purgingSingle);
-TEST(purgingMultiple);
-TEST(freeingEmpty);
-TEST(freeingSingle);
-TEST(freeingMultiple);
+/* slist_size() */
+TEST(size_works_with_slist_new);
+TEST(size_works_with_slist_init);
+TEST(size_works_manually);
 
-/* insertion.c */
-TEST(appendingSingle);
-TEST(appendingMultiple);
-TEST(prependingSingle);
-TEST(prependingMultiple);
-TEST(insertFirst);
-TEST(insertLast);
-TEST(insertMiddle);
-TEST(insertIllegal);
-TEST(removeFirst);
-TEST(removeLast);
-TEST(removeMiddle);
-TEST(removeIllegal);
+/* slist_length() */
+TEST(length_works_with_basic_ops);
+TEST(length_works_manually);
 
-/* accessing.c */
-TEST(settingData);
-TEST(settingIllegal);
-TEST(gettingData);
-TEST(gettingIllegal);
-TEST(poppingData);
-TEST(poppingEmpty);
+/* slist_first() */
+TEST(first_returns_null_on_empty_list);
+TEST(first_returns_first_element);
+TEST(first_returns_correct_pointer);
 
-TEST_SUITE(creation) {
-    TEST_ADD(allocation),
-    TEST_ADD(initialization),
+/* slist_last() */
+TEST(last_returns_null_on_empty_list);
+TEST(last_returns_last_element);
+TEST(last_returns_correct_pointer);
+
+/* slist_new() */
+TEST(new_works_with_all_sizes);
+TEST(new_sets_all_pointers_to_null);
+
+/* slist_init() */
+TEST(init_works_with_all_sizes);
+TEST(init_sets_all_pointers_to_null);
+
+/* slist_purge() */
+TEST(purge_does_nothing_on_empty_list);
+TEST(purge_removes_all_elements_of_list);
+
+/* slist_free() */
+
+/* slist_append() */
+TEST(append_sets_both_head_and_tail);
+TEST(append_sets_data_correctly);
+TEST(append_sets_length_correctly);
+
+/* slist_prepend() */
+TEST(prepend_sets_both_head_and_tail);
+TEST(prepend_sets_data_correctly);
+TEST(prepend_sets_length_correctly);
+
+/* slist_insert() */
+
+/* slist_remove() */
+
+/* slist_pop() */
+
+/* slist_swap() */
+
+/* slist_set() */
+
+/* slist_get() */
+
+TEST_SUITE(basic_data_access) {
+    TEST_ADD(size_works_with_slist_new),
+    TEST_ADD(size_works_with_slist_init),
+    TEST_ADD(size_works_manually),
+    TEST_ADD(length_works_with_basic_ops),
+    TEST_ADD(length_works_manually),
+    TEST_ADD(first_returns_null_on_empty_list),
+    TEST_ADD(first_returns_correct_pointer),
+    TEST_ADD(first_returns_first_element),
+    TEST_ADD(last_returns_null_on_empty_list),
+    TEST_ADD(last_returns_last_element),
+    TEST_ADD(last_returns_correct_pointer),
     TEST_SUITE_CLOSURE
 };
 
-TEST_SUITE(destruction) {
-    TEST_ADD(purgingEmpty),
-    TEST_ADD(purgingSingle),
-    TEST_ADD(purgingMultiple),
-    TEST_ADD(freeingEmpty),
-    TEST_ADD(freeingSingle),
-    TEST_ADD(freeingMultiple),
-    TEST_SUITE_CLOSURE
-};
-
-TEST_SUITE(pending) {
-    TEST_ADD(appendingSingle),
-    TEST_ADD(appendingMultiple),
-    TEST_ADD(prependingSingle),
-    TEST_ADD(prependingMultiple),
+TEST_SUITE(creation_destruction) {
+    TEST_ADD(new_works_with_all_sizes),
+    TEST_ADD(new_sets_all_pointers_to_null),
+    TEST_ADD(init_works_with_all_sizes),
+    TEST_ADD(init_sets_all_pointers_to_null),
+    TEST_ADD(purge_does_nothing_on_empty_list),
+    TEST_ADD(purge_removes_all_elements_of_list),
     TEST_SUITE_CLOSURE
 };
 
 TEST_SUITE(insertion) {
-    TEST_ADD(insertFirst),
-    TEST_ADD(insertLast),
-    TEST_ADD(insertMiddle),
-    TEST_ADD(insertIllegal),
-    TEST_ADD(removeFirst),
-    TEST_ADD(removeLast),
-    TEST_ADD(removeMiddle),
-    TEST_ADD(removeIllegal),
-    TEST_SUITE_CLOSURE
-};
-
-TEST_SUITE(accessing) {
-    TEST_ADD(settingData),
-    TEST_ADD(settingIllegal),
-    TEST_ADD(gettingData),
-    TEST_ADD(gettingIllegal),
-    TEST_ADD(poppingData),
-    TEST_ADD(poppingEmpty),
+    TEST_ADD(append_sets_both_head_and_tail),
+    TEST_ADD(append_sets_data_correctly),
+    TEST_ADD(append_sets_length_correctly),
+    TEST_ADD(prepend_sets_both_head_and_tail),
+    TEST_ADD(prepend_sets_data_correctly),
+    TEST_ADD(prepend_sets_length_correctly),
     TEST_SUITE_CLOSURE
 };
 
 /* test suites */
 TEST_SUITES {
-    TEST_SUITE_ADD(creation),
-    TEST_SUITE_ADD(destruction),
-    TEST_SUITE_ADD(pending),
+    TEST_SUITE_ADD(basic_data_access),
+    TEST_SUITE_ADD(creation_destruction),
     TEST_SUITE_ADD(insertion),
-    TEST_SUITE_ADD(accessing),
     TEST_SUITES_CLOSURE
 };
 int main(int argc, char *argv[])
