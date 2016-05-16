@@ -1,181 +1,194 @@
 #include "cu/cu.h"
 
-/* alloc.c */
-TEST(allocNew);
-TEST(heapInit);
-TEST(stackInit);
+/* dlist_size() */
+TEST(size_works_with_dlist_new);
+TEST(size_works_with_dlist_init);
+TEST(size_works_manually);
 
-TEST_SUITE(alloc) {
-    TEST_ADD(allocNew),
-    TEST_ADD(heapInit),
-    TEST_ADD(stackInit),
+/* dlist_length() */
+TEST(length_works_with_basic_ops);
+TEST(length_works_manually);
+
+/* dlist_first() */
+TEST(first_returns_null_on_empty_list);
+TEST(first_returns_first_element);
+TEST(first_returns_correct_pointer);
+
+/* dlist_last() */
+TEST(last_returns_null_on_empty_list);
+TEST(last_returns_last_element);
+TEST(last_returns_correct_pointer);
+
+/* dlist_new() */
+TEST(new_works_with_all_sizes);
+TEST(new_sets_all_pointers_to_null);
+
+/* dlist_init() */
+TEST(init_works_with_all_sizes);
+TEST(init_sets_all_pointers_to_null);
+
+/* dlist_purge() */
+TEST(purge_does_nothing_on_empty_list);
+TEST(purge_removes_all_elements_of_list);
+
+/* dlist_free() */
+
+/* dlist_append() */
+TEST(append_sets_both_head_and_tail);
+TEST(append_sets_data_correctly);
+TEST(append_sets_length_correctly);
+
+/* dlist_prepend() */
+TEST(prepend_sets_both_head_and_tail);
+TEST(prepend_sets_data_correctly);
+TEST(prepend_sets_length_correctly);
+
+/* dlist_insert() */
+TEST(insert_works_without_data);
+TEST(insert_returns_null_on_illegal);
+TEST(insert_works_with_data);
+
+/* dlist_remove() */
+TEST(remove_on_empty_list_does_not_work);
+TEST(remove_in_beginning_works);
+TEST(remove_at_end_works);
+TEST(remove_in_middle_works);
+
+/* dlist_pop() */
+TEST(pop_works_on_empty_list);
+TEST(pop_works_on_single_list);
+TEST(pop_works_on_full_list);
+
+/* dlist_set() */
+TEST(set_does_not_work_for_empty_list);
+TEST(set_does_not_work_for_illegal_index);
+TEST(set_with_null_data_returns_null);
+TEST(set_works_with_data);
+
+/* dlist_get() */
+TEST(get_does_not_work_for_empty_list);
+TEST(get_does_not_work_for_illegal_index);
+TEST(get_works_without_data);
+TEST(get_works_with_data);
+
+/* dlist_swap() */
+TEST(swap_does_not_work_on_empty_list);
+TEST(swap_does_not_work_on_nonexisting_indices);
+TEST(swap_does_nothing_when_indices_are_equal);
+TEST(swap_works_correctly_with_different_indices);
+
+/* dlist_split() */
+TEST(split_does_not_work_on_empty_list);
+TEST(split_does_not_work_on_illegal_pos);
+TEST(split_on_head_works_on_full_list);
+TEST(split_on_rest_works_on_full_list);
+
+/* dlist_join() */
+TEST(join_does_not_work_on_different_element_sizes);
+TEST(join_works_on_empty_lists);
+TEST(join_works_on_full_lists);
+
+/* dlist_copy() */
+TEST(copy_works_on_empty_list);
+TEST(copy_works_on_full_list);
+
+TEST_SUITE(basic_data_access) {
+    TEST_ADD(size_works_with_dlist_new),
+    TEST_ADD(size_works_with_dlist_init),
+    TEST_ADD(size_works_manually),
+    TEST_ADD(length_works_with_basic_ops),
+    TEST_ADD(length_works_manually),
+    TEST_ADD(first_returns_null_on_empty_list),
+    TEST_ADD(first_returns_correct_pointer),
+    TEST_ADD(first_returns_first_element),
+    TEST_ADD(last_returns_null_on_empty_list),
+    TEST_ADD(last_returns_last_element),
+    TEST_ADD(last_returns_correct_pointer),
     TEST_SUITE_CLOSURE
 };
 
-/* freeing.c */
-TEST(freeingEmpty);
-TEST(freeingSingle);
-TEST(freeingFull);
-TEST(purgingEmpty);
-TEST(purgingSingle);
-TEST(purgingFull);
-
-TEST_SUITE(freeing) {
-    TEST_ADD(freeingEmpty),
-    TEST_ADD(freeingSingle),
-    TEST_ADD(freeingFull),
+/*
+TEST_SUITE(creation_destruction) {
+    TEST_ADD(new_works_with_all_sizes),
+    TEST_ADD(new_sets_all_pointers_to_null),
+    TEST_ADD(init_works_with_all_sizes),
+    TEST_ADD(init_sets_all_pointers_to_null),
+    TEST_ADD(purge_does_nothing_on_empty_list),
+    TEST_ADD(purge_removes_all_elements_of_list),
     TEST_SUITE_CLOSURE
 };
 
-/* purging.c */
-TEST(purgingEmpty);
-TEST(purgingSingle);
-TEST(purgingFull);
-
-TEST_SUITE(purging) {
-    TEST_ADD(purgingEmpty),
-    TEST_ADD(purgingSingle),
-    TEST_ADD(purgingFull),
+TEST_SUITE(insertion) {
+    TEST_ADD(append_sets_both_head_and_tail),
+    TEST_ADD(append_sets_data_correctly),
+    TEST_ADD(append_sets_length_correctly),
+    TEST_ADD(prepend_sets_both_head_and_tail),
+    TEST_ADD(prepend_sets_data_correctly),
+    TEST_ADD(prepend_sets_length_correctly),
+    TEST_ADD(insert_works_without_data),
+    TEST_ADD(insert_returns_null_on_illegal),
+    TEST_ADD(insert_works_with_data),
     TEST_SUITE_CLOSURE
 };
 
-/* appending.c */
-TEST(appendEmpty);
-TEST(appendFull);
-
-TEST_SUITE(appending) {
-    TEST_ADD(appendEmpty),
-    TEST_ADD(appendFull),
+TEST_SUITE(removal) {
+    TEST_ADD(pop_works_on_empty_list),
+    TEST_ADD(pop_works_on_single_list),
+    TEST_ADD(pop_works_on_full_list),
+    TEST_ADD(remove_on_empty_list_does_not_work),
+    TEST_ADD(remove_in_beginning_works),
+    TEST_ADD(remove_at_end_works),
+    TEST_ADD(remove_in_middle_works),
     TEST_SUITE_CLOSURE
 };
 
-/* prepending.c */
-TEST(prependEmpty);
-TEST(prependFull);
-
-TEST_SUITE(prepending) {
-    TEST_ADD(prependEmpty),
-    TEST_ADD(prependFull),
+TEST_SUITE(accessing) {
+    TEST_ADD(get_does_not_work_for_empty_list),
+    TEST_ADD(get_does_not_work_for_illegal_index),
+    TEST_ADD(get_works_without_data),
+    TEST_ADD(get_works_with_data),
+    TEST_ADD(set_does_not_work_for_empty_list),
+    TEST_ADD(set_does_not_work_for_illegal_index),
+    TEST_ADD(set_with_null_data_returns_null),
+    TEST_ADD(set_works_with_data),
     TEST_SUITE_CLOSURE
 };
 
-/* inserting.c */
-TEST(insertEmpty);
-TEST(insertBeginning);
-TEST(insertBack);
-TEST(insertMiddle);
-TEST(insertAll);
-
-TEST_SUITE(inserting) {
-    TEST_ADD(insertEmpty),
-    TEST_ADD(insertBeginning),
-    TEST_ADD(insertBack),
-    TEST_ADD(insertMiddle),
-    TEST_ADD(insertAll),
+TEST_SUITE(manipulation) {
+    TEST_ADD(swap_does_not_work_on_empty_list),
+    TEST_ADD(swap_does_not_work_on_nonexisting_indices),
+    TEST_ADD(swap_does_nothing_when_indices_are_equal),
+    TEST_ADD(swap_works_correctly_with_different_indices),
+    TEST_ADD(split_does_not_work_on_empty_list),
+    TEST_ADD(split_does_not_work_on_illegal_pos),
+    TEST_ADD(split_on_head_works_on_full_list),
+    TEST_ADD(split_on_rest_works_on_full_list),
+    TEST_ADD(join_does_not_work_on_different_element_sizes),
+    TEST_ADD(join_works_on_empty_lists),
+    TEST_ADD(join_works_on_full_lists),
+    TEST_ADD(copy_works_on_empty_list),
+    TEST_ADD(copy_works_on_full_list),
     TEST_SUITE_CLOSURE
 };
+*/
 
-/* removing.c */
-TEST(removeEmpty);
-TEST(removeInvalid);
-TEST(removeSingle);
-TEST(removeAll);
-
-TEST_SUITE(removing) {
-    TEST_ADD(removeEmpty),
-    TEST_ADD(removeInvalid),
-    TEST_ADD(removeSingle),
-    TEST_ADD(removeAll),
-    TEST_SUITE_CLOSURE
-};
-
-/* getting.c */
-TEST(gettingEmpty);
-TEST(gettingSingle);
-TEST(gettingFull);
-
-TEST_SUITE(getting) {
-    TEST_ADD(gettingEmpty),
-    TEST_ADD(gettingSingle),
-    TEST_ADD(gettingFull),
-    TEST_SUITE_CLOSURE
-};
-
-/* setting.c */
-TEST(settingEmpty);
-TEST(settingInvalid);
-TEST(settingAll);
-
-TEST_SUITE(setting) {
-    TEST_ADD(settingEmpty),
-    TEST_ADD(settingInvalid),
-    TEST_ADD(settingAll),
-    TEST_SUITE_CLOSURE
-};
-
-/* popping.c */
-TEST(poppingEmpty);
-TEST(poppingSingle);
-TEST(poppingFull);
-
-TEST_SUITE(popping) {
-    TEST_ADD(poppingEmpty),
-    TEST_ADD(poppingSingle),
-    TEST_ADD(poppingFull),
-    TEST_SUITE_CLOSURE
-};
-
-/* comparing.c */
-TEST(comparingEmpty);
-TEST(comparingSingle);
-TEST(comparingFull);
-
-TEST_SUITE(comparing) {
-    TEST_ADD(comparingEmpty),
-    TEST_ADD(comparingSingle),
-    TEST_ADD(comparingFull),
-    TEST_SUITE_CLOSURE
-};
-
-/* foreach.c */
-TEST(foreachEmpty);
-TEST(foreachSingle);
-TEST(foreachFull);
-TEST(foreachBackEmpty);
-TEST(foreachBackSingle);
-TEST(foreachBackFull);
-
-TEST_SUITE(foreach) {
-    TEST_ADD(foreachEmpty),
-    TEST_ADD(foreachSingle),
-    TEST_ADD(foreachFull),
-    TEST_ADD(foreachBackEmpty),
-    TEST_ADD(foreachBackSingle),
-    TEST_ADD(foreachBackFull),
-    TEST_SUITE_CLOSURE
-};
-
+/* test suites */
 TEST_SUITES {
-    TEST_SUITE_ADD(alloc),
-    TEST_SUITE_ADD(freeing),
-    TEST_SUITE_ADD(purging),
-    TEST_SUITE_ADD(appending),
-    TEST_SUITE_ADD(prepending),
-    TEST_SUITE_ADD(inserting),
-    TEST_SUITE_ADD(removing),
-    TEST_SUITE_ADD(getting),
-    TEST_SUITE_ADD(setting),
-    TEST_SUITE_ADD(popping),
-    TEST_SUITE_ADD(comparing),
-    TEST_SUITE_ADD(foreach),
+    TEST_SUITE_ADD(basic_data_access),
+//    TEST_SUITE_ADD(creation_destruction),
+//    TEST_SUITE_ADD(insertion),
+//    TEST_SUITE_ADD(removal),
+//    TEST_SUITE_ADD(accessing),
+//    TEST_SUITE_ADD(manipulation),
     TEST_SUITES_CLOSURE
 };
-
 int main(int argc, char *argv[])
 {
     CU_SET_NAME("dlist");
     CU_SET_OUT_PREFIX("output/");
     CU_RUN(argc, argv);
 
-    return 0;
+    // set return value according to whether
+    // there were any failures
+    return (cu_fail_test_suites > 0) ? -1 : 0;
 }
