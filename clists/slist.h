@@ -138,6 +138,20 @@ struct slist
 
 typedef struct slist slist_t;
 
+/*! Function to compare two elements. 
+ *
+ *  Used by slist_compare() to compare two lists
+ *  by their elements.
+ *  
+ *  @param a the first element
+ *  @param b the second element
+ *  @return
+ *      - 0 if they are equal
+ *      - -1 if a > b
+ *      - 1 if a < b
+ */
+typedef int slist_compare_elements(void *a, void *b);
+
 /* BASIC DATA ACCESS */
 
 /*! Returns the size of the elements that the list
@@ -468,6 +482,9 @@ void *slist_prepend(slist_t *list, const void *data);
  *  element, otherwise the element is not initialized
  *  and it should be assumed to contain random garbage.
  *
+ *
+ *  Used by slist_compare() to compare two lists
+ *  by their elements.
  *  This function returns a pointer to the newly
  *  inserted element. Please note that this pointer
  *  is only valid until the next mutating library
@@ -792,6 +809,29 @@ slist_t *slist_join(slist_t *dest, slist_t *src);
  *  ```
  */
 slist_t *slist_copy(const slist_t *list);
+
+/*! Compares two lists, optionally using a 
+ *  supplied comparison function.
+ *
+ *  If no comparison function is given, the
+ *  elements are compared byte-by-byte using
+ *  memcmp(). 
+ *
+ *  @param a the first list to compare
+ *  @param b the second list to compare
+ *  @param func the comparison function to use,
+ *      or NULL
+ *
+ *  ### Example
+ *
+ *  ```c
+ *  slist_t *list_a = slist_new(sizeof(int));
+ *  slist_t *list_b = slist_new(sizeof(int));
+ *
+ *  assert(0 == slist_compare(list_a, list_b, NULL));
+ *  ```
+ */
+int slist_compare(slist_t *a, slist_t *b, slist_compare_elements *cmp);
 
 /*! Verifies that a list is correct.
  *
