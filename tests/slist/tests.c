@@ -84,6 +84,9 @@ TEST(split_on_head_works_on_full_list);
 TEST(split_on_rest_works_on_full_list);
 
 /* slist_join() */
+TEST(join_does_not_work_on_different_element_sizes);
+TEST(join_works_on_empty_lists);
+TEST(join_works_on_full_lists);
 
 /* slist_copy() */
 TEST(copy_works_on_empty_list);
@@ -159,6 +162,9 @@ TEST_SUITE(manipulation) {
     TEST_ADD(split_does_not_work_on_illegal_pos),
     TEST_ADD(split_on_head_works_on_full_list),
     TEST_ADD(split_on_rest_works_on_full_list),
+    TEST_ADD(join_does_not_work_on_different_element_sizes),
+    TEST_ADD(join_works_on_empty_lists),
+    TEST_ADD(join_works_on_full_lists),
     TEST_ADD(copy_works_on_empty_list),
     TEST_ADD(copy_works_on_full_list),
     TEST_SUITE_CLOSURE
