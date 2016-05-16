@@ -6,6 +6,8 @@ OBJS = size.o length.c first.c \
 	   last.c new.c init.c purge.c \
 	   append.c prepend.c insert.c \
 	   pop.c remove.c \
+	   get.c set.c \
+	   swap.c \
 	   tests.o helpers.o
 TSTS = ../../libclists.a
 

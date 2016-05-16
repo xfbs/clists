@@ -59,15 +59,29 @@ TEST(pop_works_on_empty_list);
 TEST(pop_works_on_single_list);
 TEST(pop_works_on_full_list);
 
-/* slist_swap() */
-
 /* slist_set() */
+TEST(set_does_not_work_for_empty_list);
+TEST(set_does_not_work_for_illegal_index);
+TEST(set_with_null_data_returns_null);
+TEST(set_works_with_data);
 
 /* slist_get() */
+TEST(get_does_not_work_for_empty_list);
+TEST(get_does_not_work_for_illegal_index);
+TEST(get_works_without_data);
+TEST(get_works_with_data);
+
+/* slist_swap() */
+TEST(swap_does_not_work_on_empty_list);
+TEST(swap_does_not_work_on_nonexisting_indices);
+TEST(swap_does_nothing_when_indices_are_equal);
+TEST(swap_works_correctly_with_different_indices);
 
 /* slist_split() */
 
 /* slist_join() */
+
+/* slist_copy() */
 
 TEST_SUITE(basic_data_access) {
     TEST_ADD(size_works_with_slist_new),
@@ -118,12 +132,34 @@ TEST_SUITE(removal) {
     TEST_SUITE_CLOSURE
 };
 
+TEST_SUITE(accessing) {
+    TEST_ADD(get_does_not_work_for_empty_list),
+    TEST_ADD(get_does_not_work_for_illegal_index),
+    TEST_ADD(get_works_without_data),
+    TEST_ADD(get_works_with_data),
+    TEST_ADD(set_does_not_work_for_empty_list),
+    TEST_ADD(set_does_not_work_for_illegal_index),
+    TEST_ADD(set_with_null_data_returns_null),
+    TEST_ADD(set_works_with_data),
+    TEST_SUITE_CLOSURE
+};
+
+TEST_SUITE(manipulation) {
+    TEST_ADD(swap_does_not_work_on_empty_list),
+    TEST_ADD(swap_does_not_work_on_nonexisting_indices),
+    TEST_ADD(swap_does_nothing_when_indices_are_equal),
+    TEST_ADD(swap_works_correctly_with_different_indices),
+    TEST_SUITE_CLOSURE
+};
+
 /* test suites */
 TEST_SUITES {
     TEST_SUITE_ADD(basic_data_access),
     TEST_SUITE_ADD(creation_destruction),
     TEST_SUITE_ADD(insertion),
     TEST_SUITE_ADD(removal),
+    TEST_SUITE_ADD(accessing),
+//    TEST_SUITE_ADD(manipulation),
     TEST_SUITES_CLOSURE
 };
 int main(int argc, char *argv[])
