@@ -546,12 +546,10 @@ int   slist_remove (slist_t *list, size_t pos);
 
 /*! Sets the data of the element at the given index.
  *
- *  If the element exists, it returns a pointer to it
- *  that can be used to set the data, otherwise it
- *  returns `NULL`.
- *
- *  If you pass a non-NULL pointer `data`, it's contents
- *  are copied into the element, otherwise it is ignored.
+ *  Copies the contents of the pointer `data` into
+ *  the given element, and returns a pointer to the
+ *  element in the list on success. If `data` is
+ *  NULL, returns NULL.
  *
  *  @param[in, out] list the list to work on
  *  @param[in] pos the position of the element to set
@@ -685,6 +683,7 @@ void *slist_pop(slist_t *list, void *data);
  *
  *  // this doesn't work
  *  assert(slist_swap(list, 1, 2) < 0);
+ *  ```
  */
 int slist_swap(slist_t *list, size_t a, size_t b);
 

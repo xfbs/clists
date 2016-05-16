@@ -318,14 +318,12 @@ void *slist_set(slist_t *list, size_t pos, const void *data)
     slist_node_t *node = slist_node_get(list, pos);
 
     // make sure node exists
-    if(node == NULL) {
+    if(node == NULL || data == NULL) {
         return NULL;
     }
 
-    // copy data over if pointer is non-NULL
-    if (data != NULL) {
-        memcpy(node->data, data, list->size);
-    }
+    // copy data over
+    memcpy(node->data, data, list->size);
 
     return node->data;
 }
