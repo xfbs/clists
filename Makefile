@@ -33,8 +33,8 @@ install: $(TARGET)
 	$(INSTALL) $(TARGET) $(INSTALL_LIB)
 	cd $(HEADERS_DIR) && $(INSTALL) $(HEADERS) $(INSTALL_INC)
 
-docs:
-	$(DOXYGEN) $(CONFIG_DOXYGEN)
+docs: $(HEADERS:%=$(HEADERS_DIR)/%)
+	$(DOXYGEN) $(DOXYGEN_CONFIG)
 
 clean:
 	$(RM) -f *.o *.a
