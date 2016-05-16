@@ -1,6 +1,4 @@
-#include "cu/cu.h"
 #include "helpers.h"
-#include "../../clists/slist.h"
 
 TEST(insert_works_without_data) {
     USING(slist_new(sizeof(int))) {

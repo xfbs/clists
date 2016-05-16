@@ -1,6 +1,4 @@
-#include "cu/cu.h"
 #include "helpers.h"
-#include "../../clists/slist.h"
 
 TEST(purge_does_nothing_on_empty_list)
 {

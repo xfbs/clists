@@ -1,6 +1,4 @@
-#include "cu/cu.h"
 #include "helpers.h"
-#include "../../clists/slist.h"
 
 TEST(join_does_not_work_on_different_element_sizes) {
     USING(slist_new(sizeof(int))) {

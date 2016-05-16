@@ -1,6 +1,4 @@
-#include "cu/cu.h"
 #include "helpers.h"
-#include "../../clists/slist.h"
 
 TEST(length_works_with_basic_ops)
 {

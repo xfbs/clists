@@ -1,6 +1,4 @@
-#include "cu/cu.h"
 #include "helpers.h"
-#include "../../clists/slist.h"
 
 TEST(split_does_not_work_on_empty_list) {
     USING(slist_new(sizeof(int))) {

@@ -1,6 +1,4 @@
-#include "cu/cu.h"
 #include "helpers.h"
-#include "../../clists/slist.h"
 
 TEST(append_sets_both_head_and_tail) {
     USING(slist_new(sizeof(int))) {

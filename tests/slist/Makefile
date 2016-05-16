@@ -1,33 +1,35 @@
 CC = gcc
+RM = rm -rf
+
+TEST_LIB = clists
+TEST_TARGET = slist
+TEST_BIN = $(TEST_LIB)_$(TEST_TARGET)_test
+TEST_LIB_PATH = ../../lib$(TEST_LIB).a
+TESTS = $(wildcard $(TEST_TARGET)*.c)
+TESTS_O = $(TESTS:%.c=%.o)
+HELPERS = helpers.c tests.c
+HELPERS_O = $(HELPERS:%.c=%.o)
+
 CFLAGS = -g -Wall -pedantic --std=gnu99 -I.. -I../..
-LDFLAGS = -L../cu/ -L../.. -lcu -lclists -lpthread
+LDFLAGS = -L../cu/ -L../.. -lcu -l$(TEST_LIB) -lpthread
 
-OBJS = size.o length.c first.c \
-	   last.c new.c init.c purge.c \
-	   append.c prepend.c insert.c \
-	   pop.c remove.c \
-	   get.c set.c \
-	   swap.c copy.c split.c join.c \
-	   tests.o helpers.o
-TSTS = ../../libclists.a
+all: $(TEST_BIN)
 
-all: test
+$(TEST_BIN): $(TESTS_O) $(HELPERS_O) $(TEST_LIB_PATH)
+	$(CC) $(CFLAGS) -o $@ $(TESTS_O) $(HELPERS_O) $(LDFLAGS)
 
-test: $(OBJS) $(TSTS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
-
-%.o: %.c %.h
+%.o: %.c $(wildcard %.h)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.o test
-	rm -rf output
+	$(RM) $(TESTS_O) $(HELPERS_O) $(TEST_BIN)
+	$(RM) output/
 
-run: test
+run: $(TEST_BIN)
 	@test -d output || mkdir output
-	@./test
+	@./$(TEST_BIN)
 
 .PHONY: all clean run

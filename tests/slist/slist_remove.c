@@ -1,6 +1,4 @@
-#include "cu/cu.h"
 #include "helpers.h"
-#include "../../clists/slist.h"
 
 TEST(remove_on_empty_list_does_not_work) {
     USING(slist_new(sizeof(int))) {
