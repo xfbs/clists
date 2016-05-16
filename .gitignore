@@ -1,0 +1,11 @@
+# vim's swap files
+*.swp
+
+# finder's temp files
+.DS_Store
+
+# object files
+*.o
+
+# library files
+*.a
