@@ -28,6 +28,20 @@
 // allocate new node with given size
 #define malloc_node(size) malloc(sizeof(slist_node_t) + (size))
 
+// swap two variables
+#define swap(x,y) do {   \
+    typeof(x) _x = x;      \
+    typeof(y) _y = y;      \
+    x = _y;                \
+    y = _x;                \
+    } while(0)
+
+// get the maximum of two values
+#define max(a,b) \
+    ({ __typeof__ (a) _a = (a); \
+    __typeof__ (b) _b = (b); \
+    _a > _b ? _a : _b; })
+
 // get the node at pos, or NULL
 static slist_node_t *slist_node_get(const slist_t *list, size_t pos);
 
@@ -386,9 +400,108 @@ void *slist_pop(slist_t *list, void *data)
     return data;
 }
 
-int slist_swap(slist_t *list, size_t a, size_t b) {
-    // FIXME
-    return -1;
+int slist_swap(slist_t *list, size_t pos_a, size_t pos_b) {
+    // if elements don't exist, we can't swap 'em
+    if(max(pos_a, pos_b) >= list->length) {
+        return -1;
+    }
+
+    // we can't swap an element with itself
+    if(pos_a == pos_b) {
+        return 0;
+    }
+
+    // make sure a is smaller than b, this gets useful
+    // later on
+    if(pos_a > pos_b) {
+        swap(pos_a, pos_b);
+    }
+
+    // if pos_a is list->head, then we have to do things a
+    // little differently, so we check for that here
+    if(pos_a == 0) {
+        // find the nodes
+        slist_node_t *node_a = list->head;
+        slist_node_t *prev_b = slist_node_get(list, pos_b-1);
+        slist_node_t *node_b = prev_b->next;
+
+        // since we made sure that both indices are smaller
+        // than list->length, we should be able to find the
+        // nodes
+        assert(node_a != NULL);
+        assert(prev_b != NULL);
+        assert(node_b != NULL);
+
+        // swap their respective next pointers
+        swap(node_a->next, node_b->next);
+        if(node_b->next == node_b) {
+            node_b->next = node_a;
+        }
+
+        // make node_b the new head of the list
+        list->head = node_b;
+
+        // connect the node before node_b to node_a
+        if(prev_b != node_a) {
+            prev_b->next = node_a;
+        }
+
+        // if node_b was the tail of the list, node_a
+        // needs to become it now
+        if(node_b == list->tail) {
+            list->tail = node_a;
+        }
+
+        return 0;
+    }
+
+    // since we know that pos_a is not 0, there must be a
+    // node before node_a, and one before node_b. let's 
+    // find both.
+    slist_node_t *prev_a = NULL;
+    slist_node_t *prev_b = NULL;
+    slist_node_t *node_a;
+    slist_node_t *node_b;
+    slist_node_t *node;
+
+    // we start pos at 1 because we are interested in
+    // the nodes before pos_a and pos_b
+    size_t pos = 1;
+
+    for(node = list->head; node != NULL; node = node->next, pos++) {
+        if(pos == pos_a) prev_a = node;
+        if(pos == pos_b) prev_b = node;
+    }
+
+    // since we made sure both pos_a and pos_b are smaller than
+    // list->length, we should be able to find the nodes.
+    assert(prev_a != NULL);
+    assert(prev_b != NULL);
+    assert(prev_a->next != NULL);
+    assert(prev_b->next != NULL);
+
+    node_a = prev_a->next;
+    node_b = prev_b->next;
+
+    // swap the nodes
+    swap(node_a->next, node_b->next);
+    if(node_b->next == node_b) {
+        node_b->next = node_a;
+    }
+
+    if(prev_b->next == node_b) {
+        swap(prev_a->next, prev_b->next);
+    } else {
+        prev_a->next = node_b;
+    }
+
+    // if node_b was the tail of the list, node_a needs
+    // to become that now
+    if(node_b == list->tail) {
+        list->tail = node_a;
+    }
+
+    return 0;
 }
 
 slist_t *slist_split(slist_t *list, size_t pos)
