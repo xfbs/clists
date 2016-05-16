@@ -11,7 +11,7 @@
 *.a
 
 # binary
-test
+clists_dlist_test
 
 # testing output folder
 output/
