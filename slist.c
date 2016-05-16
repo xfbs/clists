@@ -497,28 +497,52 @@ int slist_verify(const slist_t *list) {
         return -1;
     }
 
+    // if the list has a length of zero, then
+    // both head and tail must be NULL.
+    if(list->length != 0) {
+        if(list->head == NULL || list->tail == NULL) {
+            return -6;
+        }
+    }
+
+    // this is an array of slist_node_t pointers
+    // which we will use to keep track of nodes we have
+    // already seen to recognize loops.
     slist_node_t **nodes_seen = malloc(sizeof(slist_node_t*) * list->length);
     size_t cur_index = 0;
 
-    for(slist_node_t *node = list->head; node != NULL; node = node->next) {
+    for(slist_node_t *node = list->head; node != NULL; node = node->next, cur_index++) {
+        // if we reached the last node...
         if((cur_index+1) == list->length) {
+            // it must be the tail of the list
             if(node != list->tail) {
                 return -4;
             }
 
+            // and there may not be any nodes after it
             if(node->next != NULL) {
                 return -5;
             }
         }
 
+        // we must not have seen this node yet
         for(size_t i = 0; i < cur_index; i++) {
             if(nodes_seen[i] == node) {
                 return -2;
             }
         }
 
+        // save it in seen nodes array
         nodes_seen[cur_index] = node;
-        cur_index++;
+    }
+
+    free(nodes_seen);
+
+    // at this point, we must have travelled
+    // all nodes, otherwise list->length is
+    // wrong
+    if(cur_index != list->length) {
+        return -7;
     }
 
     return 0;
