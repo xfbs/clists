@@ -49,14 +49,25 @@ TEST(insert_returns_null_on_illegal);
 TEST(insert_works_with_data);
 
 /* slist_remove() */
+TEST(remove_on_empty_list_does_not_work);
+TEST(remove_in_beginning_works);
+TEST(remove_at_end_works);
+TEST(remove_in_middle_works);
 
 /* slist_pop() */
+TEST(pop_works_on_empty_list);
+TEST(pop_works_on_single_list);
+TEST(pop_works_on_full_list);
 
 /* slist_swap() */
 
 /* slist_set() */
 
 /* slist_get() */
+
+/* slist_split() */
+
+/* slist_join() */
 
 TEST_SUITE(basic_data_access) {
     TEST_ADD(size_works_with_slist_new),
@@ -96,11 +107,23 @@ TEST_SUITE(insertion) {
     TEST_SUITE_CLOSURE
 };
 
+TEST_SUITE(removal) {
+    TEST_ADD(pop_works_on_empty_list),
+    TEST_ADD(pop_works_on_single_list),
+    TEST_ADD(pop_works_on_full_list),
+    TEST_ADD(remove_on_empty_list_does_not_work),
+    TEST_ADD(remove_in_beginning_works),
+    TEST_ADD(remove_at_end_works),
+    TEST_ADD(remove_in_middle_works),
+    TEST_SUITE_CLOSURE
+};
+
 /* test suites */
 TEST_SUITES {
     TEST_SUITE_ADD(basic_data_access),
     TEST_SUITE_ADD(creation_destruction),
     TEST_SUITE_ADD(insertion),
+    TEST_SUITE_ADD(removal),
     TEST_SUITES_CLOSURE
 };
 int main(int argc, char *argv[])
