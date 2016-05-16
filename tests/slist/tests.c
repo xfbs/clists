@@ -78,10 +78,16 @@ TEST(swap_does_nothing_when_indices_are_equal);
 TEST(swap_works_correctly_with_different_indices);
 
 /* slist_split() */
+TEST(split_does_not_work_on_empty_list);
+TEST(split_does_not_work_on_illegal_pos);
+TEST(split_on_head_works_on_full_list);
+TEST(split_on_rest_works_on_full_list);
 
 /* slist_join() */
 
 /* slist_copy() */
+TEST(copy_works_on_empty_list);
+TEST(copy_works_on_full_list);
 
 TEST_SUITE(basic_data_access) {
     TEST_ADD(size_works_with_slist_new),
@@ -149,6 +155,12 @@ TEST_SUITE(manipulation) {
     TEST_ADD(swap_does_not_work_on_nonexisting_indices),
     TEST_ADD(swap_does_nothing_when_indices_are_equal),
     TEST_ADD(swap_works_correctly_with_different_indices),
+    TEST_ADD(split_does_not_work_on_empty_list),
+    TEST_ADD(split_does_not_work_on_illegal_pos),
+    TEST_ADD(split_on_head_works_on_full_list),
+    TEST_ADD(split_on_rest_works_on_full_list),
+    TEST_ADD(copy_works_on_empty_list),
+    TEST_ADD(copy_works_on_full_list),
     TEST_SUITE_CLOSURE
 };
 
