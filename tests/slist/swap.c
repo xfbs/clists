@@ -80,19 +80,19 @@ TEST(swap_does_nothing_when_indices_are_equal) {
         assertEquals(slist_verify(list), 0);
         assertEquals(*((int*)slist_get(list, 0, NULL)), one);
         assertEquals(*((int*)slist_get(list, 1, NULL)), two);
-        assertEquals(*((int*)slist_get(list, 3, NULL)), three);
+        assertEquals(*((int*)slist_get(list, 2, NULL)), three);
 
         assertEquals(slist_swap(list, 1, 1), 0);
         assertEquals(slist_verify(list), 0);
         assertEquals(*((int*)slist_get(list, 0, NULL)), one);
         assertEquals(*((int*)slist_get(list, 1, NULL)), two);
-        assertEquals(*((int*)slist_get(list, 3, NULL)), three);
+        assertEquals(*((int*)slist_get(list, 2, NULL)), three);
 
         assertEquals(slist_swap(list, 2, 2), 0);
         assertEquals(slist_verify(list), 0);
         assertEquals(*((int*)slist_get(list, 0, NULL)), one);
         assertEquals(*((int*)slist_get(list, 1, NULL)), two);
-        assertEquals(*((int*)slist_get(list, 3, NULL)), three);
+        assertEquals(*((int*)slist_get(list, 2, NULL)), three);
     }
 }
 

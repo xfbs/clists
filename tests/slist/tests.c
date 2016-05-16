@@ -159,7 +159,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(insertion),
     TEST_SUITE_ADD(removal),
     TEST_SUITE_ADD(accessing),
-//    TEST_SUITE_ADD(manipulation),
+    TEST_SUITE_ADD(manipulation),
     TEST_SUITES_CLOSURE
 };
 int main(int argc, char *argv[])
