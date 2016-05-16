@@ -176,7 +176,7 @@ void *dlist_append(dlist_t *list, void *data)
         node->prev = list->tail;
         list->tail->next = node;
 
-        // make out node the new last node
+        // make our node the new last node
         list->tail = node;
     } else {
         assert(list->length == 0);
@@ -613,7 +613,7 @@ dlist_t *dlist_copy(const dlist_t *list)
     return copy;
 }
 
-int dlist_verify(dlist_t *list) {
+int dlist_verify(const dlist_t *list) {
     if(list == NULL) {
         return -1;
     }
@@ -641,69 +641,87 @@ int dlist_verify(dlist_t *list) {
         nodes_seen[cur_index] = node;
         cur_index++;
     }
+
+    if(cur_index != list->length) {
+        return -6;
+    }
+
+    for(dlist_node_t *node = list->tail; node != NULL; node = node->next) {
+        if(nodes_seen[cur_index-1] != node) {
+            return -8;
+        }
+
+        cur_index--;
+    }
+
+    free(nodes_seen);
     
     // FIXME: check backwards!
 
     return 0;
 }
 
-/* internal function used to extract a node at a
- * given position or NULL if it doesn't exists. this
- * function is smart about accessing the list, working
- * backwards if pos is closer to tail of list.
- */
+// internal function used to extract a node at a
+// given position or NULL if it doesn't exists. this
+// function is smart about accessing the list, working
+// backwards if pos is closer to tail of list.
 static dlist_node_t *dlist_node_get(dlist_t *list, size_t pos)
 {
-    /* can't return a node of an empty list */
-    if(list->size == 0)
+    // can't return a node of an empty list
+    if(list->length == 0) {
         return NULL;
+    }
 
-    /* can't return a node at an invalid pos */
-    if(pos >= list->size)
+    // can't return a node at an invalid pos
+    if(pos >= list->length) {
         return NULL;
+    }
 
-    /* easy access nodes */
-    if((pos-1) == list->size)
+    // easy access nodes
+    if((pos-1) == list->length) {
         return list->tail;
-    if(pos == 0)
-        return list->head;
+    }
 
-    /* if we get here, we have the guarantee that pos
-     * is within the list and neither the head nor the
-     * tail of the list */
+    if(pos == 0) {
+        return list->head;
+    }
+
+    // if we get here, we have the guarantee that pos
+    // is within the list and neither the head nor the
+    // tail of the list
     dlist_node_t *node;
-    if(pos < (list->size/2)) {
-        /* pos is located closer to the head than the
-         * tail, so work from there */
+    if(pos < (list->length/2)) {
+        // pos is located closer to the head than the
+        // tail, so work from there
         node = list->head;
 
-        /* traverse the list forwards while decrementing
-         * pos - pos describes the distance between the
-         * current node and the one we need */
+        // traverse the list forwards while decrementing
+        // pos - pos describes the distance between the
+        // current node and the one we need
         while (node && pos) {
             node = node->next;
             pos--;
         }
     } else {
-        /* pos is located closer to the tail of the list
-         * so work from there */
+        // pos is located closer to the tail of the list
+        // so work from there
         node = list->tail;
 
-        /* since pos should describe the distance between
-         * the current node and the node we need, change
-         * it to work backwards */
-        pos = (list->size - pos) - 1;
+        // since pos should describe the distance between
+        // the current node and the node we need, change
+        // it to work backwards
+        pos = (list->length - pos) - 1;
 
-        /* get the node */
+        // get the node
         while (node && pos) {
             node = node->prev;
             pos--;
         }
     }
 
-    /* if pos is not 0, it means that at some point while
-     * traversing the list, we encountered a NULL. not good.
-     * return NULL because there's not much we can do */
+    // if pos is not 0, it means that at some point while
+    // traversing the list, we encountered a NULL. not good.
+    // return NULL because there's not much we can do
     if(pos != 0) {
         return NULL;
     } else {

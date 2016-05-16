@@ -791,6 +791,15 @@ dlist_t *dlist_copy(const dlist_t *list);
  */
 int      dlist_reverse(dlist_t *list);
 
+/*! Verifies that a list is correct.
+ *
+ *  This method verifies that a list is correct and
+ *  does not have any cycles.
+ *
+ *  It exists only for internal testing purposes.
+ */
+int dlist_verify(const dlist_t *list);
+
 #ifdef __cplusplus
 }
 #endif

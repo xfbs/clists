@@ -107,7 +107,6 @@ TEST_SUITE(basic_data_access) {
     TEST_SUITE_CLOSURE
 };
 
-/*
 TEST_SUITE(creation_destruction) {
     TEST_ADD(new_works_with_all_sizes),
     TEST_ADD(new_sets_all_pointers_to_null),
@@ -136,12 +135,13 @@ TEST_SUITE(removal) {
     TEST_ADD(pop_works_on_single_list),
     TEST_ADD(pop_works_on_full_list),
     TEST_ADD(remove_on_empty_list_does_not_work),
-    TEST_ADD(remove_in_beginning_works),
-    TEST_ADD(remove_at_end_works),
-    TEST_ADD(remove_in_middle_works),
+    //TEST_ADD(remove_in_beginning_works),
+    //TEST_ADD(remove_at_end_works),
+    //TEST_ADD(remove_in_middle_works),
     TEST_SUITE_CLOSURE
 };
 
+/*
 TEST_SUITE(accessing) {
     TEST_ADD(get_does_not_work_for_empty_list),
     TEST_ADD(get_does_not_work_for_illegal_index),
@@ -175,9 +175,9 @@ TEST_SUITE(manipulation) {
 /* test suites */
 TEST_SUITES {
     TEST_SUITE_ADD(basic_data_access),
-//    TEST_SUITE_ADD(creation_destruction),
-//    TEST_SUITE_ADD(insertion),
-//    TEST_SUITE_ADD(removal),
+    TEST_SUITE_ADD(creation_destruction),
+    TEST_SUITE_ADD(insertion),
+    TEST_SUITE_ADD(removal),
 //    TEST_SUITE_ADD(accessing),
 //    TEST_SUITE_ADD(manipulation),
     TEST_SUITES_CLOSURE
