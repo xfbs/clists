@@ -39,13 +39,13 @@ TEST(append_sets_both_head_and_tail) {
 TEST(append_sets_data_correctly) {
     USING(slist_new(sizeof(int))) {
         int num = 1;
-        assertNotEquals(slist_append(list, &num), list);
+        assertNotEquals(slist_append(list, &num), NULL);
 
         num = 2;
-        assertNotEquals(slist_append(list, &num), list);
+        assertNotEquals(slist_append(list, &num), NULL);
 
         num = 3;
-        assertNotEquals(slist_append(list, &num), list);
+        assertNotEquals(slist_append(list, &num), NULL);
 
         assertNotEquals(slist_get(list, 0, &num), NULL);
         assertEquals(num, 1);
@@ -62,11 +62,11 @@ TEST(append_sets_length_correctly) {
     USING(slist_new(sizeof(int))) {
         int num = 5;
 
-        assertNotEquals(slist_append(list, &num), list);
+        assertNotEquals(slist_append(list, &num), NULL);
         assertEquals(slist_length(list), 1);
-        assertNotEquals(slist_append(list, &num), list);
+        assertNotEquals(slist_append(list, &num), NULL);
         assertEquals(slist_length(list), 2);
-        assertNotEquals(slist_append(list, &num), list);
+        assertNotEquals(slist_append(list, &num), NULL);
         assertEquals(slist_length(list), 3);
     }
 }
