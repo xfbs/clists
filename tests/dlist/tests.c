@@ -135,9 +135,9 @@ TEST_SUITE(removal) {
     TEST_ADD(pop_works_on_single_list),
     TEST_ADD(pop_works_on_full_list),
     TEST_ADD(remove_on_empty_list_does_not_work),
-    //TEST_ADD(remove_in_beginning_works),
-    //TEST_ADD(remove_at_end_works),
-    //TEST_ADD(remove_in_middle_works),
+    TEST_ADD(remove_in_beginning_works),
+    TEST_ADD(remove_at_end_works),
+    TEST_ADD(remove_in_middle_works),
     TEST_SUITE_CLOSURE
 };
 

@@ -301,6 +301,7 @@ int dlist_remove(dlist_t *list, size_t pos)
     // discarding the data
     if(pos == 0) {
         dlist_pop(list, NULL);
+        return 0;
     }
     
     // extract the node we want to remove
