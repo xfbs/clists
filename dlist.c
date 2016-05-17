@@ -346,15 +346,14 @@ void *dlist_set(dlist_t *list, size_t pos, void *data)
     // get the node at pos
     dlist_node_t *node = dlist_node_get(list, pos);
 
-    // make sure it exists
-    if(node == NULL) {
+    // make sure it exists and we have some
+    // data to set
+    if(node == NULL || data == NULL) {
         return NULL;
     }
 
-    // if given, set data
-    if(data != NULL) {
-        memcpy(node->data, data, list->size);
-    }
+    // set data
+    memcpy(node->data, data, list->size);
 
     return node->data;
 }

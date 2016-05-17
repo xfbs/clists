@@ -141,7 +141,6 @@ TEST_SUITE(removal) {
     TEST_SUITE_CLOSURE
 };
 
-/*
 TEST_SUITE(accessing) {
     TEST_ADD(get_does_not_work_for_empty_list),
     TEST_ADD(get_does_not_work_for_illegal_index),
@@ -154,6 +153,7 @@ TEST_SUITE(accessing) {
     TEST_SUITE_CLOSURE
 };
 
+/*
 TEST_SUITE(manipulation) {
     TEST_ADD(swap_does_not_work_on_empty_list),
     TEST_ADD(swap_does_not_work_on_nonexisting_indices),
@@ -178,7 +178,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(creation_destruction),
     TEST_SUITE_ADD(insertion),
     TEST_SUITE_ADD(removal),
-//    TEST_SUITE_ADD(accessing),
+    TEST_SUITE_ADD(accessing),
 //    TEST_SUITE_ADD(manipulation),
     TEST_SUITES_CLOSURE
 };
