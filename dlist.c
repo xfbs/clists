@@ -419,9 +419,9 @@ void *dlist_pop(dlist_t *list, void *data)
 }
 
 int dlist_swap(dlist_t *list, size_t pos_a, size_t pos_b) {
-    // you can't swap an element with itself
-    if(pos_a == pos_b) {
-        return -1;
+    // swapping an element with itself is a nop
+    if(list->length > 0 && pos_a == pos_b) {
+        return 0;
     }
 
     // make sure that pos_a is smaller than pos_b
