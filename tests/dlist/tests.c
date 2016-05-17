@@ -153,8 +153,8 @@ TEST_SUITE(accessing) {
     TEST_SUITE_CLOSURE
 };
 
-/*
 TEST_SUITE(manipulation) {
+/*
     TEST_ADD(swap_does_not_work_on_empty_list),
     TEST_ADD(swap_does_not_work_on_nonexisting_indices),
     TEST_ADD(swap_does_nothing_when_indices_are_equal),
@@ -163,6 +163,7 @@ TEST_SUITE(manipulation) {
     TEST_ADD(split_does_not_work_on_illegal_pos),
     TEST_ADD(split_on_head_works_on_full_list),
     TEST_ADD(split_on_rest_works_on_full_list),
+*/
     TEST_ADD(join_does_not_work_on_different_element_sizes),
     TEST_ADD(join_works_on_empty_lists),
     TEST_ADD(join_works_on_full_lists),
@@ -170,7 +171,6 @@ TEST_SUITE(manipulation) {
     TEST_ADD(copy_works_on_full_list),
     TEST_SUITE_CLOSURE
 };
-*/
 
 /* test suites */
 TEST_SUITES {
@@ -179,7 +179,7 @@ TEST_SUITES {
     TEST_SUITE_ADD(insertion),
     TEST_SUITE_ADD(removal),
     TEST_SUITE_ADD(accessing),
-//    TEST_SUITE_ADD(manipulation),
+    TEST_SUITE_ADD(manipulation),
     TEST_SUITES_CLOSURE
 };
 int main(int argc, char *argv[])

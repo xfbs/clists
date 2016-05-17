@@ -553,9 +553,12 @@ dlist_t *dlist_join(dlist_t *dest, dlist_t *src)
 
     // if dest is empty, we can get away with
     // simply copying data */
-    if(dest->size == 0) {
+    if(dest->length == 0) {
         memcpy(dest, src, sizeof(dlist_t));
     } else {
+        assert(dest->tail != NULL);
+        assert(src->head != NULL);
+
         // otherwise, it seems like we have to
         // do some actual work. eww. so let's
         // copy some nodes!
