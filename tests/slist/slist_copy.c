@@ -30,6 +30,7 @@ TEST(copy_works_on_full_list) {
         assertEquals(slist_length(copy), slist_length(list));
         assertEquals(slist_size(copy), slist_size(list));
         assertEquals(*((int*)slist_get(list, 0, NULL)), one);
+        assertEquals(*((int*)slist_get(copy, 0, NULL)), one);
         
         slist_free(copy);
     }
@@ -44,7 +45,9 @@ TEST(copy_works_on_full_list) {
         assertEquals(slist_length(copy), slist_length(list));
         assertEquals(slist_size(copy), slist_size(list));
         assertEquals(*((int*)slist_get(list, 0, NULL)), one);
+        assertEquals(*((int*)slist_get(copy, 0, NULL)), one);
         assertEquals(*((int*)slist_get(list, 1, NULL)), two);
+        assertEquals(*((int*)slist_get(copy, 1, NULL)), two);
         
         slist_free(copy);
     }
@@ -60,8 +63,11 @@ TEST(copy_works_on_full_list) {
         assertEquals(slist_length(copy), slist_length(list));
         assertEquals(slist_size(copy), slist_size(list));
         assertEquals(*((int*)slist_get(list, 0, NULL)), one);
+        assertEquals(*((int*)slist_get(copy, 0, NULL)), one);
         assertEquals(*((int*)slist_get(list, 1, NULL)), two);
+        assertEquals(*((int*)slist_get(copy, 1, NULL)), two);
         assertEquals(*((int*)slist_get(list, 2, NULL)), three);
+        assertEquals(*((int*)slist_get(copy, 2, NULL)), three);
 
         slist_free(copy);
     }
