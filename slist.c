@@ -471,6 +471,9 @@ int slist_swap(slist_t *list, size_t pos_a, size_t pos_b) {
     for(node = list->head; node != NULL; node = node->next, pos++) {
         if(pos == pos_a) prev_a = node;
         if(pos == pos_b) prev_b = node;
+
+        // exit as soon as we have both nodes
+        if(prev_a != NULL && prev_b != NULL) break;
     }
 
     // since we made sure both pos_a and pos_b are smaller than
