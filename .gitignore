@@ -9,3 +9,6 @@
 
 # library files
 *.a
+
+# ignore documentation
+docs/
