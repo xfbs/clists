@@ -453,7 +453,7 @@ int dlist_swap(dlist_t *list, size_t pos_a, size_t pos_b) {
 
         for(size_t i = list->length-1;
             node != NULL && (node_a == NULL || node_b == NULL);
-            i++, node = node->prev)
+            i--, node = node->prev)
         {
             if(i == pos_a) node_a = node;
             if(i == pos_b) node_b = node;
@@ -466,30 +466,58 @@ int dlist_swap(dlist_t *list, size_t pos_a, size_t pos_b) {
         return -1;
     }
 
-    // node_a could be the first node and
-    // node_b could be the last node, so
-    // we have to treat those cases differently
-    if(node_a->prev == NULL) {
-        assert(pos_a == 0);
+    dlist_node_t *prev_a = node_a->prev;
+    dlist_node_t *next_a = node_a->next;
+    dlist_node_t *prev_b = node_b->prev;
+    dlist_node_t *next_b = node_b->next;
+
+    if(prev_a != NULL) {
+        prev_a->next = node_b;
+    } else {
         assert(node_a == list->head);
         list->head = node_b;
-        node_b->prev->next = node_a;
-    } else {
-        swap(node_a->prev->next, node_b->prev->next);
+        node_b->prev = NULL;
     }
 
-    if(node_b->next == NULL) {
-        assert(pos_b == (list->length-1));
+    if(next_b != NULL) {
+        next_b->prev = node_a;
+    } else {
         assert(node_b == list->tail);
         list->tail = node_a;
-        node_a->next->prev = node_b;
-    } else {
-        swap(node_a->next->prev, node_b->next->prev);
+        node_a->next = NULL;
     }
 
-    swap(node_a->next, node_b->next);
-    swap(node_a->prev, node_b->prev);
+    if(node_a->next == node_b) {
+        assert(node_b->prev == node_a);
+        node_b->next = node_a;
+        node_a->prev = node_b;
+    } else {
+        swap(node_a->next, node_b->next);
+        swap(node_a->prev, node_b->prev);
+    }
 
+    if(pos_a == 0) {
+        assert(list->head == node_b);
+        assert(node_b->prev == NULL);
+    } else {
+        assert(prev_a->next == node_b);
+        assert(node_b->prev == prev_a);
+    }
+
+    assert(node_b->next == next_a);
+    assert(next_a->prev == node_b);
+
+    assert(prev_b->next == node_a);
+    assert(node_a->prev == prev_b);
+
+    if(next_b != NULL) {
+        assert(node_a->next == next_b);
+        assert(next_b->prev == node_a);
+    } else {
+        assert(list->tail == node_a);
+        assert(node_a->next == NULL);
+    }
+        
     return 0;
 }
 
