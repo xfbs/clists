@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['array_5flist_5fnode',['array_list_node',['../structarray__list__node.html',1,'']]]
+  ['alist',['alist',['../structalist.html',1,'']]],
+  ['alist_5felement',['alist_element',['../structalist__element.html',1,'']]]
 ];

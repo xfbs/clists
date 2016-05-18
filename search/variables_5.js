@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['size',['size',['../structslist.html#af91259d38b22f2bfa12e6516f5d86a16',1,'slist::size()'],['../structdlist.html#a8412ffb02c908807a7c051d1a1bc4100',1,'dlist::size()']]]
+  ['prev',['prev',['../structdlist__node.html#a8b3d08c49e47fbf8571a2dff4f5591c1',1,'dlist_node']]]
 ];

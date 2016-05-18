@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['clist_5fiterator',['clist_iterator',['../structclist__iterator.html',1,'']]]
+  ['bitvec',['bitvec',['../structbitvec.html',1,'']]],
+  ['bitvec_2eh',['bitvec.h',['../bitvec_8h.html',1,'']]]
 ];

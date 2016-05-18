@@ -171,7 +171,7 @@ Functions</h2></td></tr>
 <li>intuitive</li>
 <li>flexible</li>
 </ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd><p class="startdd">think about making dlist a circular linked list? </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">Todo:</a></b></dt><dd><p class="startdd">think about making dlist a circular linked list? </p>
 <p class="enddd">test the code extensively </p>
 </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
@@ -290,7 +290,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the first element in the list </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
 <h3>Error Handling</h3>
 <p>If <code>list</code> is NULL or it is empty, returns NULL.</p>
 <h3>Example</h3>
@@ -364,7 +364,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the element, or NULL on error</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>incorporate data pointer</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>incorporate data pointer</dd></dl>
 <h3>Example</h3>
 <div class="fragment"><div class="line"><a class="code" href="structdlist.html">dlist_t</a> *list = <a class="code" href="dlist_8h.html#a37a052fe1e63151a307c7a3e338f28b3">dlist_new</a>(<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>));</div><div class="line"></div><div class="line"><span class="comment">// add an element</span></div><div class="line"><span class="keywordtype">int</span> five = 5;</div><div class="line">assert(<a class="code" href="dlist_8h.html#a3436ffca7866c91bfff1086509b7217c">dlist_append</a>(list, &amp;five) != NULL);</div><div class="line"></div><div class="line"><span class="comment">// get the element</span></div><div class="line"><span class="keywordtype">int</span> *elem = <a class="code" href="dlist_8h.html#abb508378ef9e02abdc784f50a020c3a3">dlist_get</a>(list, 0);</div><div class="line">assert(elem != NULL);</div><div class="line">assert(*elem == five);</div><div class="line"></div><div class="line"><span class="comment">// accessing nonexisting element produces NULL</span></div><div class="line">assert(<a class="code" href="dlist_8h.html#abb508378ef9e02abdc784f50a020c3a3">dlist_get</a>(list, 1) == NULL);</div></div><!-- fragment --> 
 </div>
@@ -476,7 +476,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a pointer to the first element in the list </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
 <h3>Error Handling</h3>
 <p>If <code>list</code> is NULL or it is empty, returns NULL.</p>
 <h3>Example</h3>
@@ -504,7 +504,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>how many elements the list holds </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
 <h3>Error Handling</h3>
 <p>If passed NULL, returns 0.</p>
 <h3>Example</h3>
@@ -746,7 +746,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the size of the elements in the list </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>implement this as macro for speed</dd></dl>
 <h3>Error Handling</h3>
 <p>If passed NULL, it will return 0.</p>
 <h3>Example</h3>

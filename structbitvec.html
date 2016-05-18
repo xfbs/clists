@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>CLists: slist_methods Struct Reference</title>
+<title>CLists: bitvec Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -85,33 +85,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">slist_methods Struct Reference</div>  </div>
+<div class="title">bitvec Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:ad2e7e0b9355dc02bc10e3fe17e4a0731"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2e7e0b9355dc02bc10e3fe17e4a0731"></a>
-void *(*&#160;</td><td class="memItemRight" valign="bottom"><b>new</b> )(size_t size)</td></tr>
-<tr class="separator:ad2e7e0b9355dc02bc10e3fe17e4a0731"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a839a7adad86e964caef7bfa5ff81280d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a839a7adad86e964caef7bfa5ff81280d"></a>
-void(*&#160;</td><td class="memItemRight" valign="bottom"><b>free</b> )(void *list)</td></tr>
-<tr class="separator:a839a7adad86e964caef7bfa5ff81280d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9226918da84013076409a48ef89fa6a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9226918da84013076409a48ef89fa6a"></a>
-void *(*&#160;</td><td class="memItemRight" valign="bottom"><b>append</b> )(void *list, void *data)</td></tr>
-<tr class="separator:ac9226918da84013076409a48ef89fa6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb52a2fce074b76178826bc62f759a56"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb52a2fce074b76178826bc62f759a56"></a>
-void *(*&#160;</td><td class="memItemRight" valign="bottom"><b>prepend</b> )(void *list, void *data)</td></tr>
-<tr class="separator:adb52a2fce074b76178826bc62f759a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13425cb64791f0051f5905c7164795ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13425cb64791f0051f5905c7164795ab"></a>
-void *(*&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> )(void *list, size_t pos, void *data)</td></tr>
-<tr class="separator:a13425cb64791f0051f5905c7164795ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2340cd864e53bdda9249d4a396745a4c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2340cd864e53bdda9249d4a396745a4c"></a>
-int(*&#160;</td><td class="memItemRight" valign="bottom"><b>delete</b> )(void *list, size_t pos)</td></tr>
-<tr class="separator:a2340cd864e53bdda9249d4a396745a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae01f39ef21e0df7da838062b3ffd5c4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae01f39ef21e0df7da838062b3ffd5c4f"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbitvec.html#ae01f39ef21e0df7da838062b3ffd5c4f">size</a></td></tr>
+<tr class="memdesc:ae01f39ef21e0df7da838062b3ffd5c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the bit vector. <br /></td></tr>
+<tr class="separator:ae01f39ef21e0df7da838062b3ffd5c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4667435685b0c9a8b5bc7697367176de"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4667435685b0c9a8b5bc7697367176de"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbitvec.html#a4667435685b0c9a8b5bc7697367176de">alloc</a></td></tr>
+<tr class="memdesc:a4667435685b0c9a8b5bc7697367176de"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many bytes were allocated. <br /></td></tr>
+<tr class="separator:a4667435685b0c9a8b5bc7697367176de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ff44a7a0b4cf802ae7a76d6341f02ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ff44a7a0b4cf802ae7a76d6341f02ec"></a>
+char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbitvec.html#a4ff44a7a0b4cf802ae7a76d6341f02ec">data</a></td></tr>
+<tr class="memdesc:a4ff44a7a0b4cf802ae7a76d6341f02ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actual bits. <br /></td></tr>
+<tr class="separator:a4ff44a7a0b4cf802ae7a76d6341f02ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>clists/<a class="el" href="list_8h_source.html">list.h</a></li>
+<li>clists/<a class="el" href="bitvec_8h_source.html">bitvec.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

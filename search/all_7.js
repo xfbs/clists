@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['size',['size',['../structslist.html#af91259d38b22f2bfa12e6516f5d86a16',1,'slist::size()'],['../structdlist.html#a8412ffb02c908807a7c051d1a1bc4100',1,'dlist::size()']]],
+  ['sarray',['sarray',['../structsarray.html',1,'']]],
+  ['sarray_2eh',['sarray.h',['../sarray_8h.html',1,'']]],
+  ['size',['size',['../structbitvec.html#ae01f39ef21e0df7da838062b3ffd5c4f',1,'bitvec::size()'],['../structdlist.html#a8412ffb02c908807a7c051d1a1bc4100',1,'dlist::size()'],['../structslist.html#af91259d38b22f2bfa12e6516f5d86a16',1,'slist::size()']]],
   ['slist',['slist',['../structslist.html',1,'']]],
   ['slist_2eh',['slist.h',['../slist_8h.html',1,'']]],
   ['slist_5fappend',['slist_append',['../slist_8h.html#a5b4993bfd81e968f61e1ffb0ea48353a',1,'slist.c']]],
@@ -15,7 +17,6 @@ var searchData=
   ['slist_5fjoin',['slist_join',['../slist_8h.html#af87c1c3c97a68d8a2e26f99fa9ec82fb',1,'slist.c']]],
   ['slist_5flast',['slist_last',['../slist_8h.html#a62e51dba1901ecf9b5022e809428a59a',1,'slist.c']]],
   ['slist_5flength',['slist_length',['../slist_8h.html#a1b86494106411ede2223fb2401618814',1,'slist.c']]],
-  ['slist_5fmethods',['slist_methods',['../structslist__methods.html',1,'']]],
   ['slist_5fnew',['slist_new',['../slist_8h.html#ab059deb48f5bc2a978e49695a01d2011',1,'slist.c']]],
   ['slist_5fnode',['slist_node',['../structslist__node.html',1,'']]],
   ['slist_5fpop',['slist_pop',['../slist_8h.html#af95c448af5f5aea019fc4659d68434e6',1,'slist.c']]],
