@@ -31,13 +31,15 @@
 extern "C" {
 #endif
 
+typedef int sarray_word;
+
 struct sarray
 {
-    bitvec_t elems;
-
     size_t size;
 
-    char *data;
+    size_t capacity;
+
+    sarray_word *data;
 };
 
 typedef struct sarray sarray_t;
@@ -48,19 +50,23 @@ size_t sarray_size(const sarray_t *array);
 
 size_t sarray_length(const sarray_t *array);
 
+size_t sarray_capacity(const sarray_t *array);
+
 void *sarray_first(const sarray_t *array);
 
 void *sarray_last(const sarray_t *array);
 
 /* CREATION/DESTRUCTION FUNCTIONS */
 
-sarray_t *sarray_new(size_t size);
+sarray_t *sarray_new(size_t size, size_t capacity);
 
-sarray_t *sarray_init(sarray_t *array, size_t size);
+sarray_t *sarray_init(sarray_t *array, size_t size, size_t capacity);
 
 sarray_t *sarray_purge(sarray_t *array);
 
 int     sarray_free (sarray_t *array);
+
+/* INSERTION/REMOVAL */
 
 void *sarray_append (sarray_t *array, const void *data);
 
@@ -70,6 +76,8 @@ void *sarray_insert (sarray_t *array, size_t pos, const void *data);
 
 int   sarray_remove (sarray_t *array, size_t pos);
 
+/* ACCESSS/MODIFICATION */
+
 void *sarray_set(sarray_t *array, size_t pos, const void *data);
 
 void *sarray_get(const sarray_t *array, size_t pos, void *data);
@@ -78,13 +86,13 @@ void *sarray_pop(sarray_t *array, void *data);
 
 int sarray_swap(sarray_t *array, size_t a, size_t b);
 
+/* MODIFICATION OF SARRAY */
+
 sarray_t *sarray_split(sarray_t *array, size_t pos);
 
 sarray_t *sarray_join(sarray_t *dest, sarray_t *src);
 
 sarray_t *sarray_copy(const sarray_t *array);
-
-int sarray_verify(const sarray_t *array);
 
 #ifdef __cplusplus
 }

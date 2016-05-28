@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -g -Wall -pedantic -std=gnu99
-OBJS = slist.o dlist.o
+OBJS = slist.o dlist.o bitvec.o sarray.o
 TARGET = libclists.a
-HEADERS = dlist.h slist.h
+HEADERS = dlist.h slist.h bitvec.h sarray.h
 HEADERS_DIR = clists
 TESTS_DIR = tests
 DOXYGEN = doxygen

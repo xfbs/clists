@@ -31,75 +31,84 @@
 #pragma once
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+typedef int bitvec_word;
+
 struct bitvec
 {
     //! The size of the bit vector
     size_t size;
 
-    //! How many bytes were allocated
+    //! How many bitvec_words were allocated
     size_t alloc;
 
     //! The actual bits
-    char *data;
+    bitvec_word *data;
 };
 
 typedef struct bitvec bitvec_t;
 
 /* BASIC DATA ACCESS */
 
-size_t bitvec_size(const bitvec_t *list);
+size_t bitvec_size(const bitvec_t *vec);
 
-void *bitvec_first(const bitvec_t *list);
+size_t bitvec_count(const bitvec_t *vec);
 
-void *bitvec_last(const bitvec_t *list);
-
-int bitvec_count(const bitvec_t *vec);
+bitvec_word *bitvec_raw(bitvec_t *vec);
 
 /* CREATION/DESTRUCTION FUNCTIONS */
 
-bitvec_t *bitvec_new(size_t size);
+bitvec_t *bitvec_new(size_t size, bool val);
 
-bitvec_t *bitvec_init(bitvec_t *list, size_t size, bool val);
+bitvec_t *bitvec_init(bitvec_t *vec, size_t size, bool val);
 
 bitvec_t *bitvec_resize(bitvec_t *vec, size_t size, bool val);
 
-bitvec_t *bitvec_purge(bitvec_t *list);
+bitvec_t *bitvec_purge(bitvec_t *vec);
 
-int     bitvec_free (bitvec_t *list);
+int     bitvec_free (bitvec_t *vec);
 
-void *bitvec_append (bitvec_t *list, bool val);
+/* INSERTION/REMOVAL OF BITS */
 
-void *bitvec_prepend(bitvec_t *list, bool val);
+void *bitvec_append (bitvec_t *vec, bool val);
 
-void *bitvec_insert (bitvec_t *list, size_t pos, bool data);
+void *bitvec_prepend(bitvec_t *vec, bool val);
 
-int   bitvec_remove (bitvec_t *list, size_t pos);
+void *bitvec_insert (bitvec_t *vec, size_t pos, bool data);
 
-void *bitvec_set(bitvec_t *list, size_t pos, bool data);
+int   bitvec_remove (bitvec_t *vec, size_t pos);
+
+/* ACCESS/MODIFICATION OF BITS */
+
+int bitvec_set(bitvec_t *vec, size_t pos, bool data);
+
+int bitvec_set_all(bitvec_t *vec, bool data);
 
 void bitvec_flip(bitvec_t *vec, size_t pos);
 
-bool bitvec_get(const bitvec_t *list, size_t pos);
+bool bitvec_get(const bitvec_t *vec, size_t pos);
 
-int bitvec_swap(bitvec_t *list, size_t a, size_t b);
+int bitvec_swap(bitvec_t *vec, size_t a, size_t b);
 
-char *bitvec_raw(bitvec_t *vec);
+/* MODIFICATION OF BITVECS */
 
-bitvec_t *bitvec_split(bitvec_t *list, size_t pos);
+bitvec_t *bitvec_split(bitvec_t *vec, size_t pos);
 
 bitvec_t *bitvec_join(bitvec_t *dest, bitvec_t *src);
 
-bitvec_t *bitvec_copy(const bitvec_t *list);
+bitvec_t *bitvec_copy(const bitvec_t *vec);
 
-int bitvec_compare(bitvec_t *a, bitvec_t *b, bitvec_compare_elements *cmp);
+int bitvec_compare(bitvec_t *a, bitvec_t *b);
 
-int bitvec_verify(const bitvec_t *list);
+/* DEBUG METHODS */
+
+int bitvec_verify(const bitvec_t *vec);
 
 #ifdef __cplusplus
 }
