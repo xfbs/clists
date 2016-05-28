@@ -147,5 +147,16 @@ TEST(swap_works_correctly_with_different_indices) {
         assertEquals(*((int*)dlist_get(list, 1, NULL)), two);
         assertEquals(*((int*)dlist_get(list, 2, NULL)), three);
         assertEquals(*((int*)dlist_get(list, 3, NULL)), four);
+
+        assertNotEquals(dlist_append(list, &four), NULL);
+
+        assertEquals(dlist_swap(list, 1, 3), 0);
+        assertEquals(dlist_verify(list), 0);
+
+        assertEquals(*((int*)dlist_get(list, 0, NULL)), one);
+        assertEquals(*((int*)dlist_get(list, 1, NULL)), four);
+        assertEquals(*((int*)dlist_get(list, 2, NULL)), three);
+        assertEquals(*((int*)dlist_get(list, 3, NULL)), two);
+        assertEquals(*((int*)dlist_get(list, 4, NULL)), four);
     }
 }

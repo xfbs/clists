@@ -24,6 +24,7 @@
 
 #include "clists/dlist.h"
 #include <assert.h>
+#include <stdio.h>
 
 // allocate new node with given size
 #define malloc_node(size) malloc(sizeof(dlist_node_t) + (size))
@@ -471,29 +472,48 @@ int dlist_swap(dlist_t *list, size_t pos_a, size_t pos_b) {
     dlist_node_t *prev_b = node_b->prev;
     dlist_node_t *next_b = node_b->next;
 
+    // update prev_a->next or list->head,
+    // depending on whether node_a is the
+    // head of the list.
     if(prev_a != NULL) {
         prev_a->next = node_b;
     } else {
         assert(node_a == list->head);
         list->head = node_b;
-        node_b->prev = NULL;
+        //node_b->prev = NULL;
     }
 
+    // update next_b->prev or list->tail,
+    // depending on whether node_b is the
+    // tail of the list.
     if(next_b != NULL) {
         next_b->prev = node_a;
     } else {
         assert(node_b == list->tail);
         list->tail = node_a;
-        node_a->next = NULL;
+        //node_a->next = NULL;
     }
 
-    if(node_a->next == node_b) {
+    if(next_a == node_b) {
         assert(node_b->prev == node_a);
         node_b->next = node_a;
+        node_b->prev = prev_a;
         node_a->prev = node_b;
+        node_a->next = next_b;
+
+        assert(node_b->next == node_a);
+        assert(node_a->prev == node_b);
     } else {
         swap(node_a->next, node_b->next);
         swap(node_a->prev, node_b->prev);
+
+        next_a->prev = node_b;
+        prev_b->next = node_a;
+
+        assert(node_b->next == next_a);
+        assert(node_b->prev == prev_a);
+        assert(node_a->next == next_b);
+        assert(node_a->prev == prev_b);
     }
 
     if(pos_a == 0) {
@@ -504,11 +524,10 @@ int dlist_swap(dlist_t *list, size_t pos_a, size_t pos_b) {
         assert(node_b->prev == prev_a);
     }
 
-    assert(node_b->next == next_a);
-    assert(next_a->prev == node_b);
-
-    assert(prev_b->next == node_a);
-    assert(node_a->prev == prev_b);
+    if(next_a != node_b) {
+        assert(next_a->prev == node_b);
+        assert(prev_b->next == node_a);
+    }
 
     if(next_b != NULL) {
         assert(node_a->next == next_b);
@@ -517,7 +536,7 @@ int dlist_swap(dlist_t *list, size_t pos_a, size_t pos_b) {
         assert(list->tail == node_a);
         assert(node_a->next == NULL);
     }
-        
+
     return 0;
 }
 
