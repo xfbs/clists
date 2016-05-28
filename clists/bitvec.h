@@ -38,7 +38,7 @@
 extern "C" {
 #endif
 
-typedef int bitvec_word;
+typedef unsigned int bitvec_word;
 
 struct bitvec
 {

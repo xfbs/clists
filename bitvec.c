@@ -24,6 +24,20 @@
 
 #include "clists/bitvec.h"
 #include <assert.h>
+#include <limits.h>
+
+#define bitvec_word_bits (sizeof(bitvec_word) * CHAR_BIT)
+#define bitvec_words(size) (((size) + bitvec_word_bits - 1)/bitvec_word_bits)
+
+inline size_t bitvec_popcount(bitvec_word w) {
+    size_t count = 0;
+    while(w != 0) {
+        w &= w - 1;
+        count++;
+    }
+
+    return count;
+}
 
 /* BASIC DATA ACCESS */
 
@@ -32,8 +46,22 @@ size_t bitvec_size(const bitvec_t *vec) {
 }
 
 size_t bitvec_count(const bitvec_t *vec) {
-    // TODO
-    return 0;
+    size_t count = 0;
+    size_t last_word = bitvec_words(vec->size) - 1;
+
+    // generate popcount of all but the last
+    // word
+    for(int i = 0; i < last_word; i++) {
+        count += bitvec_popcount(vec->data[i]);
+    }
+
+    // the last word we need to treat specially
+    // because not all of the bits are used, so
+    // we have to shift it to get to the ones
+    // we actually need.
+    count += bitvec_popcount(vec->data[last_word] >> (vec->size % bitvec_word_bits));
+
+    return count;
 }
 
 bitvec_word *bitvec_raw(bitvec_t *vec) {
@@ -139,9 +167,23 @@ int   bitvec_remove (bitvec_t *vec, size_t pos);
 
 /* ACCESS/MODIFICATION OF BITS */
 
-int bitvec_set(bitvec_t *vec, size_t pos, bool data);
+int bitvec_set(bitvec_t *vec, size_t pos, bool data) {
+    bitvec_word *word = &vec->data[pos / bitvec_word_bits];
+    
+    if(data) {
+        *word |= 1 << (bitvec_word_bits - (pos % bitvec_word_bits));
+    } else {
+        *word &= ~(1 << (bitvec_word_bits - (pos % bitvec_word_bits)));
+    }
 
-void bitvec_flip(bitvec_t *vec, size_t pos);
+    return 0;
+}
+
+void bitvec_flip(bitvec_t *vec, size_t pos) {
+    bitvec_word *word = &vec->data[pos / bitvec_word_bits];
+    
+    *word ^= 1 << (bitvec_word_bits - (pos % bitvec_word_bits));
+}
 
 bool bitvec_get(const bitvec_t *vec, size_t pos);
 
